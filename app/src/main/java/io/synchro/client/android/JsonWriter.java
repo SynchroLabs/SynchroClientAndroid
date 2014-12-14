@@ -45,9 +45,25 @@ public class JsonWriter
         writer.write('\"');
     }
 
+    private static void writeNumber(Writer writer, int i)
+            throws IOException
+    {
+        writer.write(Integer.toString(i));
+    }
+
     public static void writeValue(Writer writer, JToken value)
             throws IOException
     {
-        writeString(writer, value.asString());
+        switch (value.type)
+        {
+            case Integer:
+                writeNumber(writer, value.asInt());
+                break;
+
+            default:
+//            case String:
+                writeString(writer, value.asString());
+                break;
+        }
     }
 }

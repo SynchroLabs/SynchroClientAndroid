@@ -23,7 +23,7 @@ public class JsonParser
         }
     }
 
-    static String parseString(PushbackReader reader)
+    static JValue parseString(PushbackReader reader)
             throws IOException
     {
         int thisChar;
@@ -85,7 +85,44 @@ public class JsonParser
             returnString.append((char) thisChar);
         }
 
-        return returnString.toString();
+        return new JValue(returnString.toString());
+    }
+
+    private static JValue parseNumber(PushbackReader reader)
+            throws IOException
+    {
+        StringBuilder numberBuilder = new StringBuilder();
+        int thisChar;
+
+        skipWhitespace(reader);
+
+        while (true)
+        {
+            thisChar = reader.read();
+
+            if ("0123456789Ee.-+".indexOf(thisChar) >= 0)
+            {
+                numberBuilder.append((char) thisChar);
+                continue;
+            }
+            else if (thisChar != -1)
+            {
+                reader.unread(thisChar);
+            }
+
+            break;
+        }
+
+        String numberData = numberBuilder.toString();
+
+//        if (numberData.IndexOfAny("eE.".ToCharArray()) >= 0)
+//        {
+//            return double.Parse(numberData, CultureInfo.InvariantCulture.NumberFormat);
+//        }
+//        else
+        {
+            return new JValue(Integer.parseInt(numberData));
+        }
     }
 
     static JToken parseValue(PushbackReader reader)
@@ -94,6 +131,13 @@ public class JsonParser
         int lookahead = reader.read();
         reader.unread(lookahead);
 
-        return new JValue(parseString(reader));
+        if ((lookahead == '-') || ((lookahead >= '0') && (lookahead <= '9')))
+        {
+            return parseNumber(reader);
+        }
+        else
+        {
+            return parseString(reader);
+        }
     }
 }

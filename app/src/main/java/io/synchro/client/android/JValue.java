@@ -5,18 +5,30 @@ package io.synchro.client.android;
  */
 public class JValue extends JToken
 {
-    private String stringValue;
+    private Object value;
 
     public JValue(String value)
     {
         super(JTokenType.String);
 
-        stringValue = value;
+        this.value = value;
+    }
+
+    public JValue(int value)
+    {
+        super(JTokenType.Integer);
+
+        this.value = value;
     }
 
     public String asString()
     {
-        return (type == JTokenType.String) ? stringValue : null;
+        return (type == JTokenType.String) ? ((String) value) : null;
+    }
+
+    public int asInt()
+    {
+        return (type == JTokenType.Integer) ? ((int) value) : null;
     }
 
     @Override
@@ -26,11 +38,7 @@ public class JValue extends JToken
         {
             if (obj instanceof JValue)
             {
-                switch (type)
-                {
-                    case String:
-                        return stringValue.equals(((JValue) obj).stringValue);
-                }
+                return value.equals(((JValue) obj).value);
             }
         }
 

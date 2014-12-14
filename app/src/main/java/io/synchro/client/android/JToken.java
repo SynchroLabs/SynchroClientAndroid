@@ -24,6 +24,7 @@ public abstract class JToken
     }
 
     public abstract String asString();
+    public abstract int asInt();
 
     public String toJson()
             throws IOException

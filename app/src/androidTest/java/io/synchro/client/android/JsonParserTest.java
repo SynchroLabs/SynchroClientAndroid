@@ -37,4 +37,11 @@ public class JsonParserTest extends TestCase
     {
         validateRoundTrip("\"\\\"\\\\/\\b\\f\\n\\r\\t\\u20AC\\u007F\"", new JValue("\"\\/\b\f\n\r\t\u20AC\u007F"));
     }
+
+    public void testParseInteger()
+    {
+        validateRoundTrip("0", new JValue(0));
+        validateRoundTrip(String.format("%d", Integer.MAX_VALUE), new JValue(Integer.MAX_VALUE));
+        validateRoundTrip(String.format("%d", Integer.MIN_VALUE), new JValue(Integer.MIN_VALUE));
+    }
 }
