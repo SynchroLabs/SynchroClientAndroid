@@ -8,11 +8,28 @@ import java.io.PushbackReader;
  */
 public class JsonParser
 {
+    private static void skipWhitespace(PushbackReader reader)
+            throws IOException
+    {
+        char thisChar;
+
+        while (Character.isSpaceChar(thisChar = (char) reader.read()))
+        {
+        }
+
+        if (thisChar != -1)
+        {
+            reader.unread(thisChar);
+        }
+    }
+
     static String parseString(PushbackReader reader)
             throws IOException
     {
-        StringBuilder builder = new StringBuilder();
-        int currentChar;
+        int thisChar;
+        StringBuilder returnString = new StringBuilder();
+
+        skipWhitespace(reader);
 
         // Skip the opening quotes
 
@@ -20,14 +37,55 @@ public class JsonParser
 
         // Read until closing quotes
 
-        while ((currentChar = reader.read()) != '"')
+        while ((thisChar = reader.read()) != '"')
         {
-            builder.append((char) currentChar);
+            if (thisChar == -1)
+            {
+                throw new IOException("Unexpected end of stream");
+            }
+
+            if (thisChar == '\\')
+            {
+                thisChar = reader.read();
+
+                switch (thisChar)
+                {
+                    case 'b':
+                        thisChar = '\b';
+                        break;
+                    case 'f':
+                        thisChar = '\f';
+                        break;
+                    case 'r':
+                        thisChar = '\r';
+                        break;
+                    case 'n':
+                        thisChar = '\n';
+                        break;
+                    case 't':
+                        thisChar = '\t';
+                        break;
+                    case 'u':
+                        // Parse four hex digits
+                        StringBuilder hexBuilder = new StringBuilder(4);
+                        for (int counter = 0; counter < 4; ++counter)
+                        {
+                            hexBuilder.append((char)reader.read());
+                        }
+                        thisChar = Integer.parseInt(hexBuilder.toString(), 16);
+                        break;
+                    case '\\':
+                    case '"':
+                    case '/':
+                    default:
+                        break;
+                }
+            }
+
+            returnString.append((char) thisChar);
         }
 
-        // Already skipped the closing quotes
-
-        return builder.toString();
+        return returnString.toString();
     }
 
     static JToken parseValue(PushbackReader reader)

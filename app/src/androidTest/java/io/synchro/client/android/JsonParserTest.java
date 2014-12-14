@@ -32,4 +32,9 @@ public class JsonParserTest extends TestCase
     {
         validateRoundTrip("\"abc\"", new JValue("abc"));
     }
+
+    public void testParseStringEscapes()
+    {
+        validateRoundTrip("\"\\\"\\\\/\\b\\f\\n\\r\\t\\u20AC\\u007F\"", new JValue("\"\\/\b\f\n\r\t\u20AC\u007F"));
+    }
 }
