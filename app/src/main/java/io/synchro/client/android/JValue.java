@@ -7,6 +7,11 @@ public class JValue extends JToken
 {
     private Object value;
 
+    public JValue()
+    {
+        super(JTokenType.Null);
+    }
+
     public JValue(String value)
     {
         super(JTokenType.String);
@@ -50,7 +55,7 @@ public class JValue extends JToken
         {
             if (obj instanceof JValue)
             {
-                return value.equals(((JValue) obj).value);
+                return (value == null) ? (((JValue) obj).value == null) : (value.equals(((JValue) obj).value));
             }
         }
 

@@ -109,6 +109,12 @@ public class JsonWriter
         writer.write(b ? "true" : "false");
     }
 
+    public static void writeNull(Writer writer)
+            throws IOException
+    {
+        writer.write("null");
+    }
+
     public static void writeValue(Writer writer, JToken value)
             throws IOException
     {
@@ -128,6 +134,10 @@ public class JsonWriter
 
             case Boolean:
                 writeBoolean(writer, value.asBoolean());
+                break;
+
+            case Null:
+                writeNull(writer);
                 break;
 
             default:

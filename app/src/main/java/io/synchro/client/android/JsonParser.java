@@ -247,6 +247,19 @@ public class JsonParser
         return new JValue(false);
     }
 
+    private static JToken parseNull(PushbackReader reader)
+            throws IOException
+    {
+        // Skip 'n', 'u', 'l', 'l'
+
+        reader.read();
+        reader.read();
+        reader.read();
+        reader.read();
+
+        return new JValue();
+    }
+
     static JToken parseValue(PushbackReader reader)
             throws IOException
     {
@@ -272,6 +285,10 @@ public class JsonParser
         else if (lookahead == 'f')
         {
             return parseFalse(reader);
+        }
+        else if (lookahead == 'n')
+        {
+            return parseNull(reader);
         }
         else
         {

@@ -71,4 +71,9 @@ public class JsonParserTest extends TestCase
         validateRoundTrip("true", new JValue(true));
         validateRoundTrip("false", new JValue(false));
     }
+
+    public void testParseNull()
+    {
+        validateRoundTrip("null", new JValue());
+    }
 }
