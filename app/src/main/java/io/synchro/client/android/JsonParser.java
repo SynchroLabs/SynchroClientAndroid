@@ -164,6 +164,62 @@ public class JsonParser
         return finalList;
     }
 
+    private static JObject parseObject(PushbackReader reader)
+            throws IOException
+    {
+        JObject finalObject = new JObject();
+        int thisChar;
+
+        skipWhitespace(reader);
+
+        // Skip the opening brace
+
+        reader.read();
+
+        skipWhitespace(reader);
+
+        // Read until closing brace
+
+        while ((thisChar = reader.read()) != '}')
+        {
+            JToken name;
+            JToken value;
+
+            reader.unread(thisChar);
+
+            // Read a string
+
+            name = parseString(reader);
+
+            skipWhitespace(reader);
+
+            // Skip the colon
+
+            reader.read();
+
+            skipWhitespace(reader);
+
+            // Read the value
+
+            value = parseValue(reader);
+
+            skipWhitespace(reader);
+
+            finalObject.put(name.asString(), value);
+
+            // Skip the comma if any
+
+            if ((thisChar = reader.read()) != ',')
+            {
+                reader.unread(thisChar);
+            }
+
+            skipWhitespace(reader);
+        }
+
+        return finalObject;
+    }
+
     static JToken parseValue(PushbackReader reader)
             throws IOException
     {
@@ -177,6 +233,10 @@ public class JsonParser
         else if (lookahead == '[')
         {
             return parseArray(reader);
+        }
+        else if (lookahead == '{')
+        {
+            return parseObject(reader);
         }
         else
         {

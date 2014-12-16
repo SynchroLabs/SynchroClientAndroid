@@ -73,6 +73,36 @@ public class JsonWriter
         writer.write(']');
     }
 
+    private static void writeObject(Writer writer, JObject _object)
+            throws IOException
+    {
+        boolean firstKey = true;
+
+        writer.write('{');
+
+        for (String key : _object.keySet())
+        {
+            JToken value = _object.get(key);
+
+            if (!firstKey)
+            {
+                writer.write(',');
+            }
+            else
+            {
+                firstKey = false;
+            }
+
+            writeString(writer, key);
+
+            writer.write(':');
+
+            writeValue(writer, value);
+        }
+
+        writer.write('}');
+    }
+
     public static void writeValue(Writer writer, JToken value)
             throws IOException
     {
@@ -84,6 +114,10 @@ public class JsonWriter
 
             case Array:
                 writeArray(writer, (JArray) value);
+                break;
+
+            case Object:
+                writeObject(writer, (JObject) value);
                 break;
 
             default:

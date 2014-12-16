@@ -53,4 +53,16 @@ public class JsonParserTest extends TestCase
         validateRoundTrip("[0,\"abc\"]", new JArray(new JToken[] { new JValue(0), new JValue("abc") }));
         validateRoundTrip("[0,\"abc\",[1,\"def\"]]", new JArray(new JToken[] { new JValue(0), new JValue("abc"), new JArray(new JToken[] { new JValue(1), new JValue("def") }) }));
     }
+
+    public void testParseObject()
+    {
+        validateRoundTrip("{}", new JObject());
+        JObject expectedObject = new JObject();
+
+        expectedObject.put("foo", new JValue(0));
+        expectedObject.put("bar", new JValue("kitty"));
+        expectedObject.put("baz", new JArray(new JToken[] { new JValue(8), new JValue("dog") }));
+
+        validateRoundTrip("{\"bar\":\"kitty\",\"baz\":[8,\"dog\"],\"foo\":0}", expectedObject);
+    }
 }
