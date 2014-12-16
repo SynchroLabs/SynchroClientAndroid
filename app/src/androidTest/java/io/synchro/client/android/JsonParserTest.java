@@ -65,4 +65,10 @@ public class JsonParserTest extends TestCase
 
         validateRoundTrip("{\"bar\":\"kitty\",\"baz\":[8,\"dog\"],\"foo\":0}", expectedObject);
     }
+
+    public void testParseBoolean()
+    {
+        validateRoundTrip("true", new JValue(true));
+        validateRoundTrip("false", new JValue(false));
+    }
 }

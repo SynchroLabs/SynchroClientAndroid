@@ -25,6 +25,7 @@ public abstract class JToken
 
     public abstract String asString();
     public abstract int asInt();
+    public abstract boolean asBoolean();
 
     public String toJson()
             throws IOException

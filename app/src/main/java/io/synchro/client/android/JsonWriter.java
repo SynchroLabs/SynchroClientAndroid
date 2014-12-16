@@ -103,6 +103,12 @@ public class JsonWriter
         writer.write('}');
     }
 
+    public static void writeBoolean(Writer writer, boolean b)
+            throws IOException
+    {
+        writer.write(b ? "true" : "false");
+    }
+
     public static void writeValue(Writer writer, JToken value)
             throws IOException
     {
@@ -118,6 +124,10 @@ public class JsonWriter
 
             case Object:
                 writeObject(writer, (JObject) value);
+                break;
+
+            case Boolean:
+                writeBoolean(writer, value.asBoolean());
                 break;
 
             default:

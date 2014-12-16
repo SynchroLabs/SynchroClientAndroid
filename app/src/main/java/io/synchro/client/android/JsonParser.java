@@ -220,6 +220,33 @@ public class JsonParser
         return finalObject;
     }
 
+    private static JToken parseTrue(PushbackReader reader)
+            throws IOException
+    {
+        // Skip 't', 'r', 'u', 'e'
+
+        reader.read();
+        reader.read();
+        reader.read();
+        reader.read();
+
+        return new JValue(true);
+    }
+
+    private static JToken parseFalse(PushbackReader reader)
+            throws IOException
+    {
+        // Skip 'f', 'a', 'l', 's', 'e'
+
+        reader.read();
+        reader.read();
+        reader.read();
+        reader.read();
+        reader.read();
+
+        return new JValue(false);
+    }
+
     static JToken parseValue(PushbackReader reader)
             throws IOException
     {
@@ -237,6 +264,14 @@ public class JsonParser
         else if (lookahead == '{')
         {
             return parseObject(reader);
+        }
+        else if (lookahead == 't')
+        {
+            return parseTrue(reader);
+        }
+        else if (lookahead == 'f')
+        {
+            return parseFalse(reader);
         }
         else
         {

@@ -41,6 +41,12 @@ public class JArray extends JToken implements Iterable<JToken>
     }
 
     @Override
+    public boolean asBoolean()
+    {
+        return false;
+    }
+
+    @Override
     public Iterator<JToken> iterator()
     {
         return backingArray.iterator();

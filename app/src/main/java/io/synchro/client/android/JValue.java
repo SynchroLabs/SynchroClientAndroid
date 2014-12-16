@@ -21,6 +21,13 @@ public class JValue extends JToken
         this.value = value;
     }
 
+    public JValue(boolean value)
+    {
+        super(JTokenType.Boolean);
+
+        this.value = value;
+    }
+
     public String asString()
     {
         return (type == JTokenType.String) ? ((String) value) : null;
@@ -29,6 +36,11 @@ public class JValue extends JToken
     public int asInt()
     {
         return (type == JTokenType.Integer) ? ((int) value) : null;
+    }
+
+    public boolean asBoolean()
+    {
+        return (type == JTokenType.Boolean) ? ((boolean) value) : null;
     }
 
     @Override
