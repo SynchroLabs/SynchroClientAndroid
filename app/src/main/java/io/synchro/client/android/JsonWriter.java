@@ -51,6 +51,28 @@ public class JsonWriter
         writer.write(Integer.toString(i));
     }
 
+    private static void writeArray(Writer writer, JArray array)
+            throws IOException
+    {
+        boolean firstElement = true;
+
+        writer.write('[');
+        for (JToken value : array)
+        {
+            if (!firstElement)
+            {
+                writer.write(',');
+            }
+            else
+            {
+                firstElement = false;
+            }
+
+            writeValue(writer, value);
+        }
+        writer.write(']');
+    }
+
     public static void writeValue(Writer writer, JToken value)
             throws IOException
     {
@@ -58,6 +80,10 @@ public class JsonWriter
         {
             case Integer:
                 writeNumber(writer, value.asInt());
+                break;
+
+            case Array:
+                writeArray(writer, (JArray) value);
                 break;
 
             default:

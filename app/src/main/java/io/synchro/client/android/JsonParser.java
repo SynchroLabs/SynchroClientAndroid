@@ -125,6 +125,45 @@ public class JsonParser
         }
     }
 
+    private static JArray parseArray(PushbackReader reader)
+            throws IOException
+    {
+        JArray finalList = new JArray();
+        int thisChar;
+
+        skipWhitespace(reader);
+
+        // Skip the opening bracket
+
+        reader.read();
+
+        skipWhitespace(reader);
+
+        // Read until closing bracket
+
+        while ((thisChar = reader.read()) != ']')
+        {
+            reader.unread(thisChar);
+
+            // Read a value
+
+            finalList.add(parseValue(reader));
+
+            skipWhitespace(reader);
+
+            // Skip the comma if any
+
+            if ((thisChar = reader.read()) != ',')
+            {
+                reader.unread(thisChar);
+            }
+
+            skipWhitespace(reader);
+        }
+
+        return finalList;
+    }
+
     static JToken parseValue(PushbackReader reader)
             throws IOException
     {
@@ -134,6 +173,10 @@ public class JsonParser
         if ((lookahead == '-') || ((lookahead >= '0') && (lookahead <= '9')))
         {
             return parseNumber(reader);
+        }
+        else if (lookahead == '[')
+        {
+            return parseArray(reader);
         }
         else
         {

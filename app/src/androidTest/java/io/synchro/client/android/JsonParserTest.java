@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public class JsonParserTest extends TestCase
 {
-    private void validateRoundTrip(String jsonInput, JValue expected)
+    private void validateRoundTrip(String jsonInput, JToken expected)
     {
         JToken token = null;
         String jsonOutput = null;
@@ -21,7 +21,7 @@ public class JsonParserTest extends TestCase
         }
         catch (IOException e)
         {
-            assertTrue("Unexpected exception", true);
+            assertTrue("Unexpected exception", false);
         }
 
         assertEquals(jsonInput, jsonOutput);
@@ -43,5 +43,14 @@ public class JsonParserTest extends TestCase
         validateRoundTrip("0", new JValue(0));
         validateRoundTrip(String.format("%d", Integer.MAX_VALUE), new JValue(Integer.MAX_VALUE));
         validateRoundTrip(String.format("%d", Integer.MIN_VALUE), new JValue(Integer.MIN_VALUE));
+    }
+
+    public void testParseArray()
+    {
+        validateRoundTrip("[]", new JArray());
+        validateRoundTrip("[0]", new JArray(new JToken[] { new JValue(0) }));
+        validateRoundTrip("[\"abc\"]", new JArray(new JToken[] { new JValue("abc") }));
+        validateRoundTrip("[0,\"abc\"]", new JArray(new JToken[] { new JValue(0), new JValue("abc") }));
+        validateRoundTrip("[0,\"abc\",[1,\"def\"]]", new JArray(new JToken[] { new JValue(0), new JValue("abc"), new JArray(new JToken[] { new JValue(1), new JValue("def") }) }));
     }
 }
