@@ -51,6 +51,12 @@ public class JsonWriter
         writer.write(Integer.toString(i));
     }
 
+    private static void writeNumber(Writer writer, double d)
+            throws IOException
+    {
+        writer.write(Double.toString(d));
+    }
+
     private static void writeArray(Writer writer, JArray array)
             throws IOException
     {
@@ -122,6 +128,10 @@ public class JsonWriter
         {
             case Integer:
                 writeNumber(writer, value.asInt());
+                break;
+
+            case Float:
+                writeNumber(writer, value.asDouble());
                 break;
 
             case Array:

@@ -49,6 +49,12 @@ public class JObject extends JToken
     }
 
     @Override
+    public double asDouble()
+    {
+        return 0;
+    }
+
+    @Override
     public boolean equals(Object obj)
     {
         if (super.equals(obj))

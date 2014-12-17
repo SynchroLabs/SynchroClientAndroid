@@ -33,6 +33,13 @@ public class JValue extends JToken
         this.value = value;
     }
 
+    public JValue(double value)
+    {
+        super(JTokenType.Float);
+
+        this.value = value;
+    }
+
     public String asString()
     {
         return (type == JTokenType.String) ? ((String) value) : null;
@@ -46,6 +53,11 @@ public class JValue extends JToken
     public boolean asBoolean()
     {
         return (type == JTokenType.Boolean) ? ((boolean) value) : null;
+    }
+
+    public double asDouble()
+    {
+        return (type == JTokenType.Float) ? ((double) value) : null;
     }
 
     @Override

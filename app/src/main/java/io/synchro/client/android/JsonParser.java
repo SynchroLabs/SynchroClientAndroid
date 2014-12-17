@@ -115,11 +115,11 @@ public class JsonParser
 
         String numberData = numberBuilder.toString();
 
-//        if (numberData.IndexOfAny("eE.".ToCharArray()) >= 0)
-//        {
-//            return double.Parse(numberData, CultureInfo.InvariantCulture.NumberFormat);
-//        }
-//        else
+        if (numberData.matches(".*[eE.].*"))
+        {
+            return new JValue(Double.parseDouble(numberData)); //, CultureInfo.InvariantCulture.NumberFormat);
+        }
+        else
         {
             return new JValue(Integer.parseInt(numberData));
         }

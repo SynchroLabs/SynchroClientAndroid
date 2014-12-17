@@ -47,6 +47,12 @@ public class JArray extends JToken implements Iterable<JToken>
     }
 
     @Override
+    public double asDouble()
+    {
+        return 0;
+    }
+
+    @Override
     public Iterator<JToken> iterator()
     {
         return backingArray.iterator();
