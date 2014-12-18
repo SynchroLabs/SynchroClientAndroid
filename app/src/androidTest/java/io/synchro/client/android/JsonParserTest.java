@@ -66,6 +66,20 @@ public class JsonParserTest extends TestCase
         validateRoundTrip("{\"bar\":\"kitty\",\"baz\":[8,\"dog\"],\"foo\":0}", expectedObject);
     }
 
+    public void testParseObjectWithWhitespace()
+            throws IOException
+    {
+        String json = "  {  \"foo\"  :  0  ,  \"bar\"  :  \"kitty\"  ,  \"baz\"  :  [8  ,  \"dog\"  ]  }  ";
+        JToken actual = JToken.parse(json);
+        JObject expectedObject = new JObject();
+
+        expectedObject.put("foo", new JValue(0));
+        expectedObject.put("bar", new JValue("kitty"));
+        expectedObject.put("baz", new JArray(new JToken[] { new JValue(8), new JValue("dog") }));
+
+        assertEquals(expectedObject, actual);
+    }
+
     public void testParseBoolean()
     {
         validateRoundTrip("true", new JValue(true));

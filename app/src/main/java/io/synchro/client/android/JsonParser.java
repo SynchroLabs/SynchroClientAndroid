@@ -263,6 +263,8 @@ public class JsonParser
     static JToken parseValue(PushbackReader reader)
             throws IOException
     {
+        skipWhitespace(reader);
+
         int lookahead = reader.read();
         reader.unread(lookahead);
 
