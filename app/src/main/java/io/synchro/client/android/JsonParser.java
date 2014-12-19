@@ -35,6 +35,30 @@ public class JsonParser
                         }
                     }
                 }
+                else /* thisChar assumed to be a * */
+                {
+                    while (true)
+                    {
+                        thisChar = (char) reader.read();
+
+                        if (thisChar == -1)
+                        {
+                            break;
+                        }
+                        else if (thisChar == '*')
+                        {
+                            thisChar = (char) reader.read();
+                            if (thisChar == '/')
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                reader.unread(thisChar);
+                            }
+                        }
+                    }
+                }
             }
             else
             {

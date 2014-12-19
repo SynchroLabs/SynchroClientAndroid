@@ -117,6 +117,30 @@ public class JsonParserTest extends TestCase
         assertEquals(expectedObject, actual);
     }
 
+    public void testMultilineComments()
+            throws IOException
+    {
+        String json =
+                "// This is a comment\n" +
+                "{\n" +
+                "// The foo element is my favorite.  But comment him out for now.\n" +
+                "/*\n" +
+                "\"foo\"  :  0,\n" +
+                "*/\n" +
+                "\"bar\"  :  \"kitty\",\n" +
+                "// The baz element, he's OK also\n" +
+                "\"baz\"  :  [  8  ,  \"dog\"  ]\n" +
+                "}\n" +
+                "\n";
+        JToken actual = JToken.parse(json);
+        JObject expectedObject = new JObject();
+
+        expectedObject.put("bar", new JValue("kitty"));
+        expectedObject.put("baz", new JArray(new JToken[] { new JValue(8), new JValue("dog") }));
+
+        assertEquals(expectedObject, actual);
+    }
+
     public void testParseBoolean()
     {
         validateRoundTrip("true", new JValue(true));
