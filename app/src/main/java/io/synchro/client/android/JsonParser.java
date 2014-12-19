@@ -13,8 +13,33 @@ public class JsonParser
     {
         char thisChar;
 
-        while (Character.isSpaceChar(thisChar = (char) reader.read()))
+        while (true)
         {
+            while (Character.isWhitespace(thisChar = (char) reader.read()))
+            {
+            }
+
+            if (thisChar == '/')
+            {
+                thisChar = (char) reader.read();
+
+                if (thisChar == '/')
+                {
+                    while (true)
+                    {
+                        thisChar = (char) reader.read();
+
+                        if ((thisChar == '\r') || (thisChar == '\n') || (thisChar == -1))
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                break;
+            }
         }
 
         if (thisChar != -1)
