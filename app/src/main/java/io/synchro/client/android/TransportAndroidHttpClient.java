@@ -1,5 +1,7 @@
 package io.synchro.client.android;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -12,6 +14,8 @@ import java.net.URL;
  */
 public class TransportAndroidHttpClient
 {
+    public static final String TAG = TransportAndroidHttpClient.class.getSimpleName();
+
     private final URL _url;
 
     public TransportAndroidHttpClient(URL url)
@@ -27,6 +31,7 @@ public class TransportAndroidHttpClient
         requestObject.put("Mode", new JValue("AppDefinition"));
         requestObject.put("TransactionId", new JValue(0));
 
+        Log.i(TAG, String.format("Connecting to %s", _url));
         HttpURLConnection connection = (HttpURLConnection) _url.openConnection();
 
         connection.setRequestMethod("POST");
@@ -34,12 +39,16 @@ public class TransportAndroidHttpClient
 //        connection.setRequestProperty("User-Agent", "SynchroClientAndroid/1");
         connection.setDoOutput(true);
 
+        Log.d(TAG, "Performing write");
         {
             OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
             //noinspection TryFinallyCanBeTryWithResources
             try
             {
-                writer.write(requestObject.toJson());
+                String json = requestObject.toJson();
+
+                Log.d(TAG, String.format("Request data is %s", json));
+                writer.write(json);
             }
             finally
             {
@@ -47,12 +56,16 @@ public class TransportAndroidHttpClient
             }
         }
 
+        Log.d(TAG, "Performing read");
         {
             PushbackReader reader = new PushbackReader(new InputStreamReader(connection.getInputStream()));
             //noinspection TryFinallyCanBeTryWithResources
             try
             {
-                return (JObject) (((JObject) JsonParser.parseValue(reader)).get("App"));
+                JObject returnedObject = (JObject) JsonParser.parseValue(reader);
+                Log.d(TAG, String.format("Returned parsed object is %s", returnedObject.toJson()));
+                Log.d(TAG, "Returning object");
+                return (JObject) returnedObject.get("App");
             }
             finally
             {
