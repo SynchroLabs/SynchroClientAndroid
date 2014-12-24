@@ -1,8 +1,8 @@
-- [ ] Util (no port, but added new platform-specific stuff to it)
-- [ ] Logger
-- [ ] Json
-- [ ] JsonParser
-- [ ] JsonWriter
+- [X] Util (not sure what I'm gonna need so fine, done)
+- [X] Logger
+- [X] Json
+- [X] JsonParser
+- [X] JsonWriter
 - [ ] SynchroApp (was MaaasApp, requires Json)
 
 - [ ] DeviceMetrics/iOSDeviceMetrics
