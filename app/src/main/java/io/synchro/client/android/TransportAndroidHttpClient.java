@@ -64,7 +64,6 @@ public class TransportAndroidHttpClient
             {
                 JObject returnedObject = (JObject) JsonParser.parseValue(reader);
                 Log.d(TAG, String.format("Returned parsed object is %s", returnedObject.toJson()));
-                Log.d(TAG, "Returning object");
                 return (JObject) returnedObject.get("App");
             }
             finally
