@@ -33,3 +33,4 @@ Some peculiarities:
 
 * BOM on seed.json caused fits. Not sure what to do with BOM on UTF-8 asset files. I presume http://stackoverflow.com/questions/4897876/reading-utf-8-bom-marker is relevant. I deleted the BOM.
 * Slashes were not escaped on seed.json. Parser parsed it. Not sure if that's a problem.
+* I'm confused by "name" vs. "description" in the app JSON.
