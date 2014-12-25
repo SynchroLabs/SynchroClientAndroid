@@ -27,5 +27,6 @@ public class SplashActivity extends Activity
         }
 
         startActivity(new Intent(this, LauncherActivity.class));
+        finish();
     }
 }
