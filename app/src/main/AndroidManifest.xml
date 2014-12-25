@@ -12,12 +12,16 @@
         <activity
             android:name=".SplashActivity"
             android:label="@string/title_activity_splash"
-            android:theme="@style/Theme.Splash">
+            android:theme="@style/Theme.Splash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".LauncherActivity"
+            android:label="@string/title_activity_launcher" >
         </activity>
     </application>
 

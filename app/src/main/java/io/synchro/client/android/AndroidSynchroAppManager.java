@@ -55,6 +55,13 @@ public class AndroidSynchroAppManager
         }
     }
 
+    public SynchroApp[] getApps()
+    {
+        SynchroApp[] returnArray = new SynchroApp[apps.size()];
+        apps.values().toArray(returnArray);
+        return returnArray;
+    }
+
     public static AndroidSynchroAppManager getAppManager(Context context)
     {
         if (instance == null)
