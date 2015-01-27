@@ -40,6 +40,13 @@ public class JValue extends JToken
         this.value = value;
     }
 
+    public JValue(JValue value)
+    {
+        super(value.type);
+
+        this.value = value.value;
+    }
+
     public String asString()
     {
         return (type == JTokenType.String) ? ((String) value) : null;
@@ -58,6 +65,18 @@ public class JValue extends JToken
     public double asDouble()
     {
         return (type == JTokenType.Float) ? ((double) value) : null;
+    }
+
+    public void copyFrom(JValue other)
+    {
+        type = other.type;
+        value = other.value;
+    }
+
+    @Override
+    public JToken deepClone()
+    {
+        return new JValue(this);
     }
 
     @Override

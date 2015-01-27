@@ -1,5 +1,6 @@
 package io.synchro.client.android;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -17,7 +18,13 @@ public class JObject extends JToken
 
     public void put(String key, JToken value)
     {
+        if (backingMap.containsKey(key))
+        {
+            JToken oldValue = backingMap.get(key);
+            oldValue.setParent(null);
+        }
         backingMap.put(key, value);
+        value.setParent(this);
     }
 
     public JToken get(String key)
@@ -28,6 +35,18 @@ public class JObject extends JToken
     public Set<String> keySet()
     {
         return backingMap.keySet();
+    }
+
+    public void replace(JToken oldToken, JToken newToken)
+    {
+        for (Map.Entry<String, JToken> entry : backingMap.entrySet())
+        {
+            if (entry.getValue() == oldToken)
+            {
+                put(entry.getKey(), newToken);
+                break;
+            }
+        }
     }
 
     @Override
@@ -52,6 +71,19 @@ public class JObject extends JToken
     public double asDouble()
     {
         return 0;
+    }
+
+    @Override
+    public JToken deepClone()
+    {
+        JObject clone = new JObject();
+
+        for (String key : keySet())
+        {
+            clone.put(key, get(key).deepClone());
+        }
+
+        return clone;
     }
 
     @Override

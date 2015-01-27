@@ -26,6 +26,23 @@ public class JArray extends JToken implements Iterable<JToken>
     public void add(JToken element)
     {
         backingArray.add(element);
+        element.setParent(this);
+    }
+
+    public int size()
+    {
+        return backingArray.size();
+    }
+
+    public JToken get(int index) { return backingArray.get(index); }
+
+    public int indexOf(JToken element) { return backingArray.indexOf(element); }
+
+    public void replace(JToken oldToken, JToken newToken)
+    {
+        oldToken.setParent(null);
+        backingArray.set(backingArray.indexOf(oldToken), newToken);
+        newToken.setParent(this);
     }
 
     @Override
@@ -50,6 +67,19 @@ public class JArray extends JToken implements Iterable<JToken>
     public double asDouble()
     {
         return 0;
+    }
+
+    @Override
+    public JToken deepClone()
+    {
+        JArray clone = new JArray();
+
+        for (JToken element : backingArray)
+        {
+            clone.add(element.deepClone());
+        }
+
+        return clone;
     }
 
     @Override

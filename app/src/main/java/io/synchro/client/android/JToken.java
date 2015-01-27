@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by blake on 12/9/14.
  */
 public abstract class JToken
 {
-    protected final JTokenType type;
+    protected JTokenType type;
+    protected JToken _parent;
 
     public JToken(JTokenType type)
     {
@@ -27,6 +30,12 @@ public abstract class JToken
     public abstract int asInt();
     public abstract boolean asBoolean();
     public abstract double asDouble();
+    public abstract JToken deepClone();
+
+    public JTokenType getType()
+    {
+        return type;
+    }
 
     public String toJson()
             throws IOException
@@ -35,6 +44,100 @@ public abstract class JToken
 
         JsonWriter.writeValue(writer, this);
         return writer.toString();
+    }
+
+    private static Pattern pathRegex = Pattern.compile("\\[(\\d+)\\]");
+
+    public JToken selectToken(String path)
+    {
+        Matcher matcher = pathRegex.matcher(path);
+        String[] pathElements = matcher.replaceAll(".$1").split("\\.");
+        JToken currentToken = this;
+        for (String element : pathElements)
+        {
+            if (currentToken instanceof JArray)
+            {
+                currentToken = ((JArray)currentToken).get(Integer.parseInt(element));
+            }
+            else if (currentToken instanceof JObject)
+            {
+                currentToken = ((JObject)currentToken).get(element);
+            }
+            else
+            {
+                // If you try to go into anything other than an object or array looking for a
+                // child element, you are barking up the wrong tree...
+                //
+                throw new IllegalArgumentException("The provided path did not resolve to a token");
+            }
+        }
+
+        return currentToken;
+    }
+
+    public JToken getParent()
+    {
+        return _parent;
+    }
+
+    public void setParent(JToken parent)
+    {
+        _parent = parent;
+    }
+
+    public static JToken updateTokenValue(JToken currentToken, JToken newToken)
+    {
+        if (currentToken != newToken)
+        {
+            if ((currentToken instanceof JValue) && (newToken instanceof JValue))
+            {
+                // If the current token and the new token are both primitive values, then we just do a
+                // value assignment...
+                //
+                ((JValue)currentToken).copyFrom(((JValue)newToken));
+            }
+            else
+            {
+                // Otherwise we have to replace the current token with the new token in the current token's parent...
+                //
+                if (currentToken.replace(newToken))
+                {
+                    return newToken; // Token change
+                }
+            }
+        }
+        return null; // Value-only change, or no change
+    }
+
+    public boolean replace(JToken token)
+    {
+        boolean bReplaced = false;
+
+        if ((_parent != null) && (token != this))
+        {
+            // Find ourself in our parent, and replace...
+            //
+            if (_parent instanceof JObject)
+            {
+                JObject parentObject = (JObject) _parent;
+                parentObject.replace(this, token);
+                bReplaced = true;
+            }
+            else if (_parent instanceof JArray)
+            {
+                JArray parentArray = (JArray) _parent;
+                parentArray.replace(this, token);
+                bReplaced = true;
+            }
+
+            if (bReplaced && (_parent != null))
+            {
+                // Parent should handle nulling parent when this when item removed...
+                throw new IllegalStateException("Item was replaced, but parent was not cleared");
+            }
+        }
+
+        return bReplaced;
     }
 
     @Override
