@@ -67,39 +67,38 @@ public class BindingContext
             {
                 pathElement = pathElement.substring(1);
                 Log.d(TAG, "Found binding path element: %s".format(pathElement));
-                if (pathElement == "root")
+                switch (pathElement)
                 {
-                    parentPath = "";
-                }
-                else if (pathElement == "parent")
-                {
-                    if (parentPath.length() != 0)
-                    {
-                        int lastDot = parentPath.lastIndexOf(".");
-                        if (lastDot == -1)
+                    case "root":
+                        parentPath = "";
+                        break;
+                    case "parent":
+                        if (parentPath.length() != 0)
                         {
-                            // Remove the only remaining path segment
-                            parentPath = "";
+                            int lastDot = parentPath.lastIndexOf(".");
+                            if (lastDot == -1)
+                            {
+                                // Remove the only remaining path segment
+                                parentPath = "";
+                            }
+                            else
+                            {
+                                // Remove the last (rightmost) path segment
+                                parentPath = parentPath.substring(0, lastDot);
+                            }
                         }
-                        else
-                        {
-                            // Remove the last (rightmost) path segment
-                            parentPath = parentPath.substring(0, lastDot);
-                        }
-                    }
-                }
-                else if (pathElement == "data")
-                {
-                    // We're going to treat $data as a noop
-                }
-                else if (pathElement == "index")
-                {
-                    _isIndex = true;
+                        break;
+                    case "data":
+                        // We're going to treat $data as a noop
+                        break;
+                    case "index":
+                        _isIndex = true;
+                        break;
                 }
             }
             else
             {
-                _bindingPath = _bindingPath + pathElement;
+                _bindingPath = _bindingPath + ((_bindingPath.length() == 0) ? "" : ".") + pathElement;
             }
         }
 
@@ -195,10 +194,9 @@ public class BindingContext
 
                 while (parent != null)
                 {
-                    JArray parentArray = (JArray) parent;
-                    if (parentArray != null)
+                    if (parent instanceof JArray)
                     {
-                        return new JValue(parentArray.indexOf(child));
+                        return new JValue(((JArray) parent).indexOf(child));
                     }
                     else
                     {
