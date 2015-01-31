@@ -124,4 +124,24 @@ public class BindingContextTest extends TestCase
         assertEquals(testViewModel, viewModel);
         assertTrue(testViewModel.equals(viewModel));
     }
+
+    public void testRebind()
+    {
+        JObject testViewModel = (JObject)viewModel.deepClone();
+
+        BindingContext bindingCtx = new BindingContext(testViewModel);
+        BindingContext colorNameCtx = bindingCtx.Select("colors[1].name");
+
+        JObject newColor = new JObject();
+
+        newColor.put("name", new JValue("Purple"));
+        newColor.put("color", new JValue("purp"));
+        newColor.put("value", new JValue("0x696969"));
+
+        ((JArray)testViewModel.get("colors")).set(1, newColor);
+
+        assertEquals("Green", colorNameCtx.GetValue().asString());
+        colorNameCtx.Rebind();
+        assertEquals("Purple", colorNameCtx.GetValue().asString());
+    }
 }
