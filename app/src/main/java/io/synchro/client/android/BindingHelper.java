@@ -76,8 +76,9 @@ public class BindingHelper
                     // Top-level binding spec object contains "command", and the default binding attribute is a command, so
                     // promote { command: "doSomething" } to { defaultBindingAttribute: { command: "doSomething" } }
                     //
+                    JObject oldBindingObject = bindingObject;
                     bindingObject = new JObject();
-                    bindingObject.put(defaultBindingAttribute, bindingObject);
+                    bindingObject.put(defaultBindingAttribute, oldBindingObject);
                 }
             }
             else
