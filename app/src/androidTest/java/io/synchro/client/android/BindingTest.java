@@ -81,4 +81,35 @@ public class BindingTest extends TestCase
         JObject bindingSpec = BindingHelper.GetCanonicalBindingSpec(controlSpec, "onClick", new String[]{"onClick"});
         assertEquals(expectedBindingSpec, bindingSpec);
     }
+
+    public void testBindingHelperPromoteMultipleCommands()
+    {
+        // For multiple commands with implicit values...
+        //
+        //     binding: { onClick: "doClickCommand", onSelect: "doSelectCommand" }
+        //
+        JObject controlSpec = new JObject();
+        JObject innerControlSpec = new JObject();
+
+        innerControlSpec.put("onClick", new JValue("doClickCommand"));
+        innerControlSpec.put("onSelect", new JValue("doSelectCommand"));
+        controlSpec.put("binding", innerControlSpec);
+
+        // becomes
+        //
+        //     binding: { onClick: { command: "doClickCommand" }, onSelect: { command: "doSelectCommand" } }
+        //
+        JObject expectedBindingSpec = new JObject();
+
+        JObject innerCommand = new JObject();
+        innerCommand.put("command", new JValue("doClickCommand"));
+        expectedBindingSpec.put("onClick", innerCommand);
+
+        innerCommand = new JObject();
+        innerCommand.put("command", new JValue("doSelectCommand"));
+        expectedBindingSpec.put("onSelect", innerCommand);
+
+        JObject bindingSpec = BindingHelper.GetCanonicalBindingSpec(controlSpec, "onClick", new String[]{"onClick", "onSelect"});
+        assertEquals(expectedBindingSpec, bindingSpec);
+    }
 }
