@@ -36,6 +36,11 @@ public class JArray extends JToken implements Iterable<JToken>
 
     public JToken get(int index) { return backingArray.get(index); }
 
+    public JToken set(int index, JToken value)
+    {
+        return backingArray.set(index, value);
+    }
+
     public int indexOf(JToken element) { return backingArray.indexOf(element); }
 
     public void replace(JToken oldToken, JToken newToken)
