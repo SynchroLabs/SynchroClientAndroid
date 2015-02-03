@@ -169,4 +169,79 @@ public class PropertyValueTest extends TestCase
         assertEquals(JTokenType.Float, expandedPropValToken.getType());
         assertEquals(13.69, expandedPropValToken.asDouble());
     }
+
+    public void testPropertyValueBoolToken()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("serial", new JValue(true));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("{serial}", bindingCtx);
+        JToken expandedPropValToken = propVal.Expand();
+
+        assertEquals(JTokenType.Boolean, expandedPropValToken.getType());
+        assertEquals(true, expandedPropValToken.asBoolean());
+    }
+
+    public void testPropertyValueBoolTokenNegated()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("serial", new JValue(true));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("{!serial}", bindingCtx);
+        JToken expandedPropValToken = propVal.Expand();
+
+        assertEquals(JTokenType.Boolean, expandedPropValToken.getType());
+        assertEquals(false, expandedPropValToken.asBoolean());
+    }
+
+    public void testPropertyValueStringToken()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("serial", new JValue("foo"));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("{serial}", bindingCtx);
+        JToken expandedPropValToken = propVal.Expand();
+
+        assertEquals(JTokenType.String, expandedPropValToken.getType());
+        assertEquals("foo", expandedPropValToken.asString());
+    }
+
+    public void testPropertyValueStringTokenNegated()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("serial", new JValue("foo"));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("{!serial}", bindingCtx);
+        JToken expandedPropValToken = propVal.Expand();
+
+        // When we negate a string, the type is coerced (converted) to bool, then inverted...
+        assertEquals(JTokenType.Boolean, expandedPropValToken.getType());
+        assertEquals(false, expandedPropValToken.asBoolean());
+    }
+
+    public void testEscapedCurlyBrackets()
+    {
+        JObject viewModel = new JObject();
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("This is how you indicate a token: {{serial}}", bindingCtx);
+        assertEquals("This is how you indicate a token: {serial}", propVal.Expand().asString());
+
+        propVal = new PropertyValue("Open {{ only", bindingCtx);
+        assertEquals("Open { only", propVal.Expand().asString());
+
+        propVal = new PropertyValue("Close }} only", bindingCtx);
+        assertEquals("Close } only", propVal.Expand().asString());
+
+        propVal = new PropertyValue("{{{{Double}}}}", bindingCtx);
+        assertEquals("{{Double}}", propVal.Expand().asString());
+    }
 }

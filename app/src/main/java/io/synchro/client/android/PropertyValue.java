@@ -87,6 +87,11 @@ public class PropertyValue
         }
         m.appendTail(finalString);
         _formatString = finalString.toString();
+
+        // De-escape any escaped braces...
+        //
+        _formatString = _formatString.replace("{{", "{");
+        _formatString = _formatString.replace("}}", "}");
     }
 
     public JToken Expand()
