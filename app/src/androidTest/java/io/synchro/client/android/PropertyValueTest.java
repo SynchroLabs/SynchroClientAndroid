@@ -244,4 +244,14 @@ public class PropertyValueTest extends TestCase
         propVal = new PropertyValue("{{{{Double}}}}", bindingCtx);
         assertEquals("{{Double}}", propVal.Expand().asString());
     }
+
+    public void testContainsBindingToken()
+    {
+        assertFalse(PropertyValue.ContainsBindingTokens(""));
+        assertFalse(PropertyValue.ContainsBindingTokens("{{foo}}"));
+        assertFalse(PropertyValue.ContainsBindingTokens("Foo {{bar}} baz"));
+        assertTrue(PropertyValue.ContainsBindingTokens("{bar}"));
+        assertTrue(PropertyValue.ContainsBindingTokens("Foo {bar} baz"));
+        assertTrue(PropertyValue.ContainsBindingTokens("Foo {bar} {baz}"));
+    }
 }

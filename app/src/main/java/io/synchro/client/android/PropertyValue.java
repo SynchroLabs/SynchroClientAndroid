@@ -121,7 +121,7 @@ public class PropertyValue
 
     public static boolean ContainsBindingTokens(String value)
     {
-        return _braceContentsRE.matcher(value).matches();
+        return _braceContentsRE.matcher(value).find();
     }
 
     public static JToken Expand(String tokenString, BindingContext bindingContext)
