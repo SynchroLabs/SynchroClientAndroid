@@ -141,4 +141,32 @@ public class PropertyValueTest extends TestCase
 
         assertEquals("The Colors are Red, Greenish, and Blue", propVal.Expand().asString());
     }
+
+    public void testPropertyValueIntToken()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("serial", new JValue(420));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("{serial}", bindingCtx);
+        JToken expandedPropValToken = propVal.Expand();
+
+        assertEquals(JTokenType.Integer, expandedPropValToken.getType());
+        assertEquals(420, expandedPropValToken.asInt());
+    }
+
+    public void testPropertyValueFloatToken()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("serial", new JValue(13.69));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("{serial}", bindingCtx);
+        JToken expandedPropValToken = propVal.Expand();
+
+        assertEquals(JTokenType.Float, expandedPropValToken.getType());
+        assertEquals(13.69, expandedPropValToken.asDouble());
+    }
 }

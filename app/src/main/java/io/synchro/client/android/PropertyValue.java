@@ -91,7 +91,7 @@ public class PropertyValue
 
     public JToken Expand()
     {
-        if (_formatString.equals("{0}"))
+        if (_formatString.equals("%s"))
         {
             // If there is a binding containing exactly a single token, then that token may resolve to
             // a value of any type (not just string), and we want to preserve that type, so we process
