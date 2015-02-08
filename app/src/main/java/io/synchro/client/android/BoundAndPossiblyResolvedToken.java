@@ -2,6 +2,8 @@ package io.synchro.client.android;
 
 import android.util.Log;
 
+import java.text.NumberFormat;
+
 /**
  * Created by blake on 1/19/15.
  */
@@ -129,11 +131,27 @@ public class BoundAndPossiblyResolvedToken
                     case 'f':
                     case 'N': // Number
                     case 'n':
-                    case 'P': // Percent
-                    case 'p':
                     {
 //                        return String.Format("{0:" + _formatSpec + "}", numericValue);
                         return null;
+                    }
+                    case 'P': // Percent
+                    case 'p':
+                    {
+                        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+                        String precisionSpec = _formatSpec.substring(1);
+                        if (precisionSpec.length() > 0)
+                        {
+                            percentFormat.setMinimumFractionDigits(Integer.parseInt(precisionSpec));
+                        }
+                        else
+                        {
+                            // The C# default is 2 digits of percent precision apparently. Oh, and it's on a per-locale basis.
+                            // https://msdn.microsoft.com/en-us/library/system.globalization.numberformatinfo.percentdecimaldigits(v=vs.110).aspx
+                            percentFormat.setMinimumFractionDigits(2);
+                        }
+                        return percentFormat.format(numericValue);
+//                        return String.Format("{0:" + _formatSpec + "}", numericValue);
                     }
                 }
             }

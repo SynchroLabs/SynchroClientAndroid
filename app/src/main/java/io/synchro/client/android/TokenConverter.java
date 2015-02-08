@@ -74,7 +74,7 @@ public class TokenConverter
 
     public static Double ToDouble(JToken value, Double defaultValue)
     {
-        double result = defaultValue;
+        Double result = defaultValue;
 
         if (value != null)
         {
@@ -83,7 +83,14 @@ public class TokenConverter
                 JValue jValue = (JValue) value;
                 if (jValue.getType() == JTokenType.String)
                 {
-                    result = Double.parseDouble(value.asString());
+                    try
+                    {
+                        result = Double.parseDouble(value.asString());
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        // Not formatted as a number, no biggie...
+                    }
                 }
                 else
                 {

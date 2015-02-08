@@ -254,4 +254,46 @@ public class PropertyValueTest extends TestCase
         assertTrue(PropertyValue.ContainsBindingTokens("Foo {bar} baz"));
         assertTrue(PropertyValue.ContainsBindingTokens("Foo {bar} {baz}"));
     }
+
+    public void testNumericFormattingIntNoSpec()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("serial", new JValue(69));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("The number is: {serial}", bindingCtx);
+
+        assertEquals("The number is: 69", propVal.Expand().asString());
+    }
+
+    public void testNumericFormattingFloatNoSpec()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("serial", new JValue(13.69));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("The number is: {serial}", bindingCtx);
+
+        assertEquals("The number is: 13.69", propVal.Expand().asString());
+    }
+
+    public void testNumericFormattingAsPercentage()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("intVal", new JValue(13));
+        viewModel.put("doubleVal", new JValue(0.69139876));
+        viewModel.put("strVal", new JValue("threeve"));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("The int percentage is {intVal:P}, the double is: {doubleVal:P2}, and the str is {strVal:P2}", bindingCtx);
+
+        // !!! On .NET we get a space between the value and the percent sign.  The iOS and Android percent formatter does not do this.  All formatters are
+        //     using a locale-aware formatter and presumably know what they're doing, so I'm not inclined to try to "fix" one of them to make them
+        //     match.
+        //
+        assertEquals("The int percentage is 1,300.00%, the double is: 69.14%, and the str is threeve", propVal.Expand().asString());
+    }
 }

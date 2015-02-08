@@ -64,6 +64,11 @@ public class JValue extends JToken
 
     public double asDouble()
     {
+        if (type == JTokenType.Integer)
+        {
+            return (double) (int) value;
+        }
+
         return (type == JTokenType.Float) ? ((double) value) : null;
     }
 
