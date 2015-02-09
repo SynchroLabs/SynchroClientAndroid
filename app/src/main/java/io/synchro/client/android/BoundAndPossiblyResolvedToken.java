@@ -2,6 +2,7 @@ package io.synchro.client.android;
 
 import android.util.Log;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 /**
@@ -114,8 +115,18 @@ public class BoundAndPossiblyResolvedToken
                     case 'D': // Decimal (int)
                     case 'd':
                     {
+                        StringBuffer formatString = new StringBuffer();
+                        String precisionSpec = _formatSpec.substring(1);
+                        if (precisionSpec.length() > 0)
+                        {
+                            for (int counter = 0;counter < Integer.parseInt(precisionSpec);++counter)
+                            {
+                                formatString.append('0');
+                            }
+                        }
+                        DecimalFormat decimalFormat = new DecimalFormat(formatString.toString());
+                        return decimalFormat.format(numericValue);
 //                        return String.Format("{0:" + _formatSpec + "}", (int)numericValue);
-                        return null;
                     }
 
                     case 'X': // Hex (uint)
@@ -146,8 +157,7 @@ public class BoundAndPossiblyResolvedToken
                         }
                         else
                         {
-                            // The C# default is 2 digits of percent precision apparently. Oh, and it's on a per-locale basis.
-                            // https://msdn.microsoft.com/en-us/library/system.globalization.numberformatinfo.percentdecimaldigits(v=vs.110).aspx
+                            // The C# default is 2 digits of percent precision apparently
                             percentFormat.setMinimumFractionDigits(2);
                         }
                         return percentFormat.format(numericValue);

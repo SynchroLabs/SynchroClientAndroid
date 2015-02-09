@@ -296,4 +296,18 @@ public class PropertyValueTest extends TestCase
         //
         assertEquals("The int percentage is 1,300.00%, the double is: 69.14%, and the str is threeve", propVal.Expand().asString());
     }
+
+    public void testNumericFormattingAsDecimal()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("intVal", new JValue(-13420));
+        viewModel.put("doubleVal", new JValue(69.139876));
+        viewModel.put("strVal", new JValue("threeve"));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("The int val is {intVal:D}, the double val is: {doubleVal:D4}, and the str val is {strVal:D2}", bindingCtx);
+
+        assertEquals("The int val is -13420, the double val is: 0069, and the str val is threeve", propVal.Expand().asString());
+    }
 }
