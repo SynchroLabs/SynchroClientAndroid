@@ -370,4 +370,16 @@ public class PropertyValueTest extends TestCase
         // Also, for Java, it appears that the rounding on the last digit of the decimal is not controllable. Enjoy!
         assertEquals("The int val is -6.90E1, the double val is: 6.9120E1, and the str val is threeve", propVal.Expand().asString());
     }
+
+    public void testNumericFormattingParsesStringAsNumber()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("strVal", new JValue("13"));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("The numeric value is {strVal:F2}", bindingCtx);
+
+        assertEquals("The numeric value is 13.00", propVal.Expand().asString());
+    }
 }
