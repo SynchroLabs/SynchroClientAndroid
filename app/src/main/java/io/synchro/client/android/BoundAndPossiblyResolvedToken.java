@@ -132,8 +132,18 @@ public class BoundAndPossiblyResolvedToken
                     case 'X': // Hex (uint)
                     case 'x':
                     {
+                        String finalFormat;
+                        String precisionSpec = _formatSpec.substring(1);
+                        if (precisionSpec.length() > 0)
+                        {
+                            finalFormat = "%0" + precisionSpec + formatSpecifier;
+                        }
+                        else
+                        {
+                            finalFormat = "%" + formatSpecifier;
+                        }
+                        return String.format(finalFormat, numericValue.intValue());
 //                        return String.Format("{0:" + _formatSpec + "}", (uint)(int)numericValue);
-                        return null;
                     }
 
                     case 'E': // Exponential
