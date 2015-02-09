@@ -148,11 +148,38 @@ public class BoundAndPossiblyResolvedToken
 
                     case 'E': // Exponential
                     case 'e':
+                    {
+                        StringBuffer formatString = new StringBuffer();
+                        formatString.append("#.");
+                        String precisionSpec = _formatSpec.substring(1);
+                        if (precisionSpec.length() > 0)
+                        {
+                            for (int counter = 0;counter < Integer.parseInt(precisionSpec);++counter)
+                            {
+                                formatString.append('0');
+                            }
+                        }
+                        formatString.append("E0");
+                        DecimalFormat decimalFormat = new DecimalFormat(formatString.toString());
+                        return decimalFormat.format(numericValue);
+//                        return String.Format("{0:" + _formatSpec + "}", numericValue);
+                    }
                     case 'F': // Fixed-point
                     case 'f':
                     {
+                        StringBuffer formatString = new StringBuffer();
+                        formatString.append("#.");
+                        String precisionSpec = _formatSpec.substring(1);
+                        if (precisionSpec.length() > 0)
+                        {
+                            for (int counter = 0;counter < Integer.parseInt(precisionSpec);++counter)
+                            {
+                                formatString.append('0');
+                            }
+                        }
+                        DecimalFormat decimalFormat = new DecimalFormat(formatString.toString());
+                        return decimalFormat.format(numericValue);
 //                        return String.Format("{0:" + _formatSpec + "}", numericValue);
-                        return null;
                     }
                     case 'N': // Number
                     case 'n':

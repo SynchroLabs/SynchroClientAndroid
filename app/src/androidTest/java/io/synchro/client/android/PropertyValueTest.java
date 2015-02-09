@@ -338,4 +338,36 @@ public class PropertyValueTest extends TestCase
 
         assertEquals("The int val is fe, the double val is: 00FE, and the str val is threeve", propVal.Expand().asString());
     }
+
+    public void testNumericFormattingAsFixedPoint()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("intVal", new JValue(-13420));
+        viewModel.put("doubleVal", new JValue(254.139876));
+        viewModel.put("strVal", new JValue("threeve"));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("The int val is {intVal:F2}, the double val is: {doubleVal:F4}, and the str val is {strVal:F2}", bindingCtx);
+
+        assertEquals("The int val is -13420.00, the double val is: 254.1399, and the str val is threeve", propVal.Expand().asString());
+    }
+
+    public void testNumericFormattingAsExponential()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("intVal", new JValue(-69));
+        viewModel.put("doubleVal", new JValue(69.123456789));
+        viewModel.put("strVal", new JValue("threeve"));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("The int val is {intVal:E2}, the double val is: {doubleVal:e4}, and the str val is {strVal:e2}", bindingCtx);
+
+        // !!! .NET uses the "e+001" notation, whereas iOS and Android use "e1" notation.  Since they both use locale-aware built-in formatters for this,
+        //     I'm not inclined to try to "fix" one of them to make them match.
+        //
+        // Also, for Java, it appears that the rounding on the last digit of the decimal is not controllable. Enjoy!
+        assertEquals("The int val is -6.90E1, the double val is: 6.9120E1, and the str val is threeve", propVal.Expand().asString());
+    }
 }
