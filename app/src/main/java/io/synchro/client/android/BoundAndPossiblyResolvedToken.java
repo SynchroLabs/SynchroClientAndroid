@@ -140,11 +140,26 @@ public class BoundAndPossiblyResolvedToken
                     case 'e':
                     case 'F': // Fixed-point
                     case 'f':
-                    case 'N': // Number
-                    case 'n':
                     {
 //                        return String.Format("{0:" + _formatSpec + "}", numericValue);
                         return null;
+                    }
+                    case 'N': // Number
+                    case 'n':
+                    {
+                        NumberFormat percentFormat = NumberFormat.getNumberInstance();
+                        String precisionSpec = _formatSpec.substring(1);
+                        if (precisionSpec.length() > 0)
+                        {
+                            percentFormat.setMinimumFractionDigits(Integer.parseInt(precisionSpec));
+                        }
+                        else
+                        {
+                            // The C# default is 2 digits of percent precision apparently
+                            percentFormat.setMinimumFractionDigits(2);
+                        }
+                        return percentFormat.format(numericValue);
+//                        return String.Format("{0:" + _formatSpec + "}", numericValue);
                     }
                     case 'P': // Percent
                     case 'p':

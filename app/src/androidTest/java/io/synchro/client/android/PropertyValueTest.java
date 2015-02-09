@@ -310,4 +310,18 @@ public class PropertyValueTest extends TestCase
 
         assertEquals("The int val is -13420, the double val is: 0069, and the str val is threeve", propVal.Expand().asString());
     }
+
+    public void testNumericFormattingAsNumber()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("intVal", new JValue(-13420));
+        viewModel.put("doubleVal", new JValue(69.139876));
+        viewModel.put("strVal", new JValue("threeve"));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("The int val is {intVal:N}, the double val is: {doubleVal:N4}, and the str val is {strVal:N2}", bindingCtx);
+
+        assertEquals("The int val is -13,420.00, the double val is: 69.1399, and the str val is threeve", propVal.Expand().asString());
+    }
 }
