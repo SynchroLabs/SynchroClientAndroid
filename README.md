@@ -8,9 +8,9 @@
 - [ ] DeviceMetrics/iOSDeviceMetrics
 - [ ] Transport/TransportHttp (requires SynchroApp)
 
-- [ ] BindingContext (requires Json)
-- [ ] TokenConverter
-- [ ] Binding (requires BindingContext)
+- [X] BindingContext (requires Json)
+- [X] TokenConverter
+- [X] Binding (requires BindingContext)
 
 - [ ] ViewModel (requires Binding and BindingContext)
 
