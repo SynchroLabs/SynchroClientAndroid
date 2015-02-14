@@ -183,4 +183,94 @@ public class ViewModelTest extends TestCase
         //
         assertEquals(0, viewModel.CollectChangedValues().size());
     }
+
+    public void testUpdateViewFromViewModelDeltas()
+    {
+        ViewModel viewModel = new ViewModel();
+
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        final boolean[] bindingsInitialized = new boolean[] { false };
+
+        final String serialString[] = new String[] { "" };
+        PropertyBinding propBinding = viewModel.CreateAndRegisterPropertyBinding(
+                viewModel.getRootBindingContext(),
+                "Serial: {serial}",
+                new ISetViewValue()
+                {
+                    @Override
+                    public void SetViewValue(JToken value)
+                    {
+                        serialString[0] = value.asString();
+                    }
+                }
+            );
+
+        final String titleString[] = new String[] { "" };
+        PropertyBinding propBindingTitle = viewModel.CreateAndRegisterPropertyBinding(
+                viewModel.getRootBindingContext(),
+                "Title: {title}",
+                new ISetViewValue()
+                {
+                    @Override
+                    public void SetViewValue(JToken value)
+                    {
+                        titleString[0] = value.asString();
+                        if (bindingsInitialized[0])
+                        {
+                            fail("Property binding setter for title should not be called after initialization (since its token wasn't impacted by the deltas)");
+                        }
+                    }
+                }
+             );
+
+        final int serialValue[] = new int[] { -1 };
+        ValueBinding valBinding = viewModel.CreateAndRegisterValueBinding(
+                viewModel.getRootBindingContext().Select("serial"),
+                new IGetViewValue()
+                {
+                    @Override
+                    public JToken GetViewValue()
+                    {
+                        return new JValue(serialValue[0]);
+                    }
+                },
+                new ISetViewValue()
+                {
+                    @Override
+                    public void SetViewValue(JToken value)
+                    {
+                        serialValue[0] = value.asInt();
+                    }
+                }
+                                                                         );
+
+        propBinding.UpdateViewFromViewModel();
+        propBindingTitle.UpdateViewFromViewModel();
+        valBinding.UpdateViewFromViewModel();
+
+        bindingsInitialized[0] = true;
+
+        assertEquals("Serial: 1", serialString[0]);
+        assertEquals("Title: Colors", titleString[0]);
+        assertEquals(1, serialValue[0]);
+
+        // We're going to apply some deltas to the view model and verify that the correct dependant bindings got updated,
+        // and that no non-dependant bindings got updated
+        //
+        JArray deltas = new JArray();
+        JObject deltaObject = new JObject();
+
+        deltaObject.put("path", new JValue("serial"));
+        deltaObject.put("change", new JValue("update"));
+        deltaObject.put("value", new JValue(2));
+
+        deltas.add(deltaObject);
+
+        viewModel.UpdateViewModelData(deltas, true);
+
+        assertEquals("Serial: 2", serialString[0]);
+        assertEquals(2, serialValue[0]);
+    }
 }
+
