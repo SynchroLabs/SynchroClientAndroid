@@ -12,7 +12,7 @@
 - [X] TokenConverter
 - [X] Binding (requires BindingContext)
 
-- [ ] ViewModel (requires Binding and BindingContext)
+- [X] ViewModel (requires Binding and BindingContext)
 
 - [ ] StateManager (requires Transport,ViewModel, DeviceMetrics)
 
