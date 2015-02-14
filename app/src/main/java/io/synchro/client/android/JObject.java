@@ -49,6 +49,34 @@ public class JObject extends JToken
         }
     }
 
+    public boolean removeChild(JToken oldToken)
+    {
+        for (Map.Entry<String, JToken> entry : backingMap.entrySet())
+        {
+            if (entry.getValue() == oldToken)
+            {
+                backingMap.remove(entry.getKey());
+                oldToken.setParent(null);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public String keyForValue(JToken value)
+    {
+        for (Map.Entry<String, JToken> entry : backingMap.entrySet())
+        {
+            if (entry.getValue() == value)
+            {
+                return entry.getKey();
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public String asString()
     {

@@ -50,6 +50,20 @@ public class JArray extends JToken implements Iterable<JToken>
         newToken.setParent(this);
     }
 
+    public boolean removeChild(JToken oldToken)
+    {
+        for (int counter = 0;counter < backingArray.size();++counter)
+        {
+            if (backingArray.get(counter) == oldToken)
+            {
+                oldToken.setParent(null);
+                backingArray.remove(counter);
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String asString()
     {

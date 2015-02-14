@@ -17,6 +17,7 @@ public class JsonTest extends TestCase
         assertSame((((JObject)((JArray)stuff.get("e")).get(0)).get("f")), stuff.selectToken(
                            "e[0].f"
                                                                                            ));
+        assertEquals("e[0].f", stuff.selectToken("e[0].f").getPath());
     }
 
     public void testDeepClone()
@@ -64,5 +65,23 @@ public class JsonTest extends TestCase
 
         assertTrue(rebindRequired);
         assertEquals(expected, stuff);
+    }
+
+    public void testArrayRemoveByObjectNotValue()
+    {
+        JValue red = new JValue("Red");
+        JValue green1 = new JValue("Green");
+        JValue green2 = new JValue("Green");
+
+        JArray arr = new JArray();
+        arr.add(red);
+        arr.add(green1);
+        arr.add(green2);
+
+        green2.remove();
+
+        assertEquals(2, arr.size());
+        assertSame(red, arr.get(0));
+        assertSame(green1, arr.get(1));
     }
 }

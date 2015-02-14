@@ -32,6 +32,31 @@ public abstract class JToken
     public abstract double asDouble();
     public abstract JToken deepClone();
 
+    public boolean remove()
+    {
+        boolean bRemoved = false;
+
+        if (getParent() != null)
+        {
+            if (getParent() instanceof JObject)
+            {
+                bRemoved = ((JObject)getParent()).removeChild(this);
+            }
+            else if (getParent() instanceof JArray)
+            {
+                bRemoved = ((JArray) getParent()).removeChild(this);
+            }
+
+            if (bRemoved && (getParent() != null))
+            {
+                // Parent should handle nulling parent when this when item removed...
+                throw new IllegalStateException("Item was removed, but parent was not cleared");
+            }
+        }
+
+        return bRemoved;
+    }
+
     public JTokenType getType()
     {
         return type;
@@ -83,6 +108,47 @@ public abstract class JToken
     public void setParent(JToken parent)
     {
         _parent = parent;
+    }
+
+    public String getPath()
+    {
+        boolean useDotNotation = false;
+        String path = "";
+
+        JToken parent = getParent();
+        if (parent != null)
+        {
+            path += parent.getPath();
+
+            if (parent instanceof JObject)
+            {
+                JObject parentObject = (JObject) parent;
+                if (path.length() > 0)
+                {
+                    path += ".";
+                }
+                path += parentObject.keyForValue(this);
+            }
+            else if (parent instanceof JArray)
+            {
+                JArray parentArray = (JArray) parent;
+                int pos = parentArray.indexOf(this);
+                if (useDotNotation)
+                {
+                    if (path.length() > 0)
+                    {
+                        path += ".";
+                    }
+                    path += Integer.toString(pos);
+                }
+                else
+                {
+                    path += "[" + Integer.toString(pos) + "]";
+                }
+            }
+        }
+
+        return path;
     }
 
     public static JToken updateTokenValue(JToken currentToken, JToken newToken)
