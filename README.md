@@ -3,7 +3,7 @@
 - [X] Json
 - [X] JsonParser
 - [X] JsonWriter
-- [ ] SynchroApp (was MaaasApp, requires Json)
+- [X] SynchroApp (was MaaasApp, requires Json)
 
 - [ ] DeviceMetrics/iOSDeviceMetrics
 - [ ] Transport/TransportHttp (requires SynchroApp)
