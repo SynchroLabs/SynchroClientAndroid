@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.List;
+
 
 public class LauncherActivity extends Activity
 {
@@ -21,11 +23,12 @@ public class LauncherActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
         ListView appListView = (ListView) findViewById(R.id.appListView);
-        appListView.setAdapter(
-                new SynchroAppTwoLineArrayAdapter(
-                        this, AndroidSynchroAppManager.getAppManager(this).getApps()
-                )
-                              );
+
+        List<SynchroApp> appsList = AndroidSynchroAppManager.getAppManager(this).getApps();
+        SynchroApp[] apps = new SynchroApp[appsList.size()];
+        appsList.toArray(apps);
+
+        appListView.setAdapter(new SynchroAppTwoLineArrayAdapter(this, apps));
         appListView.setLongClickable(true);
         appListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
                                            {

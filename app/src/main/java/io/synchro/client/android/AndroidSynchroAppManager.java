@@ -1,20 +1,16 @@
 package io.synchro.client.android;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
-import java.util.TreeMap;
 
 /**
  * Created by blake on 12/24/14.
  */
-public class AndroidSynchroAppManager
+public class AndroidSynchroAppManager extends SynchroAppManager
 {
-    public static final String TAG = AndroidSynchroAppManager.class.getSimpleName();
-
     // http://stackoverflow.com/questions/14057273/android-singleton-with-global-context
 
     private static AndroidSynchroAppManager instance;
@@ -22,44 +18,51 @@ public class AndroidSynchroAppManager
     private static final String SEED_FILENAME = "seed.json";
 
     private final Context context;
-    private final TreeMap<String, SynchroApp> apps = new TreeMap<>();
 
     public AndroidSynchroAppManager(Context context)
     {
         this.context = context;
     }
 
-    public void load()
+    @Override
+    protected String loadBundledState()
             throws IOException
     {
         PushbackReader reader = new PushbackReader(
                 new InputStreamReader(context.getAssets().open(SEED_FILENAME))
         );
+        StringBuilder finalString = new StringBuilder();
 
+        // Current Android does not support TryWithResources
         //noinspection TryFinallyCanBeTryWithResources
         try
         {
-            JObject returnedObject = (JObject) JsonParser.parseValue(reader);
-            Log.d(TAG, String.format("Returned parsed object is %s", returnedObject.toJson()));
-
-            for (JToken app : ((JArray)returnedObject.get("apps")))
+            int thisChar;
+            while ((thisChar = reader.read()) != -1)
             {
-                SynchroApp synchroApp = new SynchroApp((JObject) app);
-                apps.put(synchroApp.getEndpoint(), synchroApp);
-                Log.d(TAG, String.format("Added app \"%s\" at endpoint %s", synchroApp.getName(), synchroApp.getEndpoint()));
+                finalString.append((char) thisChar);
             }
         }
         finally
         {
             reader.close();
         }
+
+        return finalString.toString();
     }
 
-    public SynchroApp[] getApps()
+    @Override
+    protected String loadLocalState()
+            throws IOException
     {
-        SynchroApp[] returnArray = new SynchroApp[apps.size()];
-        apps.values().toArray(returnArray);
-        return returnArray;
+        return null;
+    }
+
+    @Override
+    protected boolean saveLocalState(String state)
+            throws IOException
+    {
+        return false;
     }
 
     public static AndroidSynchroAppManager getAppManager(Context context)

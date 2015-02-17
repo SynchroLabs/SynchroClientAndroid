@@ -6,28 +6,53 @@ package io.synchro.client.android;
 public class SynchroApp
 {
     private String endpoint;
-    private String name;
-    private String description;
+    private JObject appDefinition;
+    private String sessionId;
 
     public String getEndpoint()
     {
         return endpoint;
     }
 
+    public void setEndpoint(String endpoint)
+    {
+        this.endpoint = endpoint;
+    }
+
+    public JObject getAppDefinition()
+    {
+        return appDefinition;
+    }
+
+    public void setAppDefinition(JObject appDefinition)
+    {
+        this.appDefinition = appDefinition;
+    }
+
+    public String getSessionId()
+    {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId)
+    {
+        this.sessionId = sessionId;
+    }
+
     public String getName()
     {
-        return name;
+        return appDefinition.get("name").asString();
     }
 
     public String getDescription()
     {
-        return description;
+        return appDefinition.get("description").asString();
     }
 
-    public SynchroApp(JObject parsedJsonApp)
+    public SynchroApp(String endpoint, JObject appDefinition, String sessionId)
     {
-        endpoint = parsedJsonApp.get("endpoint").asString();
-        name = ((JObject) parsedJsonApp.get("definition")).get("name").asString();
-        description = ((JObject) parsedJsonApp.get("definition")).get("description").asString();
+        this.endpoint = endpoint;
+        this.appDefinition = appDefinition; // !!! Should we use appDefinition.DeepClone();
+        this.sessionId = sessionId;
     }
 }

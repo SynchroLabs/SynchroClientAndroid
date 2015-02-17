@@ -29,7 +29,7 @@ public class SplashActivity extends Activity
                   AndroidSynchroAppManager appManager = AndroidSynchroAppManager.getAppManager(SplashActivity.this);
                   try
                   {
-                      appManager.load();
+                      appManager.loadState();
                   }
                   catch (IOException e)
                   {
