@@ -2,7 +2,9 @@ package io.synchro.client.android;
 
 import junit.framework.TestCase;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URL;
 
 /**
@@ -79,5 +81,45 @@ public class TransportTest extends TestCase
 
         JObject theResponse2 = transport.sendMessage(sessionId, requestObject);
         assertEquals("hello", theResponse2.get("Path").asString());
+    }
+
+    public void testHttp404Failure()
+            throws IOException
+    {
+        TransportAndroidHttpClient transport = new TransportAndroidHttpClient(new URL("http://10.0.2.2:1337"));
+        JObject requestObject = new JObject();
+
+        requestObject.put("Mode", new JValue("Page"));
+        requestObject.put("Path", new JValue("menu"));
+        requestObject.put("TransactionId", new JValue(1));
+        try
+        {
+            transport.sendMessage(null, requestObject).get("Path").asString();
+            fail("Should throw FileNotFoundException");
+        }
+        catch (FileNotFoundException e)
+        {
+            // Expected
+        }
+    }
+
+    public void testNetworkFailure()
+            throws IOException
+    {
+        TransportAndroidHttpClient transport = new TransportAndroidHttpClient(new URL("http://nohostcanbefoundhere"));
+        JObject requestObject = new JObject();
+
+        requestObject.put("Mode", new JValue("Page"));
+        requestObject.put("Path", new JValue("menu"));
+        requestObject.put("TransactionId", new JValue(1));
+        try
+        {
+            transport.sendMessage(null, requestObject).get("Path").asString();
+            fail("Should throw ConnectException");
+        }
+        catch (ConnectException e)
+        {
+            // Expected
+        }
     }
 }
