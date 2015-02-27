@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public class SynchroAppTest extends TestCase
 {
-    private class TestAppManager extends SynchroAppManager
+    public static class TestAppManager extends SynchroAppManager
     {
         String _bundledState =
                 "        {\n" +
