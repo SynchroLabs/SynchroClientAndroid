@@ -393,9 +393,21 @@ public class ControlWrapper
 
     public static ColorARGB getColor(String colorValue)
     {
+        // I use parseLong below because if you have the high bit set on a four byte parseInt, it
+        // will fail to parse. No, I don't know why. Presumably because you put in a number that
+        // overflows a positive value.
+
         if (colorValue.startsWith("#"))
         {
-            return new ColorARGB(Integer.parseInt(colorValue.substring(1), 16));
+            if (colorValue.length() == 7) // #RRGGBB = 7
+            {
+                // Alpha is 100% if only RGB, so patch it in
+                return new ColorARGB((int) (Long.parseLong(colorValue.substring(1), 16) | 0xFF000000));
+            }
+            else
+            {
+                return new ColorARGB((int) Long.parseLong(colorValue.substring(1), 16));
+            }
         }
         else
         {
