@@ -6,7 +6,7 @@
 - [X] SynchroApp (was MaaasApp, requires Json)
 
 - [ ] DeviceMetrics/iOSDeviceMetrics
-- [ ] Transport/TransportHttp (requires SynchroApp)
+- [X] Transport/TransportHttp (requires SynchroApp)
 
 - [X] BindingContext (requires Json)
 - [X] TokenConverter
@@ -14,11 +14,11 @@
 
 - [X] ViewModel (requires Binding and BindingContext)
 
-- [ ] StateManager (requires Transport,ViewModel, DeviceMetrics)
+- [X] StateManager (requires Transport,ViewModel, DeviceMetrics)
 
-- [ ] CommandInstance (requires BindingContext - needed by controls)
+- [X] CommandInstance (requires BindingContext - needed by controls)
 
-- [ ] ControlWrapper/iOSControlWrapper (requires CommandInstance, lots of stuff)
+- [X] ControlWrapper/iOSControlWrapper (requires CommandInstance, lots of stuff)
 
 - [ ] PageView/iOSPageView (requires controls, ControlWrapper)
 
