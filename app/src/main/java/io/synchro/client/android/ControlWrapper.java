@@ -389,6 +389,7 @@ public class ControlWrapper
         {
             return _b;
         }
+        public int getARGB() { return (_a << 24) | (_r << 16) | (_g << 8) | (_b); }
     }
 
     public static ColorARGB getColor(String colorValue)
