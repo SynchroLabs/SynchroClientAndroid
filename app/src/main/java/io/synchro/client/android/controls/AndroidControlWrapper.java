@@ -320,7 +320,7 @@ public class AndroidControlWrapper extends ControlWrapper
         return typographicPoints * 160f / 72f;
     }
 
-    public abstract class ThicknessSetter
+    public static abstract class ThicknessSetter
     {
         public void SetThickness(int thickness)
         {
@@ -398,6 +398,40 @@ public class AndroidControlWrapper extends ControlWrapper
         }
     }
 
+    public static class PaddingThicknessSetter extends ThicknessSetter
+    {
+        protected View _control;
+
+        public PaddingThicknessSetter(View control)
+        {
+            _control = control;
+        }
+
+        public void SetThickness(int thickness)
+        {
+            _control.setPadding(thickness, thickness, thickness, thickness);
+        }
+
+        public void SetThicknessLeft(int thickness)
+        {
+            _control.setPadding(thickness, _control.getPaddingTop(), _control.getPaddingRight(), _control.getPaddingBottom());
+        }
+
+        public void SetThicknessTop(int thickness)
+        {
+            _control.setPadding(_control.getPaddingLeft(), thickness, _control.getPaddingRight(), _control.getPaddingBottom());
+        }
+
+        public void SetThicknessRight(int thickness)
+        {
+            _control.setPadding(_control.getPaddingLeft(), _control.getPaddingTop(), thickness, _control.getPaddingBottom());
+        }
+
+        public void SetThicknessBottom(int thickness)
+        {
+            _control.setPadding(_control.getPaddingLeft(), _control.getPaddingTop(), _control.getPaddingRight(), thickness);
+        }
+    }
     public void processThicknessProperty(
             JToken thicknessAttributeValue, final ThicknessSetter thicknessSetter
                                         )
