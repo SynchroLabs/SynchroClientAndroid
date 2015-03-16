@@ -68,7 +68,7 @@ public class StateManager
 
     public boolean IsOnMainPath()
     {
-        return ((_path != null) && (_appDefinition != null) && _path.equals(_appDefinition.get("mainPage").asString()));
+        return ((_path != null) && (_appDefinition != null) && _path.equals(_appDefinition.get("main").asString()));
     }
 
     public ViewModel getViewModel()
@@ -445,7 +445,7 @@ public class StateManager
     private void sendAppStartPageRequestAsync()
             throws IOException
     {
-        this._path = _appDefinition.get("mainPage").asString();
+        this._path = _appDefinition.get("main").asString();
 
         Log.i(TAG, String.format("Request app start page at path: '%s'", this._path));
 

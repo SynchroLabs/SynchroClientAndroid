@@ -77,5 +77,7 @@ public class StateManagerTest extends TestCase
 
         assertEquals(2, responseNumber[0]);
         assertEquals("Hello World", thePageView[0].get("title").asString());
+
+        assertFalse(stateManager.IsOnMainPath());
     }
 }

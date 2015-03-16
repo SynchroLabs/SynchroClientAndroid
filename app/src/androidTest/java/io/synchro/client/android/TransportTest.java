@@ -25,8 +25,14 @@ public class TransportTest extends TestCase
         expected.put("name", new JValue("synchro-samples"));
         expected.put("version", new JValue("0.0.0"));
         expected.put("description", new JValue("Synchro API Samples"));
-        expected.put("mainPage", new JValue("menu"));
+        expected.put("main", new JValue("menu"));
         expected.put("author", new JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)"));
+        expected.put("private", new JValue(true));
+        {
+            JObject enginesObject = new JObject();
+            enginesObject.put("synchro", new JValue("*"));
+            expected.put("engines", enginesObject);
+        }
 
         TransportAndroidHttpClient transport = new TransportAndroidHttpClient(new URL(testEndpoint));
 
