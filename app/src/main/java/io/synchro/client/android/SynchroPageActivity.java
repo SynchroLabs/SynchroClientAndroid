@@ -1,6 +1,7 @@
 package io.synchro.client.android;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -116,9 +117,16 @@ public class SynchroPageActivity extends Activity
         _pageView.setSetPageTitle(new PageView.ISetPageTitle()
                                   {
                                       @Override
-                                      public void setPageTitle(String title)
+                                      public void setPageTitle(final String title)
                                       {
-                                          SynchroPageActivity.this.getActionBar().setTitle(title);
+                                          SynchroPageActivity.this.runOnUiThread(new Runnable()
+                                                                                 {
+                                                                                     @Override
+                                                                                     public void run()
+                                                                                     {
+                                                                                         SynchroPageActivity.this.getActionBar().setTitle(title);
+                                                                                     }
+                                                                                 });
                                       }
                                   });
 
@@ -150,5 +158,11 @@ public class SynchroPageActivity extends Activity
         {
             Log.wtf(TAG, e);
         }
+    }
+
+    public int getScreenOrientation()
+    {
+        // !!! Fix this in the really complicated way required.
+        return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     }
 }

@@ -1,5 +1,6 @@
 package io.synchro.client.android;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
@@ -433,13 +434,27 @@ public class StateManager
     public void startApplicationAsync()
             throws IOException
     {
-        Log.i(TAG, String.format("Loading Synchro application definition for app at: %s", _app.getEndpoint()));
-        JObject requestObject = new JObject();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params)
+            {
+                Log.i(TAG, String.format("Loading Synchro application definition for app at: %s", _app.getEndpoint()));
+                JObject requestObject = new JObject();
 
-        requestObject.put("Mode", new JValue("AppDefinition"));
-        requestObject.put("TransactionId", new JValue(0));
+                requestObject.put("Mode", new JValue("AppDefinition"));
+                requestObject.put("TransactionId", new JValue(0));
 
-        ProcessResponseAsync(_transport.sendMessage(null, requestObject));
+                try
+                {
+                    ProcessResponseAsync(StateManager.this._transport.sendMessage(null, requestObject));
+                }
+                catch (IOException e)
+                {
+                    Log.wtf(TAG, e);
+                }
+                return null;
+            }
+        }.execute();
     }
 
     private void sendAppStartPageRequestAsync()

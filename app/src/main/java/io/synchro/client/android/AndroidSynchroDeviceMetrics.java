@@ -1,6 +1,7 @@
 package io.synchro.client.android;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
@@ -9,10 +10,10 @@ import android.view.Display;
  */
 public class AndroidSynchroDeviceMetrics extends SynchroDeviceMetrics
 {
-    private final Activity _activity;
+    private final SynchroPageActivity _activity;
     private final DisplayMetrics _metrics = new DisplayMetrics();
 
-    public AndroidSynchroDeviceMetrics(Activity activity)
+    public AndroidSynchroDeviceMetrics(SynchroPageActivity activity)
     {
         super();
         _activity = activity;
@@ -68,6 +69,13 @@ public class AndroidSynchroDeviceMetrics extends SynchroDeviceMetrics
     @Override
     public SynchroOrientation getCurrentOrientation()
     {
-        return null;
+        int orientation = _activity.getScreenOrientation();
+
+        if ((orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ||
+                (orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE))
+        {
+            return SynchroOrientation.LANDSCAPE;
+        }
+        return SynchroOrientation.PORTRAIT;
     }
 }
