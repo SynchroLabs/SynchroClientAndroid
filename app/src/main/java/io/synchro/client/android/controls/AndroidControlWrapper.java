@@ -883,6 +883,7 @@ public class AndroidControlWrapper extends ControlWrapper
     {
         AndroidControlWrapper controlWrapper = null;
 
+        Log.d(TAG, String.format("Creating control %s", controlSpec.get("control").asString()));
         switch (controlSpec.get("control").asString())
         {
 //            case "actionBar.item":
@@ -973,6 +974,10 @@ public class AndroidControlWrapper extends ControlWrapper
             {
                 controlWrapper.getControl().setTag(controlWrapper);
             }
+        }
+        else
+        {
+            Log.w(TAG, String.format("Did not create a control of type %s", controlSpec.get("control").asString()));
         }
 
         return controlWrapper;
