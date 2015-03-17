@@ -135,19 +135,33 @@ public class SynchroPageActivity extends Activity
         _stateManager.SetProcessingHandlers(new StateManager.IProcessPageView()
                                             {
                                                 @Override
-                                                public void ProcessPageView(JObject pageView)
+                                                public void ProcessPageView(final JObject pageView)
                                                 {
-                                                    _pageView.ProcessPageView(pageView);
+                                                    SynchroPageActivity.this.runOnUiThread(new Runnable()
+                                                                                           {
+                                                                                               @Override
+                                                                                               public void run()
+                                                                                               {
+                                                                                                   _pageView.ProcessPageView(pageView);
+                                                                                               }
+                                                                                           });
                                                 }
                                             }, new StateManager.IProcessMessageBox()
                                             {
                                                 @Override
                                                 public void ProcessMessageBox(
-                                                        JObject messageBox,
-                                                        StateManager.ICommandHandler commandHandler
+                                                        final JObject messageBox,
+                                                        final StateManager.ICommandHandler commandHandler
                                                                              )
                                                 {
-                                                    _pageView.ProcessMessageBox(messageBox, commandHandler);
+                                                    SynchroPageActivity.this.runOnUiThread(new Runnable()
+                                                                                           {
+                                                                                               @Override
+                                                                                               public void run()
+                                                                                               {
+                                                                                                   _pageView.ProcessMessageBox(messageBox, commandHandler);
+                                                                                               }
+                                                                                           });
                                                 }
                                             });
         try

@@ -114,8 +114,12 @@ public class AndroidControlWrapper extends ControlWrapper
 
     public void AddToLinearLayout(ViewGroup layout, JObject childControlSpec)
     {
-        LinearLayout.LayoutParams linearLayoutParams = (LinearLayout.LayoutParams) this.getControl()
-                                                                                       .getLayoutParams();
+        LinearLayout.LayoutParams linearLayoutParams = null;
+
+        if (this.getControl().getLayoutParams() instanceof LinearLayout.LayoutParams)
+        {
+            linearLayoutParams = (LinearLayout.LayoutParams) this.getControl().getLayoutParams();
+        }
 
         if (linearLayoutParams == null)
         {
@@ -150,8 +154,8 @@ public class AndroidControlWrapper extends ControlWrapper
             linearLayoutParams.gravity = getVerticalAlignment() | getHorizontalAlignment();
         }
 
-        int heightStarCount = GetStarCount(childControlSpec.get("height").asString());
-        int widthStarCount = GetStarCount(childControlSpec.get("width").asString());
+        int heightStarCount = GetStarCount((childControlSpec.get("height") != null) ? childControlSpec.get("height").asString() : null);
+        int widthStarCount = GetStarCount((childControlSpec.get("width") != null) ? childControlSpec.get("width").asString() : null);
 
         int orientation = LinearLayout.HORIZONTAL;
         if (layout instanceof LinearLayout)
@@ -235,6 +239,8 @@ public class AndroidControlWrapper extends ControlWrapper
         updateGravity();
     }
 
+    // No idea why this doesn't work.
+//    @android.widget.LinearLayout.OrientationMode
     public int ToOrientation(JToken value, int defaultOrientation)
     {
         int orientation = defaultOrientation;
@@ -897,9 +903,9 @@ public class AndroidControlWrapper extends ControlWrapper
 //            case "border":
 //                controlWrapper = new AndroidBorderWrapper(parent, bindingContext, controlSpec);
 //                break;
-//            case "button":
-//                controlWrapper = new AndroidButtonWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "button":
+                controlWrapper = new AndroidButtonWrapper(parent, bindingContext, controlSpec);
+                break;
 //            case "canvas":
 //                controlWrapper = new AndroidCanvasWrapper(parent, bindingContext, controlSpec);
 //                break;
@@ -944,9 +950,9 @@ public class AndroidControlWrapper extends ControlWrapper
 //            case "slider":
 //                controlWrapper = new AndroidSliderWrapper(parent, bindingContext, controlSpec);
 //                break;
-//            case "stackpanel":
-//                controlWrapper = new AndroidStackPanelWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "stackpanel":
+                controlWrapper = new AndroidStackPanelWrapper(parent, bindingContext, controlSpec);
+                break;
 //            case "text":
 //                controlWrapper = new AndroidTextBlockWrapper(parent, bindingContext, controlSpec);
 //                break;
