@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PushbackReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -22,6 +23,12 @@ public class TransportAndroidHttpClient extends Transport
     public TransportAndroidHttpClient(URL url)
     {
         _url = url;
+    }
+
+    public static URL UrlFromEndpoint(String endpoint)
+            throws MalformedURLException
+    {
+        return new URL("http://" + endpoint);
     }
 
     @Override
