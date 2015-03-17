@@ -1,6 +1,7 @@
 package io.synchro.client.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -25,10 +26,26 @@ public class LauncherActivity extends Activity
         ListView appListView = (ListView) findViewById(R.id.appListView);
 
         List<SynchroApp> appsList = AndroidSynchroAppManager.getAppManager(this).getApps();
-        SynchroApp[] apps = new SynchroApp[appsList.size()];
+        final SynchroApp[] apps = new SynchroApp[appsList.size()];
         appsList.toArray(apps);
 
         appListView.setAdapter(new SynchroAppTwoLineArrayAdapter(this, apps));
+        appListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                                           {
+                                               @Override
+                                               public void onItemClick(
+                                                       AdapterView<?> parent, View view,
+                                                       int position, long id
+                                                                      )
+                                               {
+                                                   SynchroApp synchroApp = apps[position];
+
+                                                   Intent intent = new Intent(LauncherActivity.this, SynchroPageActivity.class);
+                                                   intent.putExtra("endpoint", synchroApp.getEndpoint());
+                                                   startActivity(intent);
+                                                   finish();
+                                               }
+                                           });
         appListView.setLongClickable(true);
         appListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
                                            {

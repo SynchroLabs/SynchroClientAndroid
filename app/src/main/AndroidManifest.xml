@@ -23,6 +23,10 @@
             android:name=".LauncherActivity"
             android:label="@string/title_activity_launcher" >
         </activity>
+        <activity
+            android:name=".SynchroPageActivity"
+            android:label="@string/title_activity_synchro_page" >
+        </activity>
     </application>
 
 </manifest>
