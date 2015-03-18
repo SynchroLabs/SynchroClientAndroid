@@ -927,9 +927,9 @@ public class AndroidControlWrapper extends ControlWrapper
 //            case "location":
 //                controlWrapper = new AndroidLocationWrapper(parent, bindingContext, controlSpec);
 //                break;
-//            case "password":
-//                controlWrapper = new AndroidTextBoxWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "password":
+                controlWrapper = new AndroidTextBoxWrapper(parent, bindingContext, controlSpec);
+                break;
 //            case "picker":
 //                controlWrapper = new AndroidPickerWrapper(parent, bindingContext, controlSpec);
 //                break;
