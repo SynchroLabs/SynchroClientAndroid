@@ -431,34 +431,38 @@ public class StateManager
         }
     }
 
-    public void startApplicationAsync()
-            throws IOException
+    public void sendMessageProcessResponseAsync(final String sessionId, final JObject requestObject)
     {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params)
             {
-                Log.i(TAG, String.format("Loading Synchro application definition for app at: %s", _app.getEndpoint()));
-                JObject requestObject = new JObject();
-
-                requestObject.put("Mode", new JValue("AppDefinition"));
-                requestObject.put("TransactionId", new JValue(0));
-
                 try
                 {
-                    ProcessResponseAsync(StateManager.this._transport.sendMessage(null, requestObject));
+                    ProcessResponseAsync(StateManager.this._transport.sendMessage(sessionId, requestObject));
                 }
                 catch (IOException e)
                 {
                     Log.wtf(TAG, e);
+                    ProcessRequestFailure(requestObject, e);
                 }
                 return null;
             }
         }.execute();
     }
 
+    public void startApplicationAsync()
+    {
+        Log.i(TAG, String.format("Loading Synchro application definition for app at: %s", _app.getEndpoint()));
+        JObject requestObject = new JObject();
+
+        requestObject.put("Mode", new JValue("AppDefinition"));
+        requestObject.put("TransactionId", new JValue(0));
+
+        sendMessageProcessResponseAsync(null, requestObject);
+    }
+
     private void sendAppStartPageRequestAsync()
-            throws IOException
     {
         this._path = _appDefinition.get("main").asString();
 
@@ -472,11 +476,10 @@ public class StateManager
         requestObject.put("DeviceMetrics", this.PackageDeviceMetrics()); // Send over device metrics (these won't ever change, per session)
         requestObject.put("ViewMetrics", this.PackageViewMetrics(_deviceMetrics.getCurrentOrientation())); // Send over view metrics
 
-        ProcessResponseAsync(_transport.sendMessage(_app.getSessionId(), requestObject));
+        sendMessageProcessResponseAsync(_app.getSessionId(), requestObject);
     }
 
     private void sendResyncRequestAsync()
-            throws IOException
     {
         Log.i(TAG, String.format("Sending resync for path: '%s'", this._path));
 
@@ -488,7 +491,7 @@ public class StateManager
         requestObject.put("InstanceId", new JValue(this._instanceId));
         requestObject.put("InstanceVersion", new JValue(this._instanceVersion));
 
-        ProcessResponseAsync(_transport.sendMessage(_app.getSessionId(), requestObject));
+        sendMessageProcessResponseAsync(_app.getSessionId(), requestObject);
     }
 
     private boolean addDeltasToRequestObject(JObject requestObject)
@@ -516,7 +519,6 @@ public class StateManager
     }
 
     public void sendUpdateRequestAsync()
-            throws IOException
     {
         Log.d(TAG, String.format("Process update for path: '%s'", this._path));
 
@@ -536,13 +538,12 @@ public class StateManager
             if (addDeltasToRequestObject(requestObject))
             {
                 // Only going to send the updates if there were any changes...
-                ProcessResponseAsync(_transport.sendMessage(_app.getSessionId(), requestObject));
+                sendMessageProcessResponseAsync(_app.getSessionId(), requestObject);
             }
         }
     }
 
     public void sendCommandRequestAsync(String command, JObject parameters)
-            throws IOException
     {
         Log.i(TAG, String.format("Sending command: '%s' for path: '%s'", command, this._path));
 
@@ -562,11 +563,10 @@ public class StateManager
 
         addDeltasToRequestObject(requestObject);
 
-        ProcessResponseAsync(_transport.sendMessage(_app.getSessionId(), requestObject));
+        sendMessageProcessResponseAsync(_app.getSessionId(), requestObject);
     }
 
     public void sendBackRequestAsync()
-            throws IOException
     {
         Log.i(TAG, String.format("Sending 'back' for path: '%s'", this._path));
 
@@ -578,11 +578,10 @@ public class StateManager
         requestObject.put("InstanceId", new JValue(this._instanceId));
         requestObject.put("InstanceVersion", new JValue(this._instanceVersion));
 
-        ProcessResponseAsync(_transport.sendMessage(_app.getSessionId(), requestObject));
+        sendMessageProcessResponseAsync(_app.getSessionId(), requestObject);
     }
 
     public void sendViewUpdateAsync(SynchroOrientation orientation)
-            throws IOException
     {
         Log.i(TAG, String.format("Sending ViewUpdate for path: '%s'", this._path));
 
@@ -596,6 +595,6 @@ public class StateManager
         requestObject.put("InstanceVersion", new JValue(this._instanceVersion));
         requestObject.put("ViewMetrics", this.PackageViewMetrics(orientation));
 
-        ProcessResponseAsync(_transport.sendMessage(_app.getSessionId(), requestObject));
+        sendMessageProcessResponseAsync(_app.getSessionId(), requestObject);
     }
 }

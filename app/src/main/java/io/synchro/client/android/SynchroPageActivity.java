@@ -164,14 +164,7 @@ public class SynchroPageActivity extends Activity
                                                                                            });
                                                 }
                                             });
-        try
-        {
-            _stateManager.startApplicationAsync();
-        }
-        catch (IOException e)
-        {
-            Log.wtf(TAG, e);
-        }
+        _stateManager.startApplicationAsync();
     }
 
     public int getScreenOrientation()
