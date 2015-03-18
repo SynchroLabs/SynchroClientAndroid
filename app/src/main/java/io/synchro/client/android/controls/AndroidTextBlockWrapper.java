@@ -1,10 +1,12 @@
 package io.synchro.client.android.controls;
 
+import android.app.Activity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.TextView;
 
+import io.synchro.client.android.AndroidUiThreadSetViewValue;
 import io.synchro.client.android.BindingContext;
 import io.synchro.client.android.ControlWrapper;
 import io.synchro.client.android.ISetViewValue;
@@ -39,10 +41,10 @@ public class AndroidTextBlockWrapper extends AndroidControlWrapper
 
         applyFrameworkElementDefaults(textView);
 
-        processElementProperty(controlSpec.get("value"), new ISetViewValue()
+        processElementProperty(controlSpec.get("value"), new AndroidUiThreadSetViewValue((Activity) textView.getContext())
                                {
                                    @Override
-                                   public void SetViewValue(JToken value)
+                                   protected void UiThreadSetViewValue(JToken value)
                                    {
                                        textView.setText(ToString(value, ""));
                                    }

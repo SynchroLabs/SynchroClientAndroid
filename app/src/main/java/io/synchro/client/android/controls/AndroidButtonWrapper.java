@@ -1,17 +1,16 @@
 package io.synchro.client.android.controls;
 
+import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import java.io.IOException;
-
+import io.synchro.client.android.AndroidUiThreadSetViewValue;
 import io.synchro.client.android.BindingContext;
 import io.synchro.client.android.BindingHelper;
 import io.synchro.client.android.CommandInstance;
 import io.synchro.client.android.CommandName;
 import io.synchro.client.android.ControlWrapper;
-import io.synchro.client.android.ISetViewValue;
 import io.synchro.client.android.JObject;
 import io.synchro.client.android.JToken;
 
@@ -36,10 +35,10 @@ public class AndroidButtonWrapper extends AndroidControlWrapper
 
         applyFrameworkElementDefaults(button);
 
-        processElementProperty(controlSpec.get("caption"), new ISetViewValue()
+        processElementProperty(controlSpec.get("caption"), new AndroidUiThreadSetViewValue((Activity) button.getContext())
                                {
                                    @Override
-                                   public void SetViewValue(JToken value)
+                                   public void UiThreadSetViewValue(JToken value)
                                    {
                                        button.setText(ToString(value, ""));
                                    }

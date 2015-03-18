@@ -1,5 +1,6 @@
 package io.synchro.client.android.controls;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -619,15 +620,26 @@ public class AndroidControlWrapper extends ControlWrapper
         // to a face that does support the style bits, then setting it to the proper typeface with the extra style param
         // seems to work (and doesn't produce any visible flickering or other artifacts).  So we're going with that for now.
         //
-        protected void setStyledTypeface(Typeface tf)
+        protected void setStyledTypeface(final Typeface tf)
         {
-            int tfStyle = getTypefaceStyle(_bold, _italic);
-            tf = Typeface.create(tf, tfStyle);
-            if (tfStyle == Typeface.NORMAL)
-            {
-                _control.setTypeface(Typeface.DEFAULT); // This is the hackaround described above
-            }
-            _control.setTypeface(tf, tfStyle);
+            ((Activity) _control.getContext()).runOnUiThread(
+                    new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            int tfStyle = getTypefaceStyle(_bold, _italic);
+                            Typeface newtf = Typeface.create(tf, tfStyle);
+                            if (tfStyle == Typeface.NORMAL)
+                            {
+                                _control.setTypeface(
+                                        Typeface.DEFAULT
+                                                    ); // This is the hackaround described above
+                            }
+                            _control.setTypeface(newtf, tfStyle);
+                        }
+                    }
+                                                            );
         }
 
         @Override
@@ -809,10 +821,10 @@ public class AndroidControlWrapper extends ControlWrapper
                               );
 
         processElementProperty(
-                controlSpec.get("enabled"), new ISetViewValue()
+                controlSpec.get("enabled"), new AndroidUiThreadSetViewValue((Activity) getControl().getContext())
                 {
                     @Override
-                    public void SetViewValue(JToken value)
+                    public void UiThreadSetViewValue(JToken value)
                     {
                         getControl().setEnabled(ToBoolean(value, false));
                     }
@@ -844,10 +856,10 @@ public class AndroidControlWrapper extends ControlWrapper
         if (textView != null)
         {
             processElementProperty(
-                    controlSpec.get("foreground"), new ISetViewValue()
+                    controlSpec.get("foreground"), new AndroidUiThreadSetViewValue((Activity) textView.getContext())
                     {
                         @Override
-                        public void SetViewValue(JToken value)
+                        public void UiThreadSetViewValue(JToken value)
                         {
                             textView.setTextColor(ToColor(value));
                         }
