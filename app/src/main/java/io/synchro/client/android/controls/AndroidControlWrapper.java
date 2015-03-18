@@ -953,9 +953,9 @@ public class AndroidControlWrapper extends ControlWrapper
             case "stackpanel":
                 controlWrapper = new AndroidStackPanelWrapper(parent, bindingContext, controlSpec);
                 break;
-//            case "text":
-//                controlWrapper = new AndroidTextBlockWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "text":
+                controlWrapper = new AndroidTextBlockWrapper(parent, bindingContext, controlSpec);
+                break;
 //            case "toggle":
 //                controlWrapper = new AndroidToggleSwitchWrapper(
 //                        parent, bindingContext, controlSpec
