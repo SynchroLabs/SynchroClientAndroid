@@ -981,10 +981,6 @@ public class AndroidControlWrapper extends ControlWrapper
                 controlWrapper.getControl().setTag(controlWrapper);
             }
         }
-        else
-        {
-            Log.w(TAG, String.format("Did not create a control of type %s", controlSpec.get("control").asString()));
-        }
 
         return controlWrapper;
     }
