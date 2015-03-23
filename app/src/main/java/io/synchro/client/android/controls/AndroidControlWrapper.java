@@ -968,11 +968,11 @@ public class AndroidControlWrapper extends ControlWrapper
             case "text":
                 controlWrapper = new AndroidTextBlockWrapper(parent, bindingContext, controlSpec);
                 break;
-//            case "toggle":
-//                controlWrapper = new AndroidToggleSwitchWrapper(
-//                        parent, bindingContext, controlSpec
-//                );
-//                break;
+            case "toggle":
+                controlWrapper = new AndroidToggleSwitchWrapper(
+                        parent, bindingContext, controlSpec
+                );
+                break;
 //            case "webview":
 //                controlWrapper = new AndroidWebViewWrapper(parent, bindingContext, controlSpec);
 //                break;
