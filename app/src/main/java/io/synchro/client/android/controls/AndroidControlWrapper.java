@@ -808,10 +808,10 @@ public class AndroidControlWrapper extends ControlWrapper
                               );
 
         processElementProperty(
-                controlSpec.get("visibility"), new ISetViewValue()
+                controlSpec.get("visibility"), new AndroidUiThreadSetViewValue((Activity) getControl().getContext())
                 {
                     @Override
-                    public void SetViewValue(JToken value)
+                    public void UiThreadSetViewValue(JToken value)
                     {
                         getControl().setVisibility(
                                 ToBoolean(value, false) ? View.VISIBLE : View.GONE
