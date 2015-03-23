@@ -912,9 +912,9 @@ public class AndroidControlWrapper extends ControlWrapper
 //                        parent, bindingContext, controlSpec
 //                );
 //                break;
-//            case "border":
-//                controlWrapper = new AndroidBorderWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "border":
+                controlWrapper = new AndroidBorderWrapper(parent, bindingContext, controlSpec);
+                break;
             case "button":
                 controlWrapper = new AndroidButtonWrapper(parent, bindingContext, controlSpec);
                 break;
@@ -927,9 +927,9 @@ public class AndroidControlWrapper extends ControlWrapper
 //            case "gridview":
 //                controlWrapper = new AndroidGridViewWrapper(parent, bindingContext, controlSpec);
 //                break;
-//            case "image":
-//                controlWrapper = new AndroidImageWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "image":
+                controlWrapper = new AndroidImageWrapper(parent, bindingContext, controlSpec);
+                break;
 //            case "listbox":
 //                controlWrapper = new AndroidListBoxWrapper(parent, bindingContext, controlSpec);
 //                break;
