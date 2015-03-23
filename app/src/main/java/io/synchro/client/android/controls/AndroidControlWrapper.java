@@ -945,23 +945,23 @@ public class AndroidControlWrapper extends ControlWrapper
 //            case "picker":
 //                controlWrapper = new AndroidPickerWrapper(parent, bindingContext, controlSpec);
 //                break;
-//            case "progressbar":
-//                controlWrapper = new AndroidSliderWrapper(parent, bindingContext, controlSpec);
-//                break;
-//            case "progressring":
-//                controlWrapper = new AndroidProgressRingWrapper(
-//                        parent, bindingContext, controlSpec
-//                );
-//                break;
-//            case "rectangle":
-//                controlWrapper = new AndroidRectangleWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "progressbar":
+                controlWrapper = new AndroidSliderWrapper(parent, bindingContext, controlSpec);
+                break;
+            case "progressring":
+                controlWrapper = new AndroidProgressRingWrapper(
+                        parent, bindingContext, controlSpec
+                );
+                break;
+            case "rectangle":
+                controlWrapper = new AndroidRectangleWrapper(parent, bindingContext, controlSpec);
+                break;
 //            case "scrollview":
 //                controlWrapper = new AndroidScrollWrapper(parent, bindingContext, controlSpec);
 //                break;
-//            case "slider":
-//                controlWrapper = new AndroidSliderWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "slider":
+                controlWrapper = new AndroidSliderWrapper(parent, bindingContext, controlSpec);
+                break;
             case "stackpanel":
                 controlWrapper = new AndroidStackPanelWrapper(parent, bindingContext, controlSpec);
                 break;
