@@ -200,18 +200,26 @@ public class AndroidControlWrapper extends ControlWrapper
         layout.addView(this.getControl());
     }
 
-    protected void updateGravity()
+    protected void updateGravityOnUiThread()
     {
-        if (this.getControl().getLayoutParams() != null)
-        {
-            LinearLayout.LayoutParams linearLayoutParams = (LinearLayout.LayoutParams) this
-                    .getControl().getLayoutParams();
-            if (linearLayoutParams != null)
-            {
-                linearLayoutParams.gravity = _horizontalAlignment | _verticalAlignment;
-                _control.requestLayout();
-            }
-        }
+        ((Activity) this.getControl().getContext()).runOnUiThread(new Runnable()
+                                                                  {
+                                                                      @Override
+                                                                      public void run()
+                                                                      {
+                                                                          if (AndroidControlWrapper.this.getControl().getLayoutParams() != null)
+                                                                          {
+                                                                              LinearLayout.LayoutParams linearLayoutParams = (LinearLayout.LayoutParams) AndroidControlWrapper.this
+                                                                                      .getControl().getLayoutParams();
+                                                                              if (linearLayoutParams != null)
+                                                                              {
+                                                                                  linearLayoutParams.gravity = _horizontalAlignment | _verticalAlignment;
+                                                                                  _control.requestLayout();
+                                                                              }
+                                                                          }
+
+                                                                      }
+                                                                  });
     }
 
     protected int _verticalAlignment = Gravity.TOP;
@@ -224,7 +232,7 @@ public class AndroidControlWrapper extends ControlWrapper
     public void setVerticalAlignment(int verticalAlignment)
     {
         _verticalAlignment = verticalAlignment;
-        updateGravity();
+        updateGravityOnUiThread();
     }
 
     protected int _horizontalAlignment = Gravity.LEFT;
@@ -237,7 +245,7 @@ public class AndroidControlWrapper extends ControlWrapper
     public void setHorizontalAlignment(int horizontalAlignment)
     {
         _horizontalAlignment = horizontalAlignment;
-        updateGravity();
+        updateGravityOnUiThread();
     }
 
     // No idea why this doesn't work.
