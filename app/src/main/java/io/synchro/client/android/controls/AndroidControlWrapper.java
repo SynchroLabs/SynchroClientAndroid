@@ -964,9 +964,9 @@ public class AndroidControlWrapper extends ControlWrapper
             case "rectangle":
                 controlWrapper = new AndroidRectangleWrapper(parent, bindingContext, controlSpec);
                 break;
-//            case "scrollview":
-//                controlWrapper = new AndroidScrollWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "scrollview":
+                controlWrapper = new AndroidScrollWrapper(parent, bindingContext, controlSpec);
+                break;
             case "slider":
                 controlWrapper = new AndroidSliderWrapper(parent, bindingContext, controlSpec);
                 break;
