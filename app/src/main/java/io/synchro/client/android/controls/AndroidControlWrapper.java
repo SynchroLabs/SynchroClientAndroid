@@ -976,9 +976,9 @@ public class AndroidControlWrapper extends ControlWrapper
 //            case "webview":
 //                controlWrapper = new AndroidWebViewWrapper(parent, bindingContext, controlSpec);
 //                break;
-//            case "wrappanel":
-//                controlWrapper = new AndroidWrapPanelWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "wrappanel":
+                controlWrapper = new AndroidWrapPanelWrapper(parent, bindingContext, controlSpec);
+                break;
         }
 
         if (controlWrapper != null)
