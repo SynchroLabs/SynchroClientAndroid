@@ -912,9 +912,9 @@ public class AndroidControlWrapper extends ControlWrapper
         Log.d(TAG, String.format("Creating control %s", controlSpec.get("control").asString()));
         switch (controlSpec.get("control").asString())
         {
-//            case "actionBar.item":
-//                controlWrapper = new AndroidActionWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "actionBar.item":
+                controlWrapper = new AndroidActionWrapper(parent, bindingContext, controlSpec);
+                break;
 //            case "actionBar.toggle":
 //                controlWrapper = new AndroidActionToggleWrapper(
 //                        parent, bindingContext, controlSpec

@@ -1,8 +1,6 @@
 package io.synchro.client.android;
 
-import android.app.Notification;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -98,6 +96,7 @@ public class AndroidActionBarItem
 
     public void setIcon(String value)
     {
+        Log.d(TAG, String.format("setIcon(\"%s\")", value));
         _iconName = value;
 
         Field idField = null;
