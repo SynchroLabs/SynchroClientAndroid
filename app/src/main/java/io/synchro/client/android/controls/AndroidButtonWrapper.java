@@ -58,7 +58,7 @@ public class AndroidButtonWrapper extends AndroidControlWrapper
                                               CommandInstance command = GetCommand(CommandName.getOnClick());
                                               if (command != null)
                                               {
-                                                  Log.d(TAG, String.format("Button click with command: %s", command));
+                                                  Log.d(TAG, String.format("Button click with command: %s", command.getCommand()));
                                                   AndroidButtonWrapper.this.getStateManager().sendCommandRequestAsync(
                                                           command.getCommand(),
                                                           command.GetResolvedParameters(

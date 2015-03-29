@@ -260,7 +260,7 @@ public class ViewModel
                         {
                             Log.d(TAG,
                                     String.format("Updating view model item for path: %s to value: %s", path,
-                                    viewModelDelta.get("value")));
+                                    viewModelDelta.get("value").asString()));
 
                             boolean rebindRequired = JToken
                                     .updateTokenValue(vmItemValue, viewModelDelta.get("value")) != null;
