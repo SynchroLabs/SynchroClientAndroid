@@ -51,6 +51,8 @@ public class FlowLayout extends ViewGroup
     public void setOrientation(int value)
     {
         _orientation = value;
+        invalidate();
+        requestLayout();
     }
 
     protected int _itemHeight = 0;
