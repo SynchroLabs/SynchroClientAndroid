@@ -944,9 +944,9 @@ public class AndroidControlWrapper extends ControlWrapper
             case "listview":
                 controlWrapper = new AndroidListViewWrapper(parent, bindingContext, controlSpec);
                 break;
-//            case "location":
-//                controlWrapper = new AndroidLocationWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "location":
+                controlWrapper = new AndroidLocationWrapper(parent, bindingContext, controlSpec);
+                break;
             case "password":
                 controlWrapper = new AndroidTextBoxWrapper(parent, bindingContext, controlSpec);
                 break;

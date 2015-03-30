@@ -20,6 +20,18 @@ public class ControlWrapper
         Multiple
     }
 
+    public static enum LocationStatus
+    {
+        Unknown,
+        DeterminingAvailabily,
+        Available,
+        NotAvailable,
+        PendingApproval,
+        NotApproved,
+        Active,
+        Failed
+    }
+
     StateManager   _stateManager;
     ViewModel      _viewModel;
     BindingContext _bindingContext;
