@@ -172,4 +172,17 @@ public class SynchroPageActivity extends Activity
         // !!! Fix this in the really complicated way required.
         return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        if (_pageView.HasBackCommand())
+        {
+            _pageView.GoBack();
+        }
+        else
+        {
+            this.finish();
+        }
+    }
 }

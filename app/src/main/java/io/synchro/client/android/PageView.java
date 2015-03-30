@@ -87,7 +87,6 @@ public abstract class PageView
     }
 
     public boolean GoBack()
-            throws IOException
     {
         if (_stateManager.IsBackSupported())
         {
