@@ -84,4 +84,20 @@ public class JsonTest extends TestCase
         assertSame(red, arr.get(0));
         assertSame(green1, arr.get(1));
     }
+
+    public void testArrayReturnsNullForIllegalIndex()
+    {
+        JValue red = new JValue("Red");
+        JValue green1 = new JValue("Green");
+        JValue green2 = new JValue("Green");
+
+        JArray arr = new JArray();
+        arr.add(red);
+        arr.add(green1);
+        arr.add(green2);
+
+        assertEquals(3, arr.size());
+        assertNull(arr.get(3));
+        assertSame(green2, arr.get(2));
+    }
 }

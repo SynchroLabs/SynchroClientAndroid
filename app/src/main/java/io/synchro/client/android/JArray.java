@@ -34,7 +34,7 @@ public class JArray extends JToken implements Iterable<JToken>
         return backingArray.size();
     }
 
-    public JToken get(int index) { return backingArray.get(index); }
+    public JToken get(int index) { return (backingArray.size() > index) ? backingArray.get(index) : null; }
 
     public JToken set(int index, JToken value)
     {
