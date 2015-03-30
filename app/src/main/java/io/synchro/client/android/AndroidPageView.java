@@ -124,7 +124,7 @@ public class AndroidPageView extends PageView
 
         ViewGroup panel = (ViewGroup)_rootControlWrapper.getControl();
 
-        ScrollView mainScroller = (ScrollView) panel;
+        ScrollView mainScroller = (panel instanceof ScrollView) ?  (ScrollView) panel : null;
         if (mainScroller != null)
         {
             mainScroller.scrollTo(0, 0);
