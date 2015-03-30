@@ -938,9 +938,9 @@ public class AndroidControlWrapper extends ControlWrapper
             case "image":
                 controlWrapper = new AndroidImageWrapper(parent, bindingContext, controlSpec);
                 break;
-//            case "listbox":
-//                controlWrapper = new AndroidListBoxWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "listbox":
+                controlWrapper = new AndroidListBoxWrapper(parent, bindingContext, controlSpec);
+                break;
             case "listview":
                 controlWrapper = new AndroidListViewWrapper(parent, bindingContext, controlSpec);
                 break;
