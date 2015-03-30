@@ -950,9 +950,9 @@ public class AndroidControlWrapper extends ControlWrapper
             case "password":
                 controlWrapper = new AndroidTextBoxWrapper(parent, bindingContext, controlSpec);
                 break;
-//            case "picker":
-//                controlWrapper = new AndroidPickerWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "picker":
+                controlWrapper = new AndroidPickerWrapper(parent, bindingContext, controlSpec);
+                break;
             case "progressbar":
                 controlWrapper = new AndroidSliderWrapper(parent, bindingContext, controlSpec);
                 break;
