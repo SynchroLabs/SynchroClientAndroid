@@ -161,7 +161,7 @@ public class ControlWrapper
         return TokenConverter.ToString(token, defaultValue);
     }
 
-    public boolean ToBoolean(JToken token, Boolean defaultValue)
+    public boolean ToBoolean(JToken token, boolean defaultValue)
     {
         return TokenConverter.ToBoolean(token, defaultValue);
     }
@@ -652,7 +652,7 @@ public class ControlWrapper
         for (int counter = 0;counter < controlList.size();++counter)
         {
             BindingContext controlBindingContext = bindingContext;
-            Boolean controlCreated = false;
+            boolean controlCreated = false;
             JObject element = (JObject) controlList.get(counter);
 
             if ((element.get("binding") != null) && (element.get("binding").getType() == JTokenType.Object))

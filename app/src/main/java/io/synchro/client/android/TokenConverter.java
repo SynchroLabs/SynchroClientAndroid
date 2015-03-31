@@ -38,9 +38,9 @@ public class TokenConverter
         return result;
     }
 
-    public static Boolean ToBoolean(JToken token, Boolean defaultValue)
+    public static boolean ToBoolean(JToken token, boolean defaultValue)
     {
-        Boolean result = defaultValue;
+        boolean result = defaultValue;
 
         if (token != null)
         {

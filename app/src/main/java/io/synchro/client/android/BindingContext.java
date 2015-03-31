@@ -132,7 +132,7 @@ public class BindingContext
 
     // Given a path to a changed element, determine if the binding is impacted.
     //
-    public Boolean IsBindingUpdated(String updatedElementPath, Boolean objectChange)
+    public boolean IsBindingUpdated(String updatedElementPath, boolean objectChange)
     {
         if (objectChange && (_bindingPath.startsWith(updatedElementPath)))
         {
@@ -217,7 +217,7 @@ public class BindingContext
 
     // Return boolean indicating whether the bound token was changed (and rebinding needs to be triggered)
     //
-    public Boolean SetValue(JToken value)
+    public boolean SetValue(JToken value)
     {
         this.attemptToBindTokenIfNeeded();
         if (_boundToken != null)

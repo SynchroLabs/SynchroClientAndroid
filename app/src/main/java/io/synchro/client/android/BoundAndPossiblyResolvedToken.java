@@ -49,7 +49,7 @@ public class BoundAndPossiblyResolvedToken
             _resolvedValue = _bindingContext.GetValue().deepClone();
             if (_negated)
             {
-                _resolvedValue = new JValue(!TokenConverter.ToBoolean(_resolvedValue, null));
+                _resolvedValue = new JValue(!TokenConverter.ToBoolean(_resolvedValue, false));
             }
         }
     }
@@ -75,7 +75,7 @@ public class BoundAndPossiblyResolvedToken
             JToken resolvedValue = _bindingContext.GetValue();
             if (_negated)
             {
-                resolvedValue = new JValue(!TokenConverter.ToBoolean(resolvedValue, null));
+                resolvedValue = new JValue(!TokenConverter.ToBoolean(resolvedValue, false));
             }
             return resolvedValue;
         }
