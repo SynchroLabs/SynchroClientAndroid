@@ -66,7 +66,7 @@ public class BindingContext
             if (pathElement.startsWith("$"))
             {
                 pathElement = pathElement.substring(1);
-                Log.d(TAG, "Found binding path element: %s".format(pathElement));
+                Log.d(TAG, String.format("Found binding path element: %s", pathElement));
                 switch (pathElement)
                 {
                     case "root":
