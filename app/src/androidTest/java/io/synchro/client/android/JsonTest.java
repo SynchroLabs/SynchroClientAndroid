@@ -15,9 +15,9 @@ public class JsonTest extends TestCase
         JObject stuff = (JObject) JToken.parse("{\"a\",{\"b\",{\"c\",\"d\"}},\"e\",[{\"f\",\"g\"},\"h\"]}");
 
         assertSame((((JObject)((JArray)stuff.get("e")).get(0)).get("f")), stuff.selectToken(
-                           "e[0].f"
+                           "e[0].f", false
                                                                                            ));
-        assertEquals("e[0].f", stuff.selectToken("e[0].f").getPath());
+        assertEquals("e[0].f", stuff.selectToken("e[0].f", false).getPath());
     }
 
     public void testDeepClone()
@@ -51,7 +51,7 @@ public class JsonTest extends TestCase
         stuff.put("a", new JValue(1));
         stuff.put("b", new JValue(2));
 
-        JToken vmItemValue = stuff.selectToken("a");
+        JToken vmItemValue = stuff.selectToken("a", false);
         JObject newVmItemValue = new JObject();
         newVmItemValue.put("baz", new JValue("Fraz"));
 

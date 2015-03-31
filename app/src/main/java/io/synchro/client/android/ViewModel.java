@@ -255,7 +255,7 @@ public class ViewModel
                         break;
                     case "update":
                     {
-                        JToken vmItemValue = _rootObject.selectToken(path);
+                        JToken vmItemValue = _rootObject.selectToken(path, false);
                         if (vmItemValue != null)
                         {
                             Log.d(TAG,
@@ -290,14 +290,14 @@ public class ViewModel
                     bindingUpdates.add(new BindingUpdate(path, true));
 
                     // First, double check to make sure the path doesn't actually exist
-                    JToken vmItemValue = _rootObject.selectToken(path);
+                    JToken vmItemValue = _rootObject.selectToken(path, false);
                     if (vmItemValue == null)
                     {
                         if (path.endsWith("]"))
                         {
                             // This is an array element...
                             String parentPath = path.substring(0, path.lastIndexOf("["));
-                            JToken parentToken = _rootObject.selectToken(parentPath);
+                            JToken parentToken = _rootObject.selectToken(parentPath, false);
                             if ((parentToken != null) && (parentToken instanceof JArray))
                             {
                                 ((JArray) parentToken).add(viewModelDelta.get("value"));
@@ -318,7 +318,7 @@ public class ViewModel
                             // This is an object property...
                             String parentPath = path.substring(0, path.lastIndexOf("."));
                             String attributeName = path.substring(path.lastIndexOf(".") + 1);
-                            JToken parentToken = _rootObject.selectToken(parentPath);
+                            JToken parentToken = _rootObject.selectToken(parentPath, false);
                             if ((parentToken != null) && (parentToken instanceof JObject))
                             {
                                 ((JObject) parentToken).put(
@@ -352,7 +352,7 @@ public class ViewModel
                     Log.d(TAG, String.format("Removing bound item for path: %s", path));
                     bindingUpdates.add(new BindingUpdate(path, true));
 
-                    JToken vmItemValue = _rootObject.selectToken(path);
+                    JToken vmItemValue = _rootObject.selectToken(path, false);
                     if (vmItemValue != null)
                     {
                         Log.d(TAG, String.format("Removing bound item for path: %s", vmItemValue.getPath()));

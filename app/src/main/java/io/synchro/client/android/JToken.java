@@ -73,31 +73,45 @@ public abstract class JToken
 
     private static Pattern pathRegex = Pattern.compile("\\[(\\d+)\\]");
 
-    public JToken selectToken(String path)
+    public JToken selectToken(String path, boolean errorWhenNoMatch)
     {
-        Matcher matcher = pathRegex.matcher(path);
-        String[] pathElements = matcher.replaceAll(".$1").split("\\.");
-        JToken currentToken = this;
-        for (String element : pathElements)
+        try
         {
-            if (currentToken instanceof JArray)
+            Matcher matcher = pathRegex.matcher(path);
+            String[] pathElements = matcher.replaceAll(".$1").split("\\.");
+            JToken currentToken = this;
+            for (String element : pathElements)
             {
-                currentToken = ((JArray)currentToken).get(Integer.parseInt(element));
+                if (currentToken instanceof JArray)
+                {
+                    currentToken = ((JArray) currentToken).get(Integer.parseInt(element));
+                }
+                else if (currentToken instanceof JObject)
+                {
+                    currentToken = ((JObject) currentToken).get(element);
+                }
+                else
+                {
+                    // If you try to go into anything other than an object or array looking for a
+                    // child element, you are barking up the wrong tree...
+                    //
+                    throw new IllegalArgumentException(
+                            "The provided path did not resolve to a token"
+                    );
+                }
             }
-            else if (currentToken instanceof JObject)
+
+            return currentToken;
+        }
+        catch (Exception e)
+        {
+            if (errorWhenNoMatch)
             {
-                currentToken = ((JObject)currentToken).get(element);
-            }
-            else
-            {
-                // If you try to go into anything other than an object or array looking for a
-                // child element, you are barking up the wrong tree...
-                //
-                throw new IllegalArgumentException("The provided path did not resolve to a token");
+                throw e;
             }
         }
 
-        return currentToken;
+        return null;
     }
 
     public JToken getParent()

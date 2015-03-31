@@ -47,7 +47,7 @@ public class BindingContext
     {
         if (_boundToken == null)
         {
-            _boundToken = _bindingRoot.selectToken(_bindingPath);
+            _boundToken = _bindingRoot.selectToken(_bindingPath, false);
         }
     }
 
@@ -234,6 +234,6 @@ public class BindingContext
 
     public void Rebind()
     {
-        _boundToken = _bindingRoot.selectToken(_bindingPath);
+        _boundToken = _bindingRoot.selectToken(_bindingPath, false);
     }
 }
