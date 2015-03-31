@@ -1,11 +1,13 @@
 package io.synchro.client.android.controls;
 
+import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
 //import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
+import io.synchro.client.android.AndroidUiThreadSetViewValue;
 import io.synchro.client.android.BindingContext;
 import io.synchro.client.android.BindingHelper;
 import io.synchro.client.android.ControlWrapper;
@@ -54,10 +56,10 @@ public class AndroidTextBoxWrapper extends AndroidControlWrapper
                                           {
                                               return new JValue(editText.getText().toString());
                                           }
-                                      }, new ISetViewValue()
+                                      }, new AndroidUiThreadSetViewValue((Activity) editText.getContext())
                                       {
                                           @Override
-                                          public void SetViewValue(JToken value)
+                                          public void UiThreadSetViewValue(JToken value)
                                           {
                                               editText.setText(ToString(value, ""));
                                           }
