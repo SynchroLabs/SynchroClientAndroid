@@ -109,17 +109,20 @@ public class AndroidActionBarItem
             Log.wtf(TAG, e);
         }
 
-        try
+        if (idField != null)
         {
-            _iconResourceId = idField.getInt(idField);
-        }
-        catch (IllegalAccessException e)
-        {
-            Log.wtf(TAG, e);
-        }
-        if (_iconResourceId > 0)
-        {
-            _icon = _context.getDrawable(_iconResourceId);
+            try
+            {
+                _iconResourceId = idField.getInt(idField);
+            }
+            catch (IllegalAccessException e)
+            {
+                Log.wtf(TAG, e);
+            }
+            if (_iconResourceId > 0)
+            {
+                _icon = _context.getDrawable(_iconResourceId);
+            }
         }
 
         updateIconOnMenuItem();
