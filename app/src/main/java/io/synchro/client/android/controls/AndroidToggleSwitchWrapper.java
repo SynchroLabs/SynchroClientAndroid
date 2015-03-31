@@ -53,7 +53,7 @@ public class AndroidToggleSwitchWrapper extends AndroidControlWrapper
                                           @Override
                                           protected void UiThreadSetViewValue(JToken value)
                                           {
-
+                                            toggleSwitch.setChecked(ToBoolean(value, false));
                                           }
                                       }))
         {
