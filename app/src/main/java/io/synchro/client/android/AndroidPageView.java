@@ -83,7 +83,6 @@ public class AndroidPageView extends PageView
     }
 
     public boolean OnCommandBarUp(MenuItem item)
-            throws IOException
     {
         Log.d(TAG, "Command bar Up button pushed");
         this.GoBack();

@@ -32,14 +32,7 @@ public class SynchroPageActivity extends Activity
     {
         if (item.getItemId() == android.R.id.home)
         {
-            try
-            {
-                return _pageView.OnCommandBarUp(item);
-            }
-            catch (IOException e)
-            {
-                Log.wtf(TAG, e);
-            }
+            return _pageView.OnCommandBarUp(item);
         }
         else if (_pageView.OnOptionsItemSelected(item))
         {

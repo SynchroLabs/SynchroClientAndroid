@@ -2,8 +2,6 @@ package io.synchro.client.android;
 
 import android.util.Log;
 
-import java.io.IOException;
-
 /**
  * Created by blake on 3/2/15.
  */
