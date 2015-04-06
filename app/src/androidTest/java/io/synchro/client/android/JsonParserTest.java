@@ -152,6 +152,13 @@ public class JsonParserTest extends TestCase
         validateRoundTrip("null", new JValue());
     }
 
+    public void testParseNullFromNullString()
+    {
+        String nullString = null;
+
+        validateRoundTrip("null", new JValue(nullString));
+    }
+
     public void  testParseDouble()
     {
         validateRoundTrip("0.001", new JValue(0.001));
