@@ -3,9 +3,7 @@ package io.synchro.client.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ActionMode;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,8 +14,6 @@ import java.util.List;
 
 public class LauncherActivity extends Activity
 {
-    private ActionMode actionMode;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -52,53 +48,12 @@ public class LauncherActivity extends Activity
                                                @Override
                                                public boolean onItemLongClick(
                                                        AdapterView<?> parent, View view,
-                                                       int position, long id)
+                                                       final int position, long id)
                                                {
-                                                   if (actionMode != null)
-                                                   {
-                                                       return false;
-                                                   }
-
-                                                   actionMode = startActionMode(new ActionMode.Callback()
-                                                                                {
-                                                                                    @Override
-                                                                                    public boolean onCreateActionMode(
-                                                                                            ActionMode mode,
-                                                                                            Menu menu
-                                                                                                                     )
-                                                                                    {
-                                                                                        MenuInflater inflater = mode.getMenuInflater();
-                                                                                        inflater.inflate(R.menu.menu_app_context, menu);
-                                                                                        return true;
-                                                                                    }
-
-                                                                                    @Override
-                                                                                    public boolean onPrepareActionMode(
-                                                                                            ActionMode mode,
-                                                                                            Menu menu
-                                                                                                                      )
-                                                                                    {
-                                                                                        return false;
-                                                                                    }
-
-                                                                                    @Override
-                                                                                    public boolean onActionItemClicked(
-                                                                                            ActionMode mode,
-                                                                                            MenuItem item
-                                                                                                                      )
-                                                                                    {
-                                                                                        return false;
-                                                                                    }
-
-                                                                                    @Override
-                                                                                    public void onDestroyActionMode(
-                                                                                            ActionMode mode
-                                                                                                                   )
-                                                                                    {
-                                                                                        actionMode = null;
-                                                                                    }
-                                                                                });
-                                                   view.setSelected(true);
+                                                   SynchroApp synchroApp = apps[position];
+                                                   Intent intent = new Intent(LauncherActivity.this, AppDetailActivity.class);
+                                                   intent.putExtra("endpoint", synchroApp.getEndpoint());
+                                                   startActivity(intent);
                                                    return true;
                                                }
                                            });
@@ -119,7 +74,14 @@ public class LauncherActivity extends Activity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
+        int id = item.getItemId();
+
+        if (id == R.id.action_add)
+        {
+            Intent intent = new Intent(this, AppDetailActivity.class);
+            startActivity(intent);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
