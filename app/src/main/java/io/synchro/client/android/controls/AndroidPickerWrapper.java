@@ -38,7 +38,7 @@ public class AndroidPickerWrapper extends AndroidControlWrapper
     boolean _selectionChangingProgramatically = false;
     JToken _localSelection;
 
-    int _lastProgramaticallySelectedPosition = Spinner.INVALID_POSITION;
+    int _lastSelectedPosition = Spinner.INVALID_POSITION;
 
     static String[] Commands = new String[] { CommandName.getOnSelectionChange().getAttribute() };
 
@@ -317,7 +317,7 @@ public class AndroidPickerWrapper extends AndroidControlWrapper
             BindingContextListItem item = adapter.GetItemAtPosition(i);
             if (selection.equals(item.GetSelection(selectionItem)))
             {
-                _lastProgramaticallySelectedPosition = i;
+                _lastSelectedPosition = i;
                 picker.setSelection(i);
                 break;
             }
@@ -345,8 +345,9 @@ public class AndroidPickerWrapper extends AndroidControlWrapper
         // call from an actual user click we will test to see of the new selected item is different than the last
         // one we set programatically.
         //
-        if ((!_selectionChangingProgramatically) && (_lastProgramaticallySelectedPosition != position))
+        if ((!_selectionChangingProgramatically) && (_lastSelectedPosition != position))
         {
+            _lastSelectedPosition = position;
             CommandInstance command = GetCommand(CommandName.getOnSelectionChange());
             if (command != null)
             {

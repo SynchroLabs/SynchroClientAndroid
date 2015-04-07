@@ -224,7 +224,12 @@ public class BindingContext
         {
             if (!_isIndex)
             {
-                return JToken.updateTokenValue(_boundToken, value) != null;
+                JToken newValue = JToken.updateTokenValue(_boundToken, value);
+                if (newValue != null)
+                {
+                    _boundToken = newValue;
+                    return true;
+                }
             }
         }
 

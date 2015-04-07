@@ -244,7 +244,7 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
         this._control = listView;
 
 
-        int choiceMode = ListView.CHOICE_MODE_SINGLE;
+        int choiceMode = ListView.CHOICE_MODE_NONE;
 
         ListSelectionMode mode = ToListSelectionMode(controlSpec.get("select"), ListSelectionMode.Single);
         switch (mode)
