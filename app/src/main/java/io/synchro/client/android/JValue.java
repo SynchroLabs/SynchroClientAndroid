@@ -16,6 +16,11 @@ public class JValue extends JToken
     {
         super(JTokenType.String);
 
+        if (value == null)
+        {
+            type = JTokenType.Null;
+        }
+
         this.value = value;
     }
 

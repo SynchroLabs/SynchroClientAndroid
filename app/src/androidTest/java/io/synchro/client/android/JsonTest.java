@@ -100,4 +100,12 @@ public class JsonTest extends TestCase
         assertNull(arr.get(3));
         assertSame(green2, arr.get(2));
     }
+
+    public void testValueNullForNullString()
+    {
+        String stringValue = null;
+        JValue nullString = new JValue(stringValue);
+
+        assertEquals(JTokenType.Null, nullString.getType());
+    }
 }
