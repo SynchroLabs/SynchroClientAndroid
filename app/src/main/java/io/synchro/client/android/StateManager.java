@@ -422,7 +422,7 @@ public class StateManager
                 addDeltasToRequestObject(requestObject);
             }
 
-            ProcessResponseAsync(_transport.sendMessage(_app.getSessionId(), requestObject));
+            sendMessageProcessResponseAsync(_app.getSessionId(), requestObject);
         }
         else if (updateRequired)
         {
