@@ -24,12 +24,13 @@ public class StateManagerTest extends TestCase
     // receipt of that page (the Menu page), issue a command which navigates to the Hello page.
     //
     public void testStateManager()
-        throws IOException
+            throws IOException, InterruptedException
     {
         // Force fresh load of AppManager from the bundled seed...
         //
         SynchroAppTest.TestAppManager appManager = new SynchroAppTest.TestAppManager();
         JObject appDefinition = new JObject();
+        final Object waitObject = new Object();
 
         appDefinition.put("name", new JValue("synchro-samples"));
         appDefinition.put("description", new JValue("Synchro API Samples"));
@@ -52,6 +53,10 @@ public class StateManagerTest extends TestCase
                                                {
                                                    ++responseNumber[0];
                                                    thePageView[0] = pageView;
+                                                   synchronized (waitObject)
+                                                   {
+                                                       waitObject.notify();
+                                                   }
                                                }
                                            }, new StateManager.IProcessMessageBox()
                                            {
@@ -67,6 +72,10 @@ public class StateManagerTest extends TestCase
 
         stateManager.startApplicationAsync();
 
+        synchronized (waitObject)
+        {
+            waitObject.wait();
+        }
         assertEquals(1, responseNumber[0]);
 
         JObject commandParameters = new JObject();
@@ -75,6 +84,10 @@ public class StateManagerTest extends TestCase
 
         stateManager.sendCommandRequestAsync("goToView", commandParameters);
 
+        synchronized (waitObject)
+        {
+            waitObject.wait();
+        }
         assertEquals(2, responseNumber[0]);
         assertEquals("Hello World", thePageView[0].get("title").asString());
 
