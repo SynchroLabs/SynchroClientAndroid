@@ -6,9 +6,9 @@ import android.widget.LinearLayout;
 import io.synchro.client.android.BindingContext;
 import io.synchro.client.android.ControlWrapper;
 import io.synchro.client.android.ISetViewValue;
-import io.synchro.client.android.JArray;
-import io.synchro.client.android.JObject;
-import io.synchro.client.android.JToken;
+import io.synchro.json.JArray;
+import io.synchro.json.JObject;
+import io.synchro.json.JToken;
 
 /**
  * Created by blake on 3/16/15.

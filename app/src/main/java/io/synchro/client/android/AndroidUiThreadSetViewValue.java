@@ -2,6 +2,8 @@ package io.synchro.client.android;
 
 import android.app.Activity;
 
+import io.synchro.json.JToken;
+
 /**
  * Created by blake on 3/18/15.
  */

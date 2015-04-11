@@ -8,8 +8,8 @@ import android.webkit.WebViewClient;
 import io.synchro.client.android.AndroidUiThreadSetViewValue;
 import io.synchro.client.android.BindingContext;
 import io.synchro.client.android.ControlWrapper;
-import io.synchro.client.android.JObject;
-import io.synchro.client.android.JToken;
+import io.synchro.json.JObject;
+import io.synchro.json.JToken;
 
 /**
  * Created by blake on 3/23/15.

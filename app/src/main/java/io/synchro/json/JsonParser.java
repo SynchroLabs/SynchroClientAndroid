@@ -1,4 +1,4 @@
-package io.synchro.client.android;
+package io.synchro.json;
 
 import java.io.IOException;
 import java.io.PushbackReader;
@@ -309,7 +309,7 @@ public class JsonParser
         return new JValue();
     }
 
-    static JToken parseValue(PushbackReader reader)
+    public static JToken parseValue(PushbackReader reader)
             throws IOException
     {
         skipWhitespace(reader);

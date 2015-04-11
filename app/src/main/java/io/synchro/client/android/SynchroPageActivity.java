@@ -10,6 +10,8 @@ import android.widget.ScrollView;
 
 import java.net.MalformedURLException;
 
+import io.synchro.json.JObject;
+
 /**
  * Created by blake on 3/16/15.
  */

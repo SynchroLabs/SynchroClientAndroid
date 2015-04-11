@@ -2,6 +2,9 @@ package io.synchro.client.android;
 
 import junit.framework.TestCase;
 
+import io.synchro.json.JObject;
+import io.synchro.json.JValue;
+
 /**
  * Created by blake on 1/31/15.
  */

@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.synchro.json.JArray;
+import io.synchro.json.JObject;
+import io.synchro.json.JToken;
+import io.synchro.json.JTokenType;
+
 /**
  * Created by blake on 2/9/15.
  */
@@ -22,7 +27,7 @@ public class ViewModel
     JObject        _rootObject;
     boolean _updatingView = false;
 
-    List<ValueBinding> _valueBindings = new ArrayList<>();
+    List<ValueBinding>    _valueBindings    = new ArrayList<>();
     List<PropertyBinding> _propertyBindings = new ArrayList<>();
 
     public ViewModel()
@@ -41,7 +46,9 @@ public class ViewModel
     }
     // Only used by BindingContext - "internal"?
 
-    public ValueBinding CreateAndRegisterValueBinding(BindingContext bindingContext, IGetViewValue getValue, ISetViewValue setValue)
+    public ValueBinding CreateAndRegisterValueBinding(
+            BindingContext bindingContext, IGetViewValue getValue, ISetViewValue setValue
+                                                     )
     {
         ValueBinding valueBinding = new ValueBinding(this, bindingContext, getValue, setValue);
         _valueBindings.add(valueBinding);

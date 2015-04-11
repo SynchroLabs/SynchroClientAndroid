@@ -3,7 +3,6 @@ package io.synchro.client.android.controls;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
@@ -15,8 +14,8 @@ import java.net.URL;
 import io.synchro.client.android.AndroidUiThreadSetViewValue;
 import io.synchro.client.android.BindingContext;
 import io.synchro.client.android.ControlWrapper;
-import io.synchro.client.android.JObject;
-import io.synchro.client.android.JToken;
+import io.synchro.json.JObject;
+import io.synchro.json.JToken;
 
 /**
  * Created by blake on 3/22/15.

@@ -10,8 +10,8 @@ import android.widget.ScrollView;
 
 import io.synchro.client.android.BindingContext;
 import io.synchro.client.android.ControlWrapper;
-import io.synchro.client.android.JArray;
-import io.synchro.client.android.JObject;
+import io.synchro.json.JArray;
+import io.synchro.json.JObject;
 
 /**
  * Created by blake on 3/23/15.

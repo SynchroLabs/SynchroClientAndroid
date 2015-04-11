@@ -13,9 +13,9 @@ import io.synchro.client.android.BindingHelper;
 import io.synchro.client.android.ControlWrapper;
 import io.synchro.client.android.IGetViewValue;
 import io.synchro.client.android.ISetViewValue;
-import io.synchro.client.android.JObject;
-import io.synchro.client.android.JToken;
-import io.synchro.client.android.JValue;
+import io.synchro.json.JObject;
+import io.synchro.json.JToken;
+import io.synchro.json.JValue;
 
 /**
  * Created by blake on 3/17/15.

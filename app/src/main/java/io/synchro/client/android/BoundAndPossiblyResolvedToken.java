@@ -5,6 +5,9 @@ import android.util.Log;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import io.synchro.json.JToken;
+import io.synchro.json.JValue;
+
 /**
  * Created by blake on 1/19/15.
  */
@@ -20,7 +23,7 @@ public class BoundAndPossiblyResolvedToken
     public static final String TAG = BoundAndPossiblyResolvedToken.class.getSimpleName();
 
     BindingContext _bindingContext;
-    JToken _resolvedValue;
+    JToken         _resolvedValue;
 
     // OK - The way negation is handled here is pretty crude.  The idea is that in the future we will support
     // complex value converters, perhaps even functions which themselves have more than one token as parameters.
@@ -35,7 +38,9 @@ public class BoundAndPossiblyResolvedToken
     //
     String _formatSpec; // If present, this is the .NET format specifier (whatever came after the colon)
 
-    public BoundAndPossiblyResolvedToken(BindingContext bindingContext, boolean oneTime, boolean negated, String formatSpec)
+    public BoundAndPossiblyResolvedToken(
+            BindingContext bindingContext, boolean oneTime, boolean negated, String formatSpec
+                                        )
     {
         _bindingContext = bindingContext;
         _negated = negated;

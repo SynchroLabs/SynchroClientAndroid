@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URL;
 
+import io.synchro.json.JObject;
+import io.synchro.json.JValue;
+
 /**
  * Created by blake on 2/21/15.
  */

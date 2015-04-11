@@ -1,13 +1,15 @@
 package io.synchro.client.android;
 
+import io.synchro.json.JObject;
+
 /**
  * Created by blake on 12/24/14.
  */
 public class SynchroApp
 {
-    private String endpoint;
+    private String  endpoint;
     private JObject appDefinition;
-    private String sessionId;
+    private String  sessionId;
 
     public String getEndpoint()
     {

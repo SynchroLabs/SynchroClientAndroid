@@ -4,6 +4,12 @@ import junit.framework.TestCase;
 
 import java.io.IOException;
 
+import io.synchro.json.JArray;
+import io.synchro.json.JObject;
+import io.synchro.json.JToken;
+import io.synchro.json.JTokenType;
+import io.synchro.json.JValue;
+
 /**
  * Created by blake on 1/25/15.
  */
@@ -12,7 +18,8 @@ public class JsonTest extends TestCase
     public void testPath()
             throws IOException
     {
-        JObject stuff = (JObject) JToken.parse("{\"a\",{\"b\",{\"c\",\"d\"}},\"e\",[{\"f\",\"g\"},\"h\"]}");
+        JObject stuff = (JObject) JToken
+                .parse("{\"a\",{\"b\",{\"c\",\"d\"}},\"e\",[{\"f\",\"g\"},\"h\"]}");
 
         assertSame((((JObject)((JArray)stuff.get("e")).get(0)).get("f")), stuff.selectToken(
                            "e[0].f", false

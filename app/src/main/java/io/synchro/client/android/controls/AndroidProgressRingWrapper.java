@@ -5,7 +5,7 @@ import android.widget.ProgressBar;
 
 import io.synchro.client.android.BindingContext;
 import io.synchro.client.android.ControlWrapper;
-import io.synchro.client.android.JObject;
+import io.synchro.json.JObject;
 
 /**
  * Created by blake on 3/23/15.

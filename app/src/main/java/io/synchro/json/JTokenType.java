@@ -1,4 +1,4 @@
-package io.synchro.client.android;
+package io.synchro.json;
 
 /**
  * Created by blake on 12/9/14.

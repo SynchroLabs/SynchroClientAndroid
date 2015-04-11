@@ -5,6 +5,10 @@ import junit.framework.TestCase;
 import java.io.IOException;
 import java.util.List;
 
+import io.synchro.json.JArray;
+import io.synchro.json.JObject;
+import io.synchro.json.JValue;
+
 /**
  * Created by blake on 1/26/15.
  */
@@ -16,12 +20,12 @@ public class BindingContextTest extends TestCase
             throws IOException
     {
         viewModel = (JObject) JObject.parse(
-                    "{" +
+                "{" +
                         "\"serial\" : 0," +
                         "\"title\" : \"Colors\"," +
                         "\"colors\" :" +
                         "[" +
-                            "{" +
+                        "{" +
                                 "\"name\" : \"Red\"," +
                                 "\"color\" : \"red\"," +
                                 "\"value\" : \"0xff0000\"" +

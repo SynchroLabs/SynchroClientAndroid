@@ -1,4 +1,4 @@
-package io.synchro.client.android;
+package io.synchro.json;
 
 import java.util.Map;
 import java.util.Set;

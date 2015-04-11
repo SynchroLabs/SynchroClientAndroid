@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import io.synchro.json.JObject;
+
 
 public class AppDetailActivity extends Activity
 {

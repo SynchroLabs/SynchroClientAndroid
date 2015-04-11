@@ -4,6 +4,9 @@ import junit.framework.TestCase;
 
 import java.io.IOException;
 
+import io.synchro.json.JObject;
+import io.synchro.json.JValue;
+
 /**
  * Created by blake on 2/16/15.
  */

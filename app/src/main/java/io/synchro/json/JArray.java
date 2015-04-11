@@ -1,4 +1,4 @@
-package io.synchro.client.android;
+package io.synchro.json;
 
 import java.util.ArrayList;
 import java.util.Collections;
