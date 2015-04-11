@@ -1,36 +1,11 @@
-- [X] Util (not sure what I'm gonna need so fine, done)
-- [X] Logger
-- [X] Json
-- [X] JsonParser
-- [X] JsonWriter
-- [X] SynchroApp (was MaaasApp, requires Json)
+Building
+========
 
-- [ ] DeviceMetrics/iOSDeviceMetrics
-- [X] Transport/TransportHttp (requires SynchroApp)
+`./gradlew assembleRelease`
 
-- [X] BindingContext (requires Json)
-- [X] TokenConverter
-- [X] Binding (requires BindingContext)
+Testing
+=======
 
-- [X] ViewModel (requires Binding and BindingContext)
+To build and run unit tests on Android, with the emulator already running, use:
 
-- [X] StateManager (requires Transport,ViewModel, DeviceMetrics)
-
-- [X] CommandInstance (requires BindingContext - needed by controls)
-
-- [X] ControlWrapper/iOSControlWrapper (requires CommandInstance, lots of stuff)
-
-- [ ] PageView/iOSPageView (requires controls, ControlWrapper)
-
-- [ ] All controls
-
-- [ ] Synchro “Page" (MaaasPageViewController)
-
-Rest of Synchro launcher app UX
-
-
-Some peculiarities:
-
-* BOM on seed.json caused fits. Not sure what to do with BOM on UTF-8 asset files. I presume http://stackoverflow.com/questions/4897876/reading-utf-8-bom-marker is relevant. I deleted the BOM.
-* Slashes were not escaped on seed.json. Parser parsed it. Not sure if that's a problem.
-* I'm confused by "name" vs. "description" in the app JSON.
+`./gradlew connectedAndroidTest`
