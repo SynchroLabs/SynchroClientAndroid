@@ -1,6 +1,7 @@
 package io.synchro.client.android;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,6 +17,9 @@ public class AndroidSynchroAppManager extends SynchroAppManager
     private static AndroidSynchroAppManager instance;
 
     private static final String SEED_FILENAME = "seed.json";
+
+    private static final String STATE_FILE = "synchro";
+    private static final String STATE_KEY = "seed.json";
 
     private final Context context;
 
@@ -55,14 +59,20 @@ public class AndroidSynchroAppManager extends SynchroAppManager
     protected String loadLocalState()
             throws IOException
     {
-        return null;
+        SharedPreferences preferences = context.getSharedPreferences(STATE_FILE, Context.MODE_PRIVATE);
+        //ISharedPreferences preferences = _activity.GetPreferences(FileCreationMode.Private);
+        return preferences.getString(STATE_KEY, null);
     }
 
     @Override
     protected boolean saveLocalState(String state)
             throws IOException
     {
-        return false;
+        SharedPreferences preferences = context.getSharedPreferences(STATE_FILE, Context.MODE_PRIVATE);
+        // ISharedPreferences preferences = _activity.GetPreferences(FileCreationMode.Private);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(STATE_KEY, state);
+        return editor.commit();
     }
 
     public static AndroidSynchroAppManager getAppManager(Context context)
