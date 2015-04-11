@@ -95,14 +95,14 @@ public class AppDetailActivity extends Activity
                                      });
 
         appManager = AndroidSynchroAppManager.getAppManager(this);
-        try
-        {
-            appManager.loadState();
-        }
-        catch (IOException e)
-        {
-            Log.wtf(TAG, e);
-        }
+//        try
+//        {
+//            appManager.loadState();
+//        }
+//        catch (IOException e)
+//        {
+//            Log.wtf(TAG, e);
+//        }
 
         String endpoint = (this.getIntent().getExtras() != null) ? this.getIntent().getExtras().getString("endpoint", null) : null;
 

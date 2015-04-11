@@ -19,7 +19,7 @@ public class AndroidSynchroAppManager extends SynchroAppManager
 
     private final Context context;
 
-    public AndroidSynchroAppManager(Context context)
+    private AndroidSynchroAppManager(Context context)
     {
         this.context = context;
     }

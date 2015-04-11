@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ScrollView;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
@@ -56,15 +55,15 @@ public class SynchroPageActivity extends Activity
         //
         ScrollView layout = new ScrollView(this);
 
-        AndroidSynchroAppManager appManager = new AndroidSynchroAppManager(this);
-        try
-        {
-            appManager.loadState();
-        }
-        catch (IOException e)
-        {
-            Log.wtf(TAG, e);
-        }
+        AndroidSynchroAppManager appManager = AndroidSynchroAppManager.getAppManager(this);
+//        try
+//        {
+//            appManager.loadState();
+//        }
+//        catch (IOException e)
+//        {
+//            Log.wtf(TAG, e);
+//        }
 
         final SynchroApp app = appManager.GetApp(endpoint);
 
