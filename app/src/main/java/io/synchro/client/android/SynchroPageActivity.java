@@ -101,6 +101,7 @@ public class SynchroPageActivity extends Activity
 //                    Intent intent = new Intent(this, typeof(AppDetailActivity));
 //                    intent.putExtra("endpoint", app.getEndpoint());
 //                    NavUtils.navigateUpTo(SynchroPageActivity.this, intent);
+                    finish();
                 }
             };
         }

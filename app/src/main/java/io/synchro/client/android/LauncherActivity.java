@@ -39,7 +39,7 @@ public class LauncherActivity extends Activity
                                                    Intent intent = new Intent(LauncherActivity.this, SynchroPageActivity.class);
                                                    intent.putExtra("endpoint", synchroApp.getEndpoint());
                                                    startActivity(intent);
-                                                   finish();
+//                                                   finish();
                                                }
                                            });
         appListView.setLongClickable(true);
