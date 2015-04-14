@@ -37,6 +37,7 @@ public abstract class SynchroAppManager
 {
     protected SynchroApp            _appSeed = null;
     protected ArrayList<SynchroApp> _apps    = new ArrayList<>();
+    protected boolean               _loaded  = false;
 
     public SynchroApp getAppSeed()
     {
@@ -153,31 +154,35 @@ public abstract class SynchroAppManager
     public boolean loadState()
             throws IOException
     {
-        String bundledState = loadBundledState();
-        JObject parsedBundledState = (JObject)JToken.parse(bundledState);
+        if (!_loaded)
+        {
+            String bundledState = loadBundledState();
+            JObject parsedBundledState = (JObject) JToken.parse(bundledState);
 
-        JObject seed = (JObject) parsedBundledState.get("seed");
-        if (seed != null)
-        {
-            // If the bundled state contains a "seed", then we're just going to use that as the
-            // app state (we'll launch the app inidicated by the seed and suppress the launcher).
-            //
-            serializeFromJson(parsedBundledState);
-        }
-        else
-        {
-            // If the bundled state doesn't contain a seed, load the local state...
-            //
-            String localState = loadLocalState();
-            if (localState == null)
+            JObject seed = (JObject) parsedBundledState.get("seed");
+            if (seed != null)
             {
-                // If there is no local state, initialize the local state from the bundled state.
+                // If the bundled state contains a "seed", then we're just going to use that as the
+                // app state (we'll launch the app inidicated by the seed and suppress the launcher).
                 //
-                localState = bundledState;
-                saveLocalState(localState);
+                serializeFromJson(parsedBundledState);
             }
-            JObject parsedLocalState = (JObject)JToken.parse(localState);
-            serializeFromJson(parsedLocalState);
+            else
+            {
+                // If the bundled state doesn't contain a seed, load the local state...
+                //
+                String localState = loadLocalState();
+                if (localState == null)
+                {
+                    // If there is no local state, initialize the local state from the bundled state.
+                    //
+                    localState = bundledState;
+                    saveLocalState(localState);
+                }
+                JObject parsedLocalState = (JObject) JToken.parse(localState);
+                serializeFromJson(parsedLocalState);
+            }
+            _loaded = true;
         }
 
         return true;
