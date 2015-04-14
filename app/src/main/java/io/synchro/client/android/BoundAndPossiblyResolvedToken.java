@@ -224,6 +224,6 @@ public class BoundAndPossiblyResolvedToken
             }
         }
 
-        return TokenConverter.ToString(this.getResolvedValue(), null);
+        return TokenConverter.ToString(this.getResolvedValue(), "");
     }
 }
