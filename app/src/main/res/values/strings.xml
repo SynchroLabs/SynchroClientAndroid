@@ -2,11 +2,10 @@
 <resources>
 
     <string name="app_name">Synchro Explorer</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_splash">Synchro</string>
     <string name="title_activity_launcher">Synchro Explorer</string>
     <string name="title_activity_synchro_page">Synchro Explorer</string>
-    <string name="title_activity_app_detail">AppDetailActivity</string>
+    <string name="title_activity_app_detail">Edit Synchro App</string>
 
 </resources>
