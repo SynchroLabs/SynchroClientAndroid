@@ -38,4 +38,12 @@ public class TransportAndroidHttpClientTest extends TestCase
 
         assertEquals(expectedObject, transport.getAppDefinition());
     }
+
+    public void testUrlFromEndpoint()
+            throws IOException
+    {
+        assertEquals(new URL("http://api.synchro.io/api"), TransportAndroidHttpClient.UrlFromEndpoint("api.synchro.io/api"));
+        assertEquals(new URL("http://api.synchro.io/api"), TransportAndroidHttpClient.UrlFromEndpoint("http://api.synchro.io/api"));
+        assertEquals(new URL("https://api.synchro.io/api"), TransportAndroidHttpClient.UrlFromEndpoint("https://api.synchro.io/api"));
+    }
 }

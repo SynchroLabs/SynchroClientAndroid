@@ -9,6 +9,7 @@ import java.io.PushbackReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.regex.Pattern;
 
 import io.synchro.json.JObject;
 import io.synchro.json.JsonParser;
@@ -18,8 +19,10 @@ import io.synchro.json.JsonParser;
  */
 public class TransportAndroidHttpClient extends Transport
 {
-    public static final String TAG = TransportAndroidHttpClient.class.getSimpleName();
-    private static final String SessionIdHeader = "synchro-api-session-id";
+    public static final  String  TAG             = TransportAndroidHttpClient.class.getSimpleName();
+    private static final String  SessionIdHeader = "synchro-api-session-id";
+    private static final String  DEFAULT_SCHEME  = "http";
+    private static final Pattern SCHEME_PATTERN  = Pattern.compile("^https?:.*");
 
     private final URL _url;
 
@@ -31,7 +34,12 @@ public class TransportAndroidHttpClient extends Transport
     public static URL UrlFromEndpoint(String endpoint)
             throws MalformedURLException
     {
-        return new URL("http://" + endpoint);
+        if (!SCHEME_PATTERN.matcher(endpoint).matches())
+        {
+            endpoint = DEFAULT_SCHEME + "://" + endpoint;
+        }
+
+        return new URL(endpoint);
     }
 
     @Override
