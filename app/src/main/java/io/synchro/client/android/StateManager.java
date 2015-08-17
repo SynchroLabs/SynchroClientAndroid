@@ -148,10 +148,12 @@ public class StateManager
 
         messageBox.put("title", new JValue(title));
         messageBox.put("message", new JValue(message));
-        messageBox.put("options", optionsObject);
+        messageBox.put("options", optionsArray);
 
         optionsObject.put("label", new JValue(buttonLabel));
         optionsObject.put("command", new JValue(buttonCommand));
+
+        optionsArray.add(optionsObject);
 
         _onProcessMessageBox.ProcessMessageBox(messageBox, onCommand);
     }
@@ -167,6 +169,7 @@ public class StateManager
             Log.wtf(TAG, e);
         }
 
+        // !!! I think this needs to be sendMessageProcessResponseAsync
         messageBox("Connection Error", "Error connecting to application server", "Retry", "retry", new ICommandHandler()
                    {
                        @Override
