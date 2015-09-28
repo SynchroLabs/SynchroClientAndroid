@@ -5,8 +5,11 @@ Building
 
 Signing
 =======
+
+```
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../../io.synchro.client.android.keystore app/build/outputs/apk/app-release-unsigned.apk app
 ~/Library/Developer/Xamarin/android-sdk-macosx/build-tools/21.0.1/zipalign -v 4 app/build/outputs/apk/app-release-unsigned.apk app/build/outputs/apk/app-release.apk
+```
 
 Testing
 =======
