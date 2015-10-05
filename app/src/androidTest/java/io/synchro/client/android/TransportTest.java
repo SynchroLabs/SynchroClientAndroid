@@ -26,7 +26,7 @@ public class TransportTest extends TestCase
         JObject expected = new JObject();
 
         expected.put("name", new JValue("synchro-samples"));
-        expected.put("version", new JValue("0.0.0"));
+        expected.put("version", new JValue("0.0.1"));
         expected.put("description", new JValue("Synchro API Samples"));
         expected.put("main", new JValue("menu"));
         expected.put("author", new JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)"));
