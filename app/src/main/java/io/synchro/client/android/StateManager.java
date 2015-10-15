@@ -112,6 +112,8 @@ public class StateManager
         returnObject.put("widthUnits", new JValue(this.getDeviceMetrics().getWidthUnits()));
         returnObject.put("heightUnits", new JValue(this.getDeviceMetrics().getHeightUnits()));
         returnObject.put("scalingFactor", new JValue(this.getDeviceMetrics().getScalingFactor()));
+        returnObject.put("clientName", new JValue(this.getDeviceMetrics().getClientName()));
+        returnObject.put("clientVersion", new JValue(this.getDeviceMetrics().getClientVersion()));
 
         return returnObject;
     }

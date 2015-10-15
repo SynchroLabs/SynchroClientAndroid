@@ -24,10 +24,15 @@ public abstract class SynchroDeviceMetrics
 
     protected double _scalingFactor = 1;
 
+    protected String _clientName;
+    protected String _clientVersion;
+
 //    public SynchroDeviceMetrics()
 //    {
 //    }
 
+    public String getClientName() { return _clientName; }
+    public String getClientVersion() { return _clientVersion; }
     // Device details
     //
     public String getOS() { return _os; }

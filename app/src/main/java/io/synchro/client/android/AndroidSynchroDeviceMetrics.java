@@ -1,7 +1,9 @@
 package io.synchro.client.android;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
@@ -10,17 +12,31 @@ import android.view.Display;
  */
 public class AndroidSynchroDeviceMetrics extends SynchroDeviceMetrics
 {
-    private final SynchroPageActivity _activity;
+    private SynchroPageActivity _activity = null;
     private final DisplayMetrics _metrics = new DisplayMetrics();
 
-    public AndroidSynchroDeviceMetrics(SynchroPageActivity activity)
+    public AndroidSynchroDeviceMetrics(Context context)
     {
         super();
-        _activity = activity;
         _os = "Android";
         _osName = "Android";
         _deviceName = "Android Device"; // !!! Actual device manufaturer/model would be nice
+        _clientName = context.getString(context.getApplicationInfo().labelRes);   // http://stackoverflow.com/questions/11229219/android-get-application-name-not-package-name
+        try
+        {
+            _clientVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName; // http://stackoverflow.com/questions/4616095/how-to-get-the-build-version-number-of-your-android-application
+        }
+        catch (PackageManager.NameNotFoundException e)
+        {
+            _clientVersion = "";    // Sorry.
+        }
+    }
 
+    public AndroidSynchroDeviceMetrics(SynchroPageActivity activity)
+    {
+        this((Context) activity);
+
+        _activity = activity;
         // Galaxy S3 - DisplayMetrics{density=2.0, width=720, height=1280, scaledDensity=2.0, xdpi=304.799, ydpi=306.716}
         //             DensityDpi: Xhigh
         //
