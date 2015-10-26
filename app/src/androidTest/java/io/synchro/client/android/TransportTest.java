@@ -26,7 +26,7 @@ public class TransportTest extends TestCase
         JObject expected = new JObject();
 
         expected.put("name", new JValue("synchro-samples"));
-        expected.put("version", new JValue("0.0.1"));
+        expected.put("version", new JValue("0.1.0"));
         expected.put("description", new JValue("Synchro API Samples"));
         expected.put("main", new JValue("menu"));
         expected.put("author", new JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)"));
@@ -66,6 +66,11 @@ public class TransportTest extends TestCase
         requestObject.put("Mode", new JValue("Page"));
         requestObject.put("Path", new JValue("menu"));
         requestObject.put("TransactionId", new JValue(1));
+
+        JObject metricsObject = new JObject();
+        metricsObject.put("clientVersion", new JValue("1.1.0"));
+
+        requestObject.put("DeviceMetrics", metricsObject);
 
         JObject theResponse = transport.sendMessage(null, requestObject);
 

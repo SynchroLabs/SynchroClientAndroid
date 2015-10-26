@@ -85,12 +85,15 @@ public class AndroidSynchroDeviceMetrics extends SynchroDeviceMetrics
     @Override
     public SynchroOrientation getCurrentOrientation()
     {
-        int orientation = _activity.getScreenOrientation();
-
-        if ((orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ||
-                (orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE))
+        if (_activity != null)
         {
-            return SynchroOrientation.LANDSCAPE;
+            int orientation = _activity.getScreenOrientation();
+
+            if ((orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ||
+                    (orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE))
+            {
+                return SynchroOrientation.LANDSCAPE;
+            }
         }
         return SynchroOrientation.PORTRAIT;
     }

@@ -1,5 +1,7 @@
 package io.synchro.client.android;
 
+import android.test.AndroidTestCase;
+
 import junit.framework.TestCase;
 
 import java.io.IOException;
@@ -11,17 +13,8 @@ import io.synchro.json.JValue;
 /**
  * Created by blake on 2/26/15.
  */
-public class StateManagerTest extends TestCase
+public class StateManagerTest extends AndroidTestCase
 {
-    class TestDeviceMetrics extends SynchroDeviceMetrics
-    {
-        @Override
-        public SynchroOrientation getCurrentOrientation()
-        {
-            return SynchroOrientation.PORTRAIT;
-        }
-    }
-
     // This could probably be more thourough.  We create a StateManager and use it to connect to the local server, starting
     // the samples app (which consists of getting the app definition from the server, then getting the "main" page), then on
     // receipt of that page (the Menu page), issue a command which navigates to the Hello page.
@@ -44,7 +37,7 @@ public class StateManagerTest extends TestCase
 
         TransportAndroidHttpClient transport = new TransportAndroidHttpClient(new URL("http://" + app.getEndpoint()));
 
-        StateManager stateManager = new StateManager(appManager, app, transport, new TestDeviceMetrics());
+        StateManager stateManager = new StateManager(appManager, app, transport, new AndroidSynchroDeviceMetrics(getContext()));
 
         final int responseNumber[] = new int[] { 0 };
         final JObject thePageView[] = new JObject[] { null };

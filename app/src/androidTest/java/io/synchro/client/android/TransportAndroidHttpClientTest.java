@@ -25,7 +25,7 @@ public class TransportAndroidHttpClientTest extends TestCase
         JObject expectedObject = new JObject();
 
         expectedObject.put("name", new JValue("synchro-samples"));
-        expectedObject.put("version", new JValue("0.0.1"));
+        expectedObject.put("version", new JValue("0.1.0"));
         expectedObject.put("description", new JValue("Synchro API Samples"));
         expectedObject.put("main", new JValue("menu"));
         expectedObject.put("author", new JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)"));
