@@ -69,6 +69,7 @@ public abstract class PageView
     public abstract void SetContent(ControlWrapper content);
 
     public abstract void ProcessMessageBox(JObject messageBox, StateManager.ICommandHandler onCommand);
+    public abstract void ProcessLaunchUrl(String primaryUrl, String secondaryUrl);
 
     public boolean HasBackCommand()
     {

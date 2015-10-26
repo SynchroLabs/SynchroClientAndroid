@@ -64,6 +64,13 @@ public class StateManagerTest extends AndroidTestCase
                                                {
                                                    fail("Unexpected message box call in test");
                                                }
+                                           }, new StateManager.IProcessUrl()
+                                           {
+                                               @Override
+                                               public void ProcessUrl(String primaryUrl, String secondaryUrl)
+                                               {
+                                                   fail("Unexpected processLaunchUrl call in test");
+                                               }
                                            });
 
         stateManager.startApplicationAsync();

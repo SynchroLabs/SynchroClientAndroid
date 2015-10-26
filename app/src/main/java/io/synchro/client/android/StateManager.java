@@ -33,6 +33,11 @@ public class StateManager
         public void ProcessMessageBox(JObject messageBox, ICommandHandler commandHandler);
     }
 
+    public interface IProcessUrl
+    {
+        public void ProcessUrl(String primaryUrl, String secondaryUrl);
+    }
+
     SynchroAppManager _appManager;
     SynchroApp _app;
     JObject _appDefinition;
@@ -52,6 +57,7 @@ public class StateManager
     ViewModel _viewModel;
     IProcessPageView _onProcessPageView;
     IProcessMessageBox _onProcessMessageBox;
+    IProcessUrl _onProcessUrl;
 
     SynchroDeviceMetrics _deviceMetrics;
 
@@ -87,10 +93,11 @@ public class StateManager
         return _deviceMetrics;
     }
 
-    public void SetProcessingHandlers(IProcessPageView OnProcessPageView, IProcessMessageBox OnProcessMessageBox)
+    public void SetProcessingHandlers(IProcessPageView OnProcessPageView, IProcessMessageBox OnProcessMessageBox, IProcessUrl OnProcessUrl)
     {
         _onProcessPageView = OnProcessPageView;
         _onProcessMessageBox = OnProcessMessageBox;
+        _onProcessUrl = OnProcessUrl;
     }
 
     JObject PackageDeviceMetrics()
@@ -419,6 +426,14 @@ public class StateManager
                                                            sendCommandRequestAsync(command, null);
                                                         }
                                                    });
+        }
+        else if (responseAsJSON.get("LaunchUrl") != null)
+        {
+            JObject jsonLaunchUrl = (JObject)responseAsJSON.get("LaunchUrl");
+            _onProcessUrl.ProcessUrl(
+                    jsonLaunchUrl.get("primaryUrl").asString(),
+                    jsonLaunchUrl.get("secondaryUrl").asString()
+                                    );
         }
 
         if (responseAsJSON.get("NextRequest") != null)

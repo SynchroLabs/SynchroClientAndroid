@@ -2,8 +2,11 @@ package io.synchro.client.android;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -330,5 +333,18 @@ public class AndroidPageView extends PageView
         }
 
         dialog.show();
+    }
+
+    @Override
+    public void ProcessLaunchUrl(String primaryUrl, String secondaryUrl)
+    {
+        try
+        {
+            _activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(primaryUrl)));
+        }
+        catch (ActivityNotFoundException e)
+        {
+            _activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(secondaryUrl)));
+        }
     }
 }

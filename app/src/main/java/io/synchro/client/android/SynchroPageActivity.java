@@ -158,6 +158,24 @@ public class SynchroPageActivity extends Activity
                                                                                                }
                                                                                            });
                                                 }
+                                            }, new StateManager.IProcessUrl() {
+
+                                                @Override
+                                                public void ProcessUrl(
+                                                        final String primaryUrl, final String secondaryUrl
+                                                                      )
+                                                {
+                                                    SynchroPageActivity.this.runOnUiThread(
+                                                            new Runnable()
+                                                            {
+                                                                @Override
+                                                                public void run()
+                                                                {
+                                                                    _pageView.ProcessLaunchUrl(primaryUrl, secondaryUrl);
+                                                                }
+                                                            }
+                                                                                          );
+                                                }
                                             });
         _stateManager.startApplicationAsync();
     }
