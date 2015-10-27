@@ -34,6 +34,9 @@ public class TokenConverter
                 case Boolean:
                     result = token.asBoolean() ? "true" : "false";
                     break;
+                case Null:
+                    // Give back the default value if the type is a JSON null
+                    break;
                 default:
                     result = token.toString();
                     break;

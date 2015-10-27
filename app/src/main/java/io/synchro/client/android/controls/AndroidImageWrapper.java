@@ -16,6 +16,7 @@ import io.synchro.client.android.BindingContext;
 import io.synchro.client.android.ControlWrapper;
 import io.synchro.json.JObject;
 import io.synchro.json.JToken;
+import io.synchro.json.JTokenType;
 
 /**
  * Created by blake on 3/22/15.
@@ -50,7 +51,8 @@ public class AndroidImageWrapper extends AndroidControlWrapper
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
                                    {
-                                       if (value == null)
+                                       String img = ToString(value, "");
+                                       if (img.equals(""))
                                        {
                                            image.setImageDrawable(null);
                                            _loadedImage = null;
@@ -66,7 +68,7 @@ public class AndroidImageWrapper extends AndroidControlWrapper
                                            URL url = null;
                                            try
                                            {
-                                               url = new URL(ToString(value, ""));
+                                               url = new URL(img);
                                            }
                                            catch (MalformedURLException e)
                                            {
