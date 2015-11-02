@@ -161,6 +161,11 @@ public class AndroidControlWrapper extends ControlWrapper
             // The control might have had gravity (h/v alignment) set before getting added to the linear layout, and if so, we
             // want to pick up those values in the new LayoutParams now...
             //
+            // The noinspection is because gravity has some strong typing and get...Alignment()
+            // return just regular int. The right fix is probably to fix get...Alignment return
+            // values to indicate they are strongly typed and not just crazy ints.
+            //
+            //noinspection ResourceType
             linearLayoutParams.gravity = getVerticalAlignment() | getHorizontalAlignment();
         }
 

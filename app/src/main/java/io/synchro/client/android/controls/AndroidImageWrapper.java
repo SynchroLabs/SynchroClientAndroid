@@ -129,6 +129,10 @@ public class AndroidImageWrapper extends AndroidControlWrapper
                     Log.d(TAG, String.format("Getting image from %s", params[0]));
                     final Bitmap bmp = BitmapFactory.decodeStream(params[0].openConnection().getInputStream());
 
+                    // This is suppressing a warning that getContext has to be called from a UI thread.
+                    // This function is being called inside an AsyncTask which is by definition on the
+                    // UI thread.
+                    //noinspection ResourceType
                     ((Activity) (AndroidImageWrapper.this._control.getContext())).runOnUiThread(new Runnable()
                                                                                                 {
                                                                                                     @Override
