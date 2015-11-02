@@ -41,6 +41,9 @@ public class AndroidControlWrapper extends ControlWrapper
     protected int _height = ViewGroup.LayoutParams.WRAP_CONTENT;
     protected int _width  = ViewGroup.LayoutParams.WRAP_CONTENT;
 
+    protected boolean _widthSpecified = false;
+    protected boolean _heightSpecified = false;
+
     public AndroidControlWrapper(
             AndroidPageView pageView, StateManager stateManager, ViewModel viewModel,
             BindingContext bindingContext, View control
@@ -100,6 +103,7 @@ public class AndroidControlWrapper extends ControlWrapper
             _control.setMinimumWidth(width);
         }
         this.updateSize();
+        _widthSpecified = true;
     }
 
     public int getHeight()
@@ -115,6 +119,7 @@ public class AndroidControlWrapper extends ControlWrapper
             _control.setMinimumHeight(height);
         }
         this.updateSize();
+        _heightSpecified = true;
     }
 
     public void AddToLinearLayout(ViewGroup layout, JObject childControlSpec)

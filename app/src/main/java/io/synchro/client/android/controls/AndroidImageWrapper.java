@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -26,6 +27,30 @@ public class AndroidImageWrapper extends AndroidControlWrapper
     public static final String TAG = AndroidImageWrapper.class.getSimpleName();
 
     protected URL _loadedImage = null;
+
+    private ScaleType ToImageScaleType(JToken value, ScaleType defaultType)
+    {
+        ScaleType scaleType = defaultType;
+
+        String scaleTypeValue = ToString(value, "");
+
+        switch (scaleTypeValue)
+        {
+            case "Stretch":
+                scaleType = ScaleType.FIT_XY;
+                break;
+            case "Fit":
+                scaleType = ScaleType.FIT_CENTER;
+                break;
+            case "Fill":
+                scaleType = ScaleType.CENTER_CROP;
+                break;
+            default:
+                break;
+        }
+
+        return scaleType;
+    }
 
     public AndroidImageWrapper(
             ControlWrapper parent,
@@ -78,6 +103,18 @@ public class AndroidImageWrapper extends AndroidControlWrapper
                                        }
                                    }
                                });
+
+        processElementProperty(
+                controlSpec.get("scale"), new AndroidUiThreadSetViewValue((Activity) image.getContext())
+                {
+                    @Override
+                    protected void UiThreadSetViewValue(JToken value)
+                    {
+                        ScaleType scaleType = ToImageScaleType(value, ScaleType.FIT_CENTER);
+                        Log.d(TAG, String.format("New image scale type is %s", scaleType));
+                        image.setScaleType(scaleType);
+                    }
+                });
     }
 
     private void loadImageAsync(URL url)
@@ -97,7 +134,33 @@ public class AndroidImageWrapper extends AndroidControlWrapper
                                                                                                     @Override
                                                                                                     public void run()
                                                                                                     {
-                                                                                                        ((ImageView)AndroidImageWrapper.this._control).setImageBitmap(bmp);
+                                                                                                        ImageView imageView = (ImageView)AndroidImageWrapper.this._control;
+                                                                                                        Bitmap finalBmp = bmp;
+
+                                                                                                        // Fix up bitmap sizes based on scaling
+
+                                                                                                        if (_heightSpecified && !_widthSpecified)
+                                                                                                        {
+                                                                                                            int newWidth = (int) (bmp.getWidth() / (double)bmp.getHeight() * imageView.getHeight());
+
+                                                                                                            // Only height specified, set width based on image aspect
+                                                                                                            //
+                                                                                                            imageView.setMinimumWidth(newWidth);
+                                                                                                            _control.forceLayout();
+//                                                                                                            finalBmp = Bitmap.createScaledBitmap(bmp, newWidth, bmp.getHeight(), false);
+                                                                                                        }
+                                                                                                        else if (_widthSpecified && !_heightSpecified)
+                                                                                                        {
+                                                                                                            int newHeight = (int) (bmp.getHeight() / (double)bmp.getWidth() * imageView.getWidth());
+
+                                                                                                            // Only width specified, set height based on image aspect
+                                                                                                            //
+                                                                                                            imageView.setMinimumHeight(newHeight);
+                                                                                                            _control.forceLayout();
+//                                                                                                            finalBmp = Bitmap.createScaledBitmap(bmp, bmp.getWidth(), newHeight, false);
+                                                                                                        }
+
+                                                                                                        imageView.setImageBitmap(finalBmp);
                                                                                                     }
                                                                                                 });
                 }
