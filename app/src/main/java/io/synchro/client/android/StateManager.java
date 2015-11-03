@@ -431,8 +431,8 @@ public class StateManager
         {
             JObject jsonLaunchUrl = (JObject)responseAsJSON.get("LaunchUrl");
             _onProcessUrl.ProcessUrl(
-                    jsonLaunchUrl.get("primaryUrl").asString(),
-                    jsonLaunchUrl.get("secondaryUrl").asString()
+                    (jsonLaunchUrl.get("primaryUrl") != null) ? jsonLaunchUrl.get("primaryUrl").asString() : null,
+                    (jsonLaunchUrl.get("secondaryUrl") != null) ? jsonLaunchUrl.get("secondaryUrl").asString() : null
                                     );
         }
 
