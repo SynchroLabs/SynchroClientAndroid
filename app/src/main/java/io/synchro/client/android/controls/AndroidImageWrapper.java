@@ -150,7 +150,8 @@ public class AndroidImageWrapper extends AndroidControlWrapper
                                                                                                             // Only height specified, set width based on image aspect
                                                                                                             //
                                                                                                             imageView.setMinimumWidth(newWidth);
-                                                                                                            _control.forceLayout();
+                                                                                                            _width = newWidth;
+                                                                                                            updateSize();
 //                                                                                                            finalBmp = Bitmap.createScaledBitmap(bmp, newWidth, bmp.getHeight(), false);
                                                                                                         }
                                                                                                         else if (_widthSpecified && !_heightSpecified)
@@ -160,7 +161,8 @@ public class AndroidImageWrapper extends AndroidControlWrapper
                                                                                                             // Only width specified, set height based on image aspect
                                                                                                             //
                                                                                                             imageView.setMinimumHeight(newHeight);
-                                                                                                            _control.forceLayout();
+                                                                                                            _height = newHeight;
+                                                                                                            updateSize();
 //                                                                                                            finalBmp = Bitmap.createScaledBitmap(bmp, bmp.getWidth(), newHeight, false);
                                                                                                         }
 
