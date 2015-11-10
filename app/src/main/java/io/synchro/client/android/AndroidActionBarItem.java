@@ -102,7 +102,7 @@ public class AndroidActionBarItem
         Field idField = null;
         try
         {
-            idField = R.class.getDeclaredField(value);
+            idField = R.drawable.class.getDeclaredField(value);
         }
         catch (NoSuchFieldException e)
         {
