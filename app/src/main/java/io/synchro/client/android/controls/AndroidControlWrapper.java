@@ -938,9 +938,9 @@ public class AndroidControlWrapper extends ControlWrapper
             case "button":
                 controlWrapper = new AndroidButtonWrapper(parent, bindingContext, controlSpec);
                 break;
-//            case "canvas":
-//                controlWrapper = new AndroidCanvasWrapper(parent, bindingContext, controlSpec);
-//                break;
+            case "canvas":
+                controlWrapper = new AndroidCanvasWrapper(parent, bindingContext, controlSpec);
+                break;
             case "edit":
                 controlWrapper = new AndroidTextBoxWrapper(parent, bindingContext, controlSpec);
                 break;
