@@ -36,7 +36,16 @@ public class SplashActivity extends Activity
                       Log.wtf(TAG, e);
                   }
 
-                  startActivity(new Intent(SplashActivity.this, LauncherActivity.class));
+                  if (appManager.getAppSeed() != null)
+                  {
+                      Intent intent = new Intent(SplashActivity.this, SynchroPageActivity.class);
+                      intent.putExtra("endpoint", appManager.getAppSeed().getEndpoint());
+                      startActivity(intent);
+                  }
+                  else
+                  {
+                      startActivity(new Intent(SplashActivity.this, LauncherActivity.class));
+                  }
                   finish();
               }
           }, SPLASH_TIME_OUT_MS);
