@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Synchro Explorer</string>
+    <string name="app_name">Synchro Civics</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_splash">Synchro</string>
-    <string name="title_activity_launcher">Synchro Explorer</string>
-    <string name="title_activity_synchro_page">Synchro Explorer</string>
+    <string name="title_activity_splash">Civics</string>
+    <string name="title_activity_launcher">Synchro Civics</string>
+    <string name="title_activity_synchro_page">Synchro Civics</string>
     <string name="title_activity_app_detail">Edit Synchro App</string>
 
 </resources>
