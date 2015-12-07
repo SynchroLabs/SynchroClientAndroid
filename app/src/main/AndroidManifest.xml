@@ -26,6 +26,7 @@
         </activity>
         <activity
             android:name=".SynchroPageActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_synchro_page" >
         </activity>
         <activity

@@ -156,32 +156,17 @@ public abstract class SynchroAppManager
     {
         if (!_loaded)
         {
-            String bundledState = loadBundledState();
-            JObject parsedBundledState = (JObject) JToken.parse(bundledState);
+            String localState = loadLocalState();
 
-            JObject seed = (JObject) parsedBundledState.get("seed");
-            if (seed != null)
+            if (localState == null)
             {
-                // If the bundled state contains a "seed", then we're just going to use that as the
-                // app state (we'll launch the app inidicated by the seed and suppress the launcher).
+                // If there is no local state, initialize the local state from the bundled state.
                 //
-                serializeFromJson(parsedBundledState);
+                localState = loadBundledState();
+                saveLocalState(localState);
             }
-            else
-            {
-                // If the bundled state doesn't contain a seed, load the local state...
-                //
-                String localState = loadLocalState();
-                if (localState == null)
-                {
-                    // If there is no local state, initialize the local state from the bundled state.
-                    //
-                    localState = bundledState;
-                    saveLocalState(localState);
-                }
-                JObject parsedLocalState = (JObject) JToken.parse(localState);
-                serializeFromJson(parsedLocalState);
-            }
+            JObject parsedLocalState = (JObject) JToken.parse(localState);
+            serializeFromJson(parsedLocalState);
             _loaded = true;
         }
 

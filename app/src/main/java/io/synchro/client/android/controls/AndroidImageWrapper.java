@@ -1,12 +1,12 @@
 package io.synchro.client.android.controls;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +20,6 @@ import io.synchro.client.android.BindingContext;
 import io.synchro.client.android.ControlWrapper;
 import io.synchro.json.JObject;
 import io.synchro.json.JToken;
-import io.synchro.json.JTokenType;
 
 /**
  * Created by blake on 3/22/15.
@@ -105,7 +104,7 @@ public class AndroidImageWrapper extends AndroidControlWrapper
                             {
                                 Log.wtf(TAG, e);
                             }
-                            loadImageAsync(url);
+                            loadImageAsync(url, (Activity) image.getContext());
                         }
                     }
                 }
@@ -159,75 +158,55 @@ public class AndroidImageWrapper extends AndroidControlWrapper
         return inputStream;
     }
 
-    private void loadImageAsync(URL url)
+    private void loadImageAsync(final URL url, final Activity activity)
     {
-        new AsyncTask<URL, Void, Void>()
-        {
-            @Override
-            protected Void doInBackground(URL... params)
-            {
-                try
+        Picasso picasso = Picasso.with(activity);
+        // picasso.setIndicatorsEnabled(true);
+        Log.d(TAG, String.format("Going to get image from %s", url));
+        picasso.load(url.toString()).into(
+                (ImageView) AndroidImageWrapper.this._control, new Callback()
                 {
-                    final URL url = params[0];
-                    final Bitmap bmp = BitmapFactory.decodeStream(getUrlInputStreamFollowingRedirectsAcrossSchemes(url));
-                    Log.d(TAG, String.format("Back with image from %s", url));
+                    @Override
+                    public void onSuccess()
+                    {
+                        Log.d(TAG, String.format("Back with image from %s", url));
+                        ImageView imageView = (ImageView) AndroidImageWrapper.this._control;
 
-                    // This is suppressing a warning that getContext has to be called from a UI thread.
-                    // This function is being called inside an AsyncTask which is by definition on the
-                    // UI thread.
-                    //noinspection ResourceType
-                    ((Activity) (AndroidImageWrapper.this._control.getContext())).runOnUiThread(new Runnable()
-                                                                                                {
-                                                                                                    @Override
-                                                                                                    public void run()
-                                                                                                    {
-                                                                                                        if (bmp == null)
-                                                                                                        {
-                                                                                                            Log.d(TAG, String.format("NULL bitmap from %s", url));
-                                                                                                        }
-                                                                                                        else
-                                                                                                        {
-                                                                                                            ImageView imageView = (ImageView)AndroidImageWrapper.this._control;
-                                                                                                            Bitmap finalBmp = bmp;
+                        // Fix up bitmap sizes based on scaling
 
-                                                                                                            // Fix up bitmap sizes based on scaling
+                        if (_heightSpecified && !_widthSpecified)
+                        {
+                            int newWidth = (int) (imageView.getDrawable()
+                                                           .getIntrinsicWidth() / (double) imageView
+                                    .getDrawable().getIntrinsicHeight() * imageView
+                                    .getHeight());
 
-                                                                                                            if (_heightSpecified && !_widthSpecified)
-                                                                                                            {
-                                                                                                                int newWidth = (int) (bmp.getWidth() / (double)bmp.getHeight() * imageView.getHeight());
+                            // Only height specified, set width based on image aspect
+                            //
+                            imageView.setMinimumWidth(newWidth);
+                            _width = newWidth;
+                            updateSize();
+                        }
+                        else if (_widthSpecified && !_heightSpecified)
+                        {
+                            int newHeight = (int) (imageView.getDrawable()
+                                                            .getIntrinsicHeight() / (double) imageView
+                                    .getDrawable().getIntrinsicWidth() * imageView
+                                    .getWidth());
 
-                                                                                                                // Only height specified, set width based on image aspect
-                                                                                                                //
-                                                                                                                imageView.setMinimumWidth(newWidth);
-                                                                                                                _width = newWidth;
-                                                                                                                updateSize();
-    //                                                                                                            finalBmp = Bitmap.createScaledBitmap(bmp, newWidth, bmp.getHeight(), false);
-                                                                                                            }
-                                                                                                            else if (_widthSpecified && !_heightSpecified)
-                                                                                                            {
-                                                                                                                int newHeight = (int) (bmp.getHeight() / (double)bmp.getWidth() * imageView.getWidth());
+                            // Only width specified, set height based on image aspect
+                            //
+                            imageView.setMinimumHeight(newHeight);
+                            _height = newHeight;
+                            updateSize();
+                        }
+                    }
 
-                                                                                                                // Only width specified, set height based on image aspect
-                                                                                                                //
-                                                                                                                imageView.setMinimumHeight(newHeight);
-                                                                                                                _height = newHeight;
-                                                                                                                updateSize();
-    //                                                                                                            finalBmp = Bitmap.createScaledBitmap(bmp, bmp.getWidth(), newHeight, false);
-                                                                                                            }
-
-                                                                                                            imageView.setImageBitmap(finalBmp);
-                                                                                                        }
-                                                                                                    }
-                                                                                                });
-                }
-                catch (IOException e)
-                {
-                    Log.d(TAG, String.format("IO Exception with image from %s", params[0]));
-                    Log.wtf(TAG, e);
-                }
-
-                return null;
-            }
-        }.execute(url);
+                    @Override
+                    public void onError()
+                    {
+                        Log.d(TAG, String.format("onError with image from %s", url));
+                    }
+                });
     }
 }
