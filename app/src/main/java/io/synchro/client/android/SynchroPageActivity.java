@@ -2,6 +2,7 @@ package io.synchro.client.android;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -184,6 +185,23 @@ public class SynchroPageActivity extends Activity
     {
         // !!! Fix this in the really complicated way required.
         return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            Log.d(TAG, "Screen oriented to Portrait");
+            _stateManager.sendViewUpdateAsync(SynchroOrientation.PORTRAIT);
+        }
+        else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+        {
+            Log.d(TAG, "Screen oriented to Landscape");
+            _stateManager.sendViewUpdateAsync(SynchroOrientation.LANDSCAPE);
+        }
     }
 
     @Override
