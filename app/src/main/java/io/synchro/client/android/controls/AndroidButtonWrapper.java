@@ -29,7 +29,7 @@ public class AndroidButtonWrapper extends AndroidControlWrapper
                                )
     {
         super(parent, bindingContext);
-        Log.d(TAG, String.format("Creating button element with caption of: %s", controlSpec.get("caption").asString()));
+        Log.d(TAG, String.format("Creating button element with caption of: %s", (controlSpec.get("caption") != null) ? controlSpec.get("caption").asString() : "(no caption)"));
         final Button button = new Button(((AndroidControlWrapper)parent).getControl().getContext());
         this._control = button;
 
