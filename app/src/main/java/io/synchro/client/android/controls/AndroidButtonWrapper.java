@@ -1,9 +1,15 @@
 package io.synchro.client.android.controls;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import io.synchro.client.android.AndroidUiThreadSetViewValue;
 import io.synchro.client.android.BindingContext;
@@ -47,6 +53,51 @@ public class AndroidButtonWrapper extends AndroidControlWrapper
         JObject bindingSpec = BindingHelper
                 .GetCanonicalBindingSpec(controlSpec, CommandName.getOnClick().getAttribute(), Commands);
         ProcessCommands(bindingSpec, Commands);
+
+        processElementProperty(
+                controlSpec.get("resource"),
+                new AndroidUiThreadSetViewValue((Activity) button.getContext())
+                {
+                    @Override
+                    protected void UiThreadSetViewValue(JToken value)
+                    {
+                        final String img = ToString(value, "");
+                        if (img.equals(""))
+                        {
+                            button.setBackground(null);
+                        }
+                        else
+                        {
+                            Picasso picasso = Picasso.with((Activity) button.getContext());
+                            // picasso.setIndicatorsEnabled(true);
+                            Log.d(TAG, String.format("Going to get image from %s", img));
+                            picasso.load(img).into(
+                                    new Target()
+                                    {
+                                        @Override
+                                        public void onBitmapLoaded(
+                                                Bitmap bitmap, Picasso.LoadedFrom from
+                                                                  )
+                                        {
+                                            Log.d(TAG, String.format("Got image from %s, loadedfrom = %s", img, from));
+                                            button.setBackground(new BitmapDrawable(bitmap));
+                                        }
+
+                                        @Override
+                                        public void onBitmapFailed(Drawable errorDrawable)
+                                        {
+                                            Log.d(TAG, String.format("onBitmapFailed from %s", img));
+                                        }
+
+                                        @Override
+                                        public void onPrepareLoad(Drawable placeHolderDrawable)
+                                        {
+
+                                        }
+                                    });
+                        }
+                    }
+                });
 
         if (GetCommand(CommandName.getOnClick()) != null)
         {
