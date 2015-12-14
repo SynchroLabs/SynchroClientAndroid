@@ -67,6 +67,7 @@ public class StateManager
 
         _appManager = appManager;
         _app = app;
+        _appDefinition = app.getAppDefinition();
         _transport = transport;
         // _transport.setDefaultHandlers(this.ProcessResponseAsync, this.ProcessRequestFailure);
 
@@ -267,7 +268,7 @@ public class StateManager
                     // The best option in this situation is to request a Resync with the server...
                     //
                     Log.w(TAG, "ERROR - client state out of sync - need resync");
-                    this.sendResyncRequestAsync();
+                    this.sendResyncInstanceRequestAsync();
                 }
             }
             else
@@ -372,7 +373,7 @@ public class StateManager
                         // Instance version was not one more than current version on view model update
                         //
                         Log.w(TAG, "ERROR - instance version mismatch, updates not applied - need resync");
-                        this.sendResyncRequestAsync();
+                        this.sendResyncInstanceRequestAsync();
                         return;
                     }
                 }
@@ -393,7 +394,7 @@ public class StateManager
                         // Instance version was not correct on view update
                         //
                         Log.w(TAG, "ERROR - instance version mismatch on view update - need resync");
-                        this.sendResyncRequestAsync();
+                        this.sendResyncInstanceRequestAsync();
                         return;
                     }
                 }
@@ -407,7 +408,7 @@ public class StateManager
                 // Incorrect instance id
                 //
                 Log.w(TAG, "ERROR - instance id mismatch (response instance id > local instance id), updates not applied - need resync");
-                this.sendResyncRequestAsync();
+                this.sendResyncInstanceRequestAsync();
                 return;
             }
         }
@@ -504,7 +505,7 @@ public class StateManager
         sendMessageProcessResponseAsync(_app.getSessionId(), requestObject);
     }
 
-    private void sendResyncRequestAsync()
+    private void sendResyncInstanceRequestAsync()
     {
         Log.i(TAG, String.format("Sending resync for path: '%s'", this._path));
 
@@ -619,6 +620,28 @@ public class StateManager
         requestObject.put("InstanceId", new JValue(this._instanceId));
         requestObject.put("InstanceVersion", new JValue(this._instanceVersion));
         requestObject.put("ViewMetrics", this.PackageViewMetrics(orientation));
+
+        sendMessageProcessResponseAsync(_app.getSessionId(), requestObject);
+    }
+
+    // If your app has a session, but no other state, such as on recovery from tombstoning, you
+    // can call this method instead of startApplicationAsync().  The server will respond with the
+    // full state required to resume your app.
+    //
+    // This method should only be called in a restart from tombstoning state.  For example, if a
+    // user had navigated into the app and then shut it down via the operating system, when they
+    // restart they do not expect to return to where they were (as they would with this method),
+    // they expect to return to the entry sreen of the app.
+    //
+
+    public void sendResyncRequestAsync()
+    {
+        Log.i(TAG, "Sending resync (no path/instance)");
+
+        JObject requestObject = new JObject();
+
+        requestObject.put("Mode", new JValue("Resync"));
+        requestObject.put("TransactionId", new JValue(getNewTransactionId()));
 
         sendMessageProcessResponseAsync(_app.getSessionId(), requestObject);
     }
