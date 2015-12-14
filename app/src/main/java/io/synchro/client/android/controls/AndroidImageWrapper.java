@@ -2,6 +2,7 @@ package io.synchro.client.android.controls;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
@@ -17,6 +18,9 @@ import java.net.URLConnection;
 
 import io.synchro.client.android.AndroidUiThreadSetViewValue;
 import io.synchro.client.android.BindingContext;
+import io.synchro.client.android.BindingHelper;
+import io.synchro.client.android.CommandInstance;
+import io.synchro.client.android.CommandName;
 import io.synchro.client.android.ControlWrapper;
 import io.synchro.json.JObject;
 import io.synchro.json.JToken;
@@ -27,6 +31,7 @@ import io.synchro.json.JToken;
 public class AndroidImageWrapper extends AndroidControlWrapper
 {
     public static final String TAG = AndroidImageWrapper.class.getSimpleName();
+    static              String[] Commands = new String[]{CommandName.getOnTap().getAttribute()};
 
     protected URL _loadedImage = null;
 
@@ -123,6 +128,33 @@ public class AndroidImageWrapper extends AndroidControlWrapper
                     }
                 }
                               );
+
+        JObject bindingSpec = BindingHelper
+                .GetCanonicalBindingSpec(
+                        controlSpec, CommandName.getOnTap().getAttribute(), Commands
+                                        );
+        ProcessCommands(bindingSpec, Commands);
+
+        if (GetCommand(CommandName.getOnTap()) != null)
+        {
+            image.setOnClickListener(new View.OnClickListener()
+                                      {
+                                          @Override
+                                          public void onClick(View v)
+                                          {
+                                              CommandInstance command = GetCommand(CommandName.getOnTap());
+                                              if (command != null)
+                                              {
+                                                  Log.d(TAG, String.format("Image tap with command: %s", command.getCommand()));
+                                                  AndroidImageWrapper.this.getStateManager().sendCommandRequestAsync(
+                                                          command.getCommand(),
+                                                          command.GetResolvedParameters(
+                                                                  getBindingContext()
+                                                                                       ));
+                                              }
+                                          }
+                                      });
+        }
     }
 
     private static InputStream getUrlInputStreamFollowingRedirectsAcrossSchemes(URL url)

@@ -2,6 +2,7 @@ package io.synchro.client.android.controls;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.View;
 
 import io.synchro.client.android.*;
 import io.synchro.json.JObject;
@@ -13,6 +14,7 @@ import io.synchro.json.JToken;
 public class AndroidRectangleWrapper extends AndroidControlWrapper
 {
     public static final String TAG = AndroidRectangleWrapper.class.getSimpleName();
+    static              String[] Commands = new String[]{CommandName.getOnTap().getAttribute()};
 
     AndroidSynchroRectDrawable _rect = new AndroidSynchroRectDrawable();
 
@@ -65,5 +67,32 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
                                        _rect.SetFillColor(ToColor(value));
                                    }
                                });
+
+        JObject bindingSpec = BindingHelper
+                .GetCanonicalBindingSpec(
+                        controlSpec, CommandName.getOnTap().getAttribute(), Commands
+                                        );
+        ProcessCommands(bindingSpec, Commands);
+
+        if (GetCommand(CommandName.getOnTap()) != null)
+        {
+            drawableView.setOnClickListener(new View.OnClickListener()
+                                     {
+                                         @Override
+                                         public void onClick(View v)
+                                         {
+                                             CommandInstance command = GetCommand(CommandName.getOnTap());
+                                             if (command != null)
+                                             {
+                                                 Log.d(TAG, String.format("Rectangle tap with command: %s", command.getCommand()));
+                                                 AndroidRectangleWrapper.this.getStateManager().sendCommandRequestAsync(
+                                                         command.getCommand(),
+                                                         command.GetResolvedParameters(
+                                                                 getBindingContext()
+                                                                                      ));
+                                             }
+                                         }
+                                     });
+        }
     }
 }
