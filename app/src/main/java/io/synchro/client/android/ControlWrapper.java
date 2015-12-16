@@ -187,7 +187,15 @@ public class ControlWrapper
 
     public double ToDeviceUnits(Double value)
     {
-        return getStateManager().getDeviceMetrics().MaaasUnitsToDeviceUnits(value);
+        if (getStateManager() != null)
+        {
+            return getStateManager().getDeviceMetrics().MaaasUnitsToDeviceUnits(value);
+        }
+        else
+        {
+            // For test cases where we don't have a StateManager, just return the raw size
+            return value;
+        }
     }
 
     public double ToDeviceUnits(JToken value)

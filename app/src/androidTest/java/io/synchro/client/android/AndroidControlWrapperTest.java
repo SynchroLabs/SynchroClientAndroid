@@ -183,4 +183,214 @@ public class AndroidControlWrapperTest extends TestCase
         assertEquals("attr1val", testControl.attr1);
         assertEquals(null, testControl.attr2);
     }
+
+    public void testStyleExplicitWithStyle()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        controlSpec.put("style", new JValue("testStyle1"));
+        controlSpec.put("attr1", new JValue("attr1val"));
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals("attr1val", testControl.attr1);
+        assertEquals(null, testControl.attr2);
+    }
+
+    public void testStyleFromStyle()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        controlSpec.put("style", new JValue("testStyle1"));
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals("attr1fromStyle1", testControl.attr1);
+        assertEquals(null, testControl.attr2);
+    }
+
+    public void testStyleFromStyles()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        controlSpec.put("style", new JValue("testStyle1, testStyle2"));
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals("attr1fromStyle1", testControl.attr1);
+        assertEquals("attr2fromStyle2", testControl.attr2);
+    }
+
+    public void testStyleFromStylesPriority()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        controlSpec.put("style", new JValue("testStyle2, testStyle1"));
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals("attr1fromStyle2", testControl.attr1);
+        assertEquals("attr2fromStyle2", testControl.attr2);
+    }
+
+    public void testStyleExplicitThicknessNoStyle()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        controlSpec.put("thicknessAttr", new JValue(5));
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals(5, testControl.thickness.top);
+        assertEquals(5, testControl.thickness.left);
+        assertEquals(5, testControl.thickness.bottom);
+        assertEquals(5, testControl.thickness.right);
+    }
+
+    public void testStyleExplicitThicknessObjNoStyle()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        {
+            JObject thicknessObject = new JObject();
+
+            thicknessObject.put("top", new JValue(5));
+            thicknessObject.put("left", new JValue(6));
+            thicknessObject.put("bottom", new JValue(7));
+            thicknessObject.put("right", new JValue(8));
+
+            controlSpec.put("thicknessAttr", thicknessObject);
+        }
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals(5, testControl.thickness.top);
+        assertEquals(6, testControl.thickness.left);
+        assertEquals(7, testControl.thickness.bottom);
+        assertEquals(8, testControl.thickness.right);
+    }
+
+    public void testStyleExplicitThicknessObjAndStyles()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        controlSpec.put("style", new JValue("testStyle1, testStyle2"));
+        {
+            JObject thicknessObject = new JObject();
+
+            thicknessObject.put("top", new JValue(5));
+            thicknessObject.put("left", new JValue(6));
+
+            controlSpec.put("thicknessAttr", thicknessObject);
+        }
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals(5, testControl.thickness.top);
+        assertEquals(6, testControl.thickness.left);
+        assertEquals(9, testControl.thickness.bottom);
+        assertEquals(10, testControl.thickness.right);
+    }
+
+    public void testStyleExplicitFontSize()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        controlSpec.put("fontsize", new JValue(20));
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals(20.0, testControl.fontSetter.size);
+    }
+
+    public void testStyleExplicitFontSizeFromObject()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        {
+            JObject fontObject = new JObject();
+
+            fontObject.put("size", new JValue(22));
+
+            controlSpec.put("font", fontObject);
+        }
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals(22.0, testControl.fontSetter.size);
+    }
+
+    public void testStyleFontFromStyle()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        controlSpec.put("style", new JValue("testStyle1, testStyle2"));
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals(24.0, testControl.fontSetter.size);
+        assertEquals(true, testControl.fontSetter.bold);
+        assertEquals(true, testControl.fontSetter.italic);
+        assertEquals(ControlWrapper.FontFaceType.FONT_SANSERIF, testControl.fontSetter.faceType);
+    }
+
+    public void testStyleFontFromStylePriority()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        controlSpec.put("style", new JValue("testStyle2, testStyle1"));
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals(26.0, testControl.fontSetter.size);
+        assertEquals(true, testControl.fontSetter.bold);
+        assertEquals(true, testControl.fontSetter.italic);
+        assertEquals(ControlWrapper.FontFaceType.FONT_SANSERIF, testControl.fontSetter.faceType);
+    }
+
+    public void testStyleFontFromStyleExplicitOverride()
+    {
+        ViewModel viewModel = new ViewModel();
+        viewModel.InitializeViewModelData(viewModelObj);
+
+        AndroidControlWrapper rootControl = new AndroidControlWrapper(pageView, stateManager, viewModel, viewModel.getRootBindingContext(), null);
+
+        JObject controlSpec = new JObject();
+        controlSpec.put("style", new JValue("testStyle1"));
+        {
+            JObject fontObject = new JObject();
+
+            fontObject.put("size", new JValue(28));
+            fontObject.put("italic", new JValue(false));
+
+            controlSpec.put("font", fontObject);
+        }
+        AndroidTestControlWrapper testControl = new AndroidTestControlWrapper(rootControl, rootControl.getBindingContext(), controlSpec);
+        assertEquals(28.0, testControl.fontSetter.size);
+        assertEquals(true, testControl.fontSetter.bold);
+        assertEquals(false, testControl.fontSetter.italic);
+        assertEquals(ControlWrapper.FontFaceType.FONT_SANSERIF, testControl.fontSetter.faceType);
+    }
 }
