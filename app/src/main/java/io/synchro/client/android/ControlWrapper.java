@@ -40,6 +40,7 @@ public class ControlWrapper
     StateManager   _stateManager;
     ViewModel      _viewModel;
     BindingContext _bindingContext;
+    String[]       _styles;
 
     HashMap<String, CommandInstance> _commands         = new HashMap<>();
     HashMap<String, ValueBinding>    _valueBindings    = new HashMap<>();
@@ -60,11 +61,16 @@ public class ControlWrapper
         _bindingContext = bindingContext;
     }
 
-    public ControlWrapper(ControlWrapper parent, BindingContext bindingContext)
+    public ControlWrapper(ControlWrapper parent, BindingContext bindingContext, JObject controlSpec)
     {
         _stateManager = parent.getStateManager();
         _viewModel = parent.getViewModel();
         _bindingContext = bindingContext;
+
+        if (controlSpec.get("style") != null)
+        {
+            _styles = controlSpec.get("style").asString().split("[ ,]");
+        }
     }
 
     public StateManager getStateManager()
@@ -191,9 +197,15 @@ public class ControlWrapper
 
     public double ToDeviceUnitsFromTypographicPoints(JToken value)
     {
-        return ToDeviceUnits(getStateManager().getDeviceMetrics().TypographicPointsToMaaasUnits(
-                                     ToDouble(value, 0)
-                                                                                               ));
+        if (getStateManager() != null)
+        {
+            return ToDeviceUnits(getStateManager().getDeviceMetrics().TypographicPointsToMaaasUnits(ToDouble(value, 0)));
+        }
+        else
+        {
+            // For test cases where we don't have a StateManager, just return the raw size
+            return ToDouble(value, 0);
+        }
     }
 
     public ListSelectionMode ToListSelectionMode(JToken value, ListSelectionMode defaultSelectionMode)
@@ -464,71 +476,57 @@ public class ControlWrapper
 
     public void processFontAttribute(JObject controlSpec, final IFontSetter fontSetter)
     {
-        JToken fontAttributeValue = controlSpec.get("font");
-        if (fontAttributeValue instanceof JObject)
-        {
-            JObject fontObject = (JObject) fontAttributeValue;
-
-            processElementProperty(fontObject.get("face"), new ISetViewValue()
-                                   {
-                                       @Override
-                                       public void SetViewValue(JToken value)
-                                       {
-                                           FontFaceType faceType = FontFaceType.FONT_DEFAULT;
-                                           String faceTypeString = ToString(value, "");
-                                           switch (faceTypeString)
-                                           {
-                                               case "Serif":
-                                                   faceType = FontFaceType.FONT_SERIF;
-                                                   break;
-                                               case "SanSerif":
-                                                   faceType = FontFaceType.FONT_SANSERIF;
-                                                   break;
-                                               case "Monospace":
-                                                   faceType = FontFaceType.FONT_MONOSPACE;
-                                                   break;
-                                           }
-                                           fontSetter.SetFaceType(faceType);
-                                       }
-                                   });
-            processElementProperty(fontObject.get("size"), new ISetViewValue()
-                                   {
-                                       @Override
-                                       public void SetViewValue(JToken value)
-                                       {
-                                           if (value != null)
-                                           {
-                                               fontSetter.SetSize(ToDeviceUnitsFromTypographicPoints(value));
-                                           }
-                                       }
-                                   });
-            processElementProperty(fontObject.get("bold"), new ISetViewValue()
-                                   {
-                                       @Override
-                                       public void SetViewValue(JToken value)
-                                       {
-                                           fontSetter.SetBold(ToBoolean(value, false));
-                                       }
-                                   });
-            processElementProperty(fontObject.get("italic"), new ISetViewValue()
-                                   {
-                                       @Override
-                                       public void SetViewValue(JToken value)
-                                       {
-                                           fontSetter.SetItalic(ToBoolean(value, false));
-                                       }
-                                   });
-        }
-
-        // This will handle the simple style "fontsize" attribute (this is the most common font attribute and is
-        // very often used by itself, so we'll support this alternate syntax).
-        //
-        processElementProperty(controlSpec.get("fontsize"), new ISetViewValue()
+        processElementProperty(controlSpec, "font.face", new ISetViewValue()
                                {
                                    @Override
                                    public void SetViewValue(JToken value)
                                    {
-                                       fontSetter.SetSize(ToDeviceUnitsFromTypographicPoints(value));
+                                       FontFaceType faceType = FontFaceType.FONT_DEFAULT;
+                                       String faceTypeString = ToString(value, "");
+                                       switch (faceTypeString)
+                                       {
+                                           case "Serif":
+                                               faceType = FontFaceType.FONT_SERIF;
+                                               break;
+                                           case "SanSerif":
+                                               faceType = FontFaceType.FONT_SANSERIF;
+                                               break;
+                                           case "Monospace":
+                                               faceType = FontFaceType.FONT_MONOSPACE;
+                                               break;
+                                       }
+                                       fontSetter.SetFaceType(faceType);
+                                   }
+                               });
+
+        // This will handle the simple style "fontsize" attribute (this is the most common font attribute and is
+        // very often used by itself, so we'll support this alternate syntax).
+        //
+        processElementProperty(controlSpec, "font.size", "fontsize", new ISetViewValue()
+                               {
+                                   @Override
+                                   public void SetViewValue(JToken value)
+                                   {
+                                       if (value != null)
+                                       {
+                                           fontSetter.SetSize(ToDeviceUnitsFromTypographicPoints(value));
+                                       }
+                                   }
+                               });
+        processElementProperty(controlSpec, "font.bold", new ISetViewValue()
+                               {
+                                   @Override
+                                   public void SetViewValue(JToken value)
+                                   {
+                                       fontSetter.SetBold(ToBoolean(value, false));
+                                   }
+                               });
+        processElementProperty(controlSpec, "font.italic", new ISetViewValue()
+                               {
+                                   @Override
+                                   public void SetViewValue(JToken value)
+                                   {
+                                       fontSetter.SetItalic(ToBoolean(value, false));
                                    }
                                });
     }
@@ -554,16 +552,62 @@ public class ControlWrapper
         return false;
     }
 
+    private boolean attemptStyleBinding(String style, String attributeName, ISetViewValue setValue)
+    {
+        // See if [style].[attributeName] is defined, and if so, bind to it
+        //
+        String styleBinding = style + "." + attributeName;
+        BindingContext styleBindingContext = _viewModel.getRootBindingContext().Select(styleBinding);
+        JToken value = styleBindingContext.GetValue();
+        if ((value != null) && (value.getType() != JTokenType.Object))
+        {
+            PropertyBinding binding = getViewModel().CreateAndRegisterPropertyBinding(this.getBindingContext(), "{$root." + styleBinding + "}", setValue);
+            _propertyBindings.add(binding);
+
+            // Immediate content update during configuration.
+            binding.UpdateViewFromViewModel();
+
+            return true;
+        }
+
+        return false;
+    }
+
     // Process an element property, which can contain a plain value, a property binding token string, or no value at all,
     // in which case any optionally supplied defaultValue will be used.  This call *may* result in a property binding to
     // the element property, or it may not.
     //
     // This is "public" because there are cases when a parent element needs to process properties on its children after creation.
     //
-    public void processElementProperty(JToken value, ISetViewValue setValue)
+    public void processElementProperty(JObject controlSpec, String attributeName, String altAttributeName, ISetViewValue setValue)
     {
+        JToken value = controlSpec.selectToken(attributeName, false);
+
+        if ((value == null) && (altAttributeName != null))
+        {
+            value = controlSpec.selectToken(altAttributeName, false);
+            if ((value != null) && (value.getType() == JTokenType.Object))
+            {
+                value = null;
+            }
+        }
+
         if (value == null)
         {
+            if (_styles != null)
+            {
+                for (String style : _styles)
+                {
+                    if (attemptStyleBinding(style, attributeName, setValue))
+                    {
+                        break;
+                    }
+                    else if (attemptStyleBinding(style, altAttributeName, setValue))
+                    {
+                        break;
+                    }
+                }
+            }
             //noinspection UnnecessaryReturnStatement
             return;
         }
@@ -583,6 +627,11 @@ public class ControlWrapper
             // Otherwise, just set the property value
             setValue.SetViewValue(value);
         }
+    }
+
+    public void processElementProperty(JObject controlSpec, String attributeName, ISetViewValue setValue)
+    {
+        processElementProperty(controlSpec, attributeName, null, setValue);
     }
 
     // This helper is used by control update handlers.

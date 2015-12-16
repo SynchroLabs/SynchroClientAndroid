@@ -26,7 +26,7 @@ public class AndroidScrollWrapper extends AndroidControlWrapper
             JObject controlSpec
                                )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating scroll element");
 
         FrameLayout scroller = null;

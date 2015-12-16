@@ -100,7 +100,7 @@ public class AndroidBorderWrapper extends AndroidControlWrapper
             ControlWrapper parent, BindingContext bindingContext, JObject controlSpec
                                )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating border element");
 
         _layout = new LinearLayout(((AndroidControlWrapper) parent).getControl().getContext());
@@ -129,7 +129,7 @@ public class AndroidBorderWrapper extends AndroidControlWrapper
         // If border thickness or padding change, need to record value and update layout padding...
         //
         final BorderPaddingThicknessSetter borderThicknessSetter = new BorderPaddingThicknessSetter(this.getControl());
-        processElementProperty(controlSpec.get("border"), new AndroidUiThreadSetViewValue((Activity) this.getControl().getContext())
+        processElementProperty(controlSpec, "border", new AndroidUiThreadSetViewValue((Activity) this.getControl().getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -137,7 +137,7 @@ public class AndroidBorderWrapper extends AndroidControlWrapper
                                        _rect.SetStrokeColor(ToColor(value));
                                    }
                                });
-        processElementProperty(controlSpec.get("borderThickness"), new AndroidUiThreadSetViewValue((Activity) this.getControl().getContext())
+        processElementProperty(controlSpec, "borderThickness", new AndroidUiThreadSetViewValue((Activity) this.getControl().getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -147,7 +147,7 @@ public class AndroidBorderWrapper extends AndroidControlWrapper
                                        borderThicknessSetter.setInset(_thickness);
                                    }
                                });
-        processElementProperty(controlSpec.get("cornerRadius"), new AndroidUiThreadSetViewValue((Activity) this.getControl().getContext())
+        processElementProperty(controlSpec, "cornerRadius", new AndroidUiThreadSetViewValue((Activity) this.getControl().getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -155,7 +155,7 @@ public class AndroidBorderWrapper extends AndroidControlWrapper
                                        _rect.setCornerRadius((float) ToDeviceUnits(value));
                                    }
                                });
-        processElementProperty(controlSpec.get("background"), new AndroidUiThreadSetViewValue((Activity) this.getControl().getContext())
+        processElementProperty(controlSpec, "background", new AndroidUiThreadSetViewValue((Activity) this.getControl().getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -163,7 +163,7 @@ public class AndroidBorderWrapper extends AndroidControlWrapper
                                        _rect.SetFillColor(ToColor(value));
                                    }
                                });
-        processThicknessProperty(controlSpec.get("padding"), borderThicknessSetter);
+        processThicknessProperty(controlSpec, "padding", borderThicknessSetter);
 
         // In theory we're only jamming one child in here (so it doesn't really matter whether the linear layout is
         // horizontal or vertical).
@@ -188,7 +188,7 @@ public class AndroidBorderWrapper extends AndroidControlWrapper
                                {
                                    controlWrapper.AddToLinearLayout(_layout, controlSpec);
                                    processElementProperty(
-                                           controlSpec.get("verticalAlignment"),
+                                           controlSpec, "verticalAlignment",
                                            new AndroidUiThreadSetViewValue((Activity) AndroidBorderWrapper.this.getControl().getContext())
                                            {
                                                @Override

@@ -34,14 +34,14 @@ public class AndroidButtonWrapper extends AndroidControlWrapper
             JObject controlSpec
                                )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, String.format("Creating button element with caption of: %s", (controlSpec.get("caption") != null) ? controlSpec.get("caption").asString() : "(no caption)"));
         final Button button = new Button(((AndroidControlWrapper)parent).getControl().getContext());
         this._control = button;
 
         applyFrameworkElementDefaults(button);
 
-        processElementProperty(controlSpec.get("caption"), new AndroidUiThreadSetViewValue((Activity) button.getContext())
+        processElementProperty(controlSpec, "caption", new AndroidUiThreadSetViewValue((Activity) button.getContext())
                                {
                                    @Override
                                    public void UiThreadSetViewValue(JToken value)
@@ -55,7 +55,7 @@ public class AndroidButtonWrapper extends AndroidControlWrapper
         ProcessCommands(bindingSpec, Commands);
 
         processElementProperty(
-                controlSpec.get("resource"),
+                controlSpec, "resource",
                 new AndroidUiThreadSetViewValue((Activity) button.getContext())
                 {
                     @Override

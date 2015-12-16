@@ -65,7 +65,7 @@ public class AndroidImageWrapper extends AndroidControlWrapper
             JObject controlSpec
                               )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating image element");
         final ImageView image = new ImageView(((AndroidControlWrapper)parent).getControl().getContext());
         this._control = image;
@@ -79,7 +79,7 @@ public class AndroidImageWrapper extends AndroidControlWrapper
         // image.SetScaleType(ImageView.ScaleType.CenterInside); // Fit preserving aspect
 
         processElementProperty(
-                controlSpec.get("resource"),
+                controlSpec, "resource",
                 new AndroidUiThreadSetViewValue((Activity) image.getContext())
                 {
                     @Override
@@ -116,7 +116,7 @@ public class AndroidImageWrapper extends AndroidControlWrapper
                               );
 
         processElementProperty(
-                controlSpec.get("scale"),
+                controlSpec, "scale",
                 new AndroidUiThreadSetViewValue((Activity) image.getContext())
                 {
                     @Override

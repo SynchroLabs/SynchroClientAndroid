@@ -123,7 +123,7 @@ public class AndroidListBoxWrapper extends AndroidControlWrapper
             JObject controlSpec
                                 )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating listbox element");
 
         final ListView listView = new ListView(((AndroidControlWrapper)parent).getControl().getContext());

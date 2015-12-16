@@ -176,7 +176,7 @@ public class AndroidPickerWrapper extends AndroidControlWrapper
             JObject controlSpec
                                )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
 
         Log.d(TAG, "Creating picker element");
         final Spinner picker = new Spinner(((AndroidControlWrapper)parent).getControl().getContext());

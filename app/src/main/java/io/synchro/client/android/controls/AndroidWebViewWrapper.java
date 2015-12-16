@@ -24,7 +24,7 @@ public class AndroidWebViewWrapper extends AndroidControlWrapper
             JObject controlSpec
                                 )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating web view button");
         final WebView webView = new WebView(((AndroidControlWrapper)parent).getControl().getContext());
         this._control = webView;
@@ -35,7 +35,7 @@ public class AndroidWebViewWrapper extends AndroidControlWrapper
         applyFrameworkElementDefaults(webView);
 
         // !!! TODO - Android Web View
-        processElementProperty(controlSpec.get("contents"), new AndroidUiThreadSetViewValue((Activity) webView.getContext())
+        processElementProperty(controlSpec, "contents", new AndroidUiThreadSetViewValue((Activity) webView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -45,7 +45,7 @@ public class AndroidWebViewWrapper extends AndroidControlWrapper
                                                        );
                                    }
                                });
-        processElementProperty(controlSpec.get("url"), new AndroidUiThreadSetViewValue((Activity) webView.getContext())
+        processElementProperty(controlSpec, "url", new AndroidUiThreadSetViewValue((Activity) webView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)

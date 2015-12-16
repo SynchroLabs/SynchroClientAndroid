@@ -23,7 +23,7 @@ public class AndroidStackPanelWrapper extends AndroidControlWrapper
             JObject controlSpec
                                    )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating stack panel element");
 
         final LinearLayout layout = new LinearLayout(((AndroidControlWrapper)parent).getControl().getContext());
@@ -43,7 +43,7 @@ public class AndroidStackPanelWrapper extends AndroidControlWrapper
         }
         else
         {
-            processElementProperty(controlSpec.get("orientation"), new ISetViewValue()
+            processElementProperty(controlSpec, "orientation", new ISetViewValue()
                                    {
                                        @Override
                                        public void SetViewValue(JToken value)
@@ -57,7 +57,7 @@ public class AndroidStackPanelWrapper extends AndroidControlWrapper
                                    });
         }
 
-        processThicknessProperty(controlSpec.get("padding"), new PaddingThicknessSetter(this.getControl()));
+        processThicknessProperty(controlSpec, "padding", new PaddingThicknessSetter(this.getControl()));
 
         if (controlSpec.get("contents") != null)
         {

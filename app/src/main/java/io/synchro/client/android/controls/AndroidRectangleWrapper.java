@@ -24,7 +24,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
             JObject controlSpec
               )
 {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating rectangle");
 
         AndroidDrawableView drawableView = new AndroidDrawableView(((AndroidControlWrapper)parent).getControl().getContext(), _rect);
@@ -32,7 +32,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
 
         applyFrameworkElementDefaults(drawableView);
 
-        processElementProperty(controlSpec.get("border"), new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
+        processElementProperty(controlSpec, "border", new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -41,7 +41,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec.get("borderThickness"), new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
+        processElementProperty(controlSpec, "borderThickness", new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -50,7 +50,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec.get("cornerRadius"), new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
+        processElementProperty(controlSpec, "cornerRadius", new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -59,7 +59,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec.get("fill"), new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
+        processElementProperty(controlSpec, "fill", new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)

@@ -20,7 +20,7 @@ public class AndroidCanvasWrapper extends AndroidControlWrapper
 
     public AndroidCanvasWrapper(ControlWrapper parent, BindingContext bindingContext, JObject controlSpec)
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating canvas element");
 
         final AbsoluteLayout absLayout = new AbsoluteLayout(((AndroidControlWrapper)parent).getControl().getContext());
@@ -31,7 +31,7 @@ public class AndroidCanvasWrapper extends AndroidControlWrapper
 
         applyFrameworkElementDefaults(absLayout);
         processElementProperty(
-                controlSpec.get("background"), new AndroidUiThreadSetViewValue((Activity) _control.getContext())
+                controlSpec, "background", new AndroidUiThreadSetViewValue((Activity) _control.getContext())
                 {
                     @Override
                     protected void UiThreadSetViewValue(JToken value)
@@ -67,7 +67,7 @@ public class AndroidCanvasWrapper extends AndroidControlWrapper
                                    // Bind the x and y position to the appropriate properties of the AbsoluteLayout.LayoutParams....
                                    //
                                    childControlWrapper.processElementProperty(
-                                           childControlSpec.get("left"),
+                                           childControlSpec, "left",
                                            new AndroidUiThreadSetViewValue((Activity) _control.getContext())
                                            {
                                                @Override
@@ -83,7 +83,7 @@ public class AndroidCanvasWrapper extends AndroidControlWrapper
                                            });
 
                                    childControlWrapper.processElementProperty(
-                                           childControlSpec.get("top"),
+                                           childControlSpec, "top",
                                            new AndroidUiThreadSetViewValue((Activity) _control.getContext())
                                            {
                                                @Override

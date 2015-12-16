@@ -234,7 +234,7 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
             JObject controlSpec
                                  )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
 
         Log.d(TAG, "Creating listview element");
 

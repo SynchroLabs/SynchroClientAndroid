@@ -26,7 +26,7 @@ public class AndroidTextBlockWrapper extends AndroidControlWrapper
             JObject controlSpec
                                   )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(
                 TAG, String.format(
                         "Creating text view element with text of: %s",
@@ -41,7 +41,7 @@ public class AndroidTextBlockWrapper extends AndroidControlWrapper
 
         applyFrameworkElementDefaults(textView);
 
-        processElementProperty(controlSpec.get("value"), new AndroidUiThreadSetViewValue((Activity) textView.getContext())
+        processElementProperty(controlSpec, "value", new AndroidUiThreadSetViewValue((Activity) textView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -50,7 +50,7 @@ public class AndroidTextBlockWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec.get("ellipsize"), new ISetViewValue()
+        processElementProperty(controlSpec, "ellipsize", new ISetViewValue()
                                {
                                    @Override
                                    public void SetViewValue(JToken value)
@@ -73,7 +73,7 @@ public class AndroidTextBlockWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec.get("textAlignment"), new ISetViewValue()
+        processElementProperty(controlSpec, "textAlignment", new ISetViewValue()
                                {
                                    @Override
                                    public void SetViewValue(JToken value)
