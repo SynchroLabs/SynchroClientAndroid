@@ -30,7 +30,7 @@ public class AndroidTextBlockWrapper extends AndroidControlWrapper
         Log.d(
                 TAG, String.format(
                         "Creating text view element with text of: %s",
-                        controlSpec.get("value").asString()
+                        (controlSpec.get("value")) != null ? controlSpec.get("value").asString() : "(none)"
                                   )
              );
 
