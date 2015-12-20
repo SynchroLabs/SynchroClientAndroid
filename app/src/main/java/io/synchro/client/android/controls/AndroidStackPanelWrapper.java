@@ -37,25 +37,19 @@ public class AndroidStackPanelWrapper extends AndroidControlWrapper
         //
         layout.setBaselineAligned(false);
 
-        if (controlSpec.get("orientation") == null)
-        {
-            layout.setOrientation(LinearLayout.VERTICAL);
-        }
-        else
-        {
-            processElementProperty(controlSpec, "orientation", new ISetViewValue()
+        layout.setOrientation(LinearLayout.VERTICAL);
+        processElementProperty(controlSpec, "orientation", new ISetViewValue()
+                               {
+                                   @Override
+                                   public void SetViewValue(JToken value)
                                    {
-                                       @Override
-                                       public void SetViewValue(JToken value)
-                                       {
-                                           layout.setOrientation(
-                                                   ToOrientation(
-                                                           value, LinearLayout.VERTICAL
-                                                                ) == LinearLayout.HORIZONTAL ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL
-                                                                );
-                                       }
-                                   });
-        }
+                                       layout.setOrientation(
+                                               ToOrientation(
+                                                       value, LinearLayout.VERTICAL
+                                                            ) == LinearLayout.HORIZONTAL ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL
+                                                            );
+                                   }
+                               });
 
         processThicknessProperty(controlSpec, "padding", new PaddingThicknessSetter(this.getControl()));
 

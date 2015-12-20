@@ -131,7 +131,7 @@ public class AndroidListBoxWrapper extends AndroidControlWrapper
 
         int listTemplate = android.R.layout.simple_list_item_1; // Default for ChoiceMode.None
 
-        ListSelectionMode mode = ToListSelectionMode(controlSpec.get("select"), ListSelectionMode.Single);
+        ListSelectionMode mode = ToListSelectionMode(processElementProperty(controlSpec, "select", null), ListSelectionMode.Single);
         switch (mode)
         {
             case Single:

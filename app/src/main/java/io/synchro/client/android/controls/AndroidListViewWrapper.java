@@ -246,7 +246,7 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
 
         int choiceMode = ListView.CHOICE_MODE_NONE;
 
-        ListSelectionMode mode = ToListSelectionMode(controlSpec.get("select"), ListSelectionMode.Single);
+        ListSelectionMode mode = ToListSelectionMode(processElementProperty(controlSpec, "select", null), ListSelectionMode.Single);
         switch (mode)
         {
             case Single:

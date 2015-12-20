@@ -560,7 +560,7 @@ public class ControlWrapper
         return false;
     }
 
-    private boolean attemptStyleBinding(String style, String attributeName, ISetViewValue setValue)
+    private JToken attemptStyleBinding(String style, String attributeName, ISetViewValue setValue)
     {
         // See if [style].[attributeName] is defined, and if so, bind to it
         //
@@ -570,24 +570,38 @@ public class ControlWrapper
         if ((value != null) && (value.getType() != JTokenType.Object))
         {
             PropertyBinding binding = getViewModel().CreateAndRegisterPropertyBinding(this.getBindingContext(), "{$root." + styleBinding + "}", setValue);
-            _propertyBindings.add(binding);
+            if (setValue == null)
+            {
+                getViewModel().UnregisterPropertyBinding(binding);
+            }
+            else
+            {
+                _propertyBindings.add(binding);
+            }
 
             // Immediate content update during configuration.
-            binding.UpdateViewFromViewModel();
-
-            return true;
+            return binding.UpdateViewFromViewModel();
         }
 
-        return false;
+        return null;
     }
 
     // Process an element property, which can contain a plain value, a property binding token string, or no value at all,
-    // in which case any optionally supplied defaultValue will be used.  This call *may* result in a property binding to
-    // the element property, or it may not.
+    // in which case one or more "style" attribute values will be used to attempt to find a binding of the attributeName
+    // to a style value.  This call *may* result in a property binding to the element property, or it may not.
     //
     // This is "public" because there are cases when a parent element needs to process properties on its children after creation.
     //
-    public void processElementProperty(JObject controlSpec, String attributeName, String altAttributeName, ISetViewValue setValue)
+    // The returned JToken (if any) represents the bound value as determined at the time of processing the element.  It may return
+    // nil in the case that there was no binding, or where there was a binding to an element in the view model that does not currently
+    // exist.
+    //
+    // This function can be used for cases where the element binding is required to be present at processing time (for config elements
+    // that are required upon control creation, and that do not support value update during the control lifecycle).  In that case, a
+    // nil value may be passed for setValue, which will avoid creating and managing bindings (which should not be necessary since there
+    // is no setter), but will still return a resolved value if once can be determined.
+    //
+    public JToken processElementProperty(JObject controlSpec, String attributeName, String altAttributeName, ISetViewValue setValue)
     {
         JToken value = controlSpec.selectToken(attributeName, false);
 
@@ -606,18 +620,21 @@ public class ControlWrapper
             {
                 for (String style : _styles)
                 {
-                    if (attemptStyleBinding(style, attributeName, setValue))
+                    JToken resolvedValue = attemptStyleBinding(style, attributeName, setValue);
+                    if (resolvedValue != null)
                     {
-                        break;
+                        return resolvedValue;
                     }
-                    else if (attemptStyleBinding(style, altAttributeName, setValue))
+                    else if (altAttributeName != null)
                     {
-                        break;
+                        resolvedValue = attemptStyleBinding(style, altAttributeName, setValue);
+                        if (resolvedValue != null)
+                        {
+                            return resolvedValue;
+                        }
                     }
                 }
             }
-            //noinspection UnnecessaryReturnStatement
-            return;
         }
         else if ((value.getType() == JTokenType.String) && PropertyValue.ContainsBindingTokens(value.asString()))
         {
@@ -625,21 +642,34 @@ public class ControlWrapper
             PropertyBinding binding = getViewModel().CreateAndRegisterPropertyBinding(
                     this.getBindingContext(), value.asString(), setValue
                                                                                      );
-            _propertyBindings.add(binding);
+
+            if (setValue == null)
+            {
+                getViewModel().UnregisterPropertyBinding(binding);
+            }
+            else
+            {
+                _propertyBindings.add(binding);
+            }
 
             // Immediate content update during configuration.
-            binding.UpdateViewFromViewModel();
+            return binding.UpdateViewFromViewModel();
         }
         else
         {
             // Otherwise, just set the property value
-            setValue.SetViewValue(value);
+            if (setValue != null)
+            {
+                setValue.SetViewValue(value);
+            }
+            return value;
         }
+        return null;
     }
 
-    public void processElementProperty(JObject controlSpec, String attributeName, ISetViewValue setValue)
+    public JToken processElementProperty(JObject controlSpec, String attributeName, ISetViewValue setValue)
     {
-        processElementProperty(controlSpec, attributeName, null, setValue);
+        return processElementProperty(controlSpec, attributeName, null, setValue);
     }
 
     // This helper is used by control update handlers.
