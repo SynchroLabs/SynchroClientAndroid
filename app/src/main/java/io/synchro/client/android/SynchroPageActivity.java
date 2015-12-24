@@ -194,12 +194,6 @@ public class SynchroPageActivity extends Activity
         }
     }
 
-    public int getScreenOrientation()
-    {
-        // !!! Fix this in the really complicated way required.
-        return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-    }
-
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {

@@ -49,6 +49,11 @@ public class AndroidSynchroDeviceMetrics extends SynchroDeviceMetrics
         double screenDiagonalInches = Math.sqrt(
                 Math.pow(_widthInches, 2) + Math.pow(_heightInches, 2)
                                                );
+        _widthInches = _metrics.widthPixels / _metrics.xdpi;
+        _heightInches = _metrics.heightPixels / _metrics.ydpi;
+        _widthDeviceUnits = _metrics.widthPixels;
+        _heightDeviceUnits = _metrics.heightPixels;
+
         if (screenDiagonalInches > 6.5f)
         {
             _deviceClass = SynchroDeviceClass.TABLET;
@@ -60,17 +65,10 @@ public class AndroidSynchroDeviceMetrics extends SynchroDeviceMetrics
             _naturalOrientation = SynchroOrientation.PORTRAIT;
         }
 
-        if (getCurrentOrientation() == _naturalOrientation)
+        if (getCurrentOrientation() != _naturalOrientation)
         {
-            _widthInches = _metrics.widthPixels / _metrics.xdpi;
-            _heightInches = _metrics.heightPixels / _metrics.ydpi;
-            _widthDeviceUnits = _metrics.widthPixels;
-            _heightDeviceUnits = _metrics.heightPixels;
-        }
-        else
-        {
-            _widthInches = _metrics.heightPixels / _metrics.xdpi;
-            _heightInches = _metrics.widthPixels / _metrics.ydpi;
+            _widthInches = _metrics.heightPixels / _metrics.ydpi;
+            _heightInches = _metrics.widthPixels / _metrics.xdpi;
             // Because we are not in the natural orientation, the axes are flipped. Suppress
             // the warning, the assignments are correct.
             //noinspection SuspiciousNameCombination
@@ -87,7 +85,10 @@ public class AndroidSynchroDeviceMetrics extends SynchroDeviceMetrics
     {
         if (_activity != null)
         {
-            int orientation = _activity.getScreenOrientation();
+            Display display = _activity.getWindowManager().getDefaultDisplay();
+            display.getMetrics(_metrics);
+
+            int orientation = (_metrics.widthPixels > _metrics.heightPixels) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
             if ((orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ||
                     (orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE))
