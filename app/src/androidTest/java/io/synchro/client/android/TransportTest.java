@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 import io.synchro.json.JObject;
 import io.synchro.json.JValue;
@@ -26,7 +27,7 @@ public class TransportTest extends TestCase
         JObject expected = new JObject();
 
         expected.put("name", new JValue("synchro-samples"));
-        expected.put("version", new JValue("0.1.0"));
+        expected.put("version", new JValue("1.2.0"));
         expected.put("description", new JValue("Synchro API Samples"));
         expected.put("main", new JValue("menu"));
         expected.put("author", new JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)"));
@@ -68,7 +69,7 @@ public class TransportTest extends TestCase
         requestObject.put("TransactionId", new JValue(1));
 
         JObject metricsObject = new JObject();
-        metricsObject.put("clientVersion", new JValue("1.1.0"));
+        metricsObject.put("clientVersion", new JValue("1.2.0"));
 
         requestObject.put("DeviceMetrics", metricsObject);
 
@@ -129,9 +130,9 @@ public class TransportTest extends TestCase
         try
         {
             transport.sendMessage(null, requestObject).get("Path").asString();
-            fail("Should throw ConnectException");
+            fail("Should throw UnknownHostException");
         }
-        catch (ConnectException e)
+        catch (UnknownHostException e)
         {
             // Expected
         }
