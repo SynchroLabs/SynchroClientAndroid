@@ -95,9 +95,33 @@ public class ViewModel
             viewModel = new JObject();
         }
         _rootObject = viewModel;
+        _rootBindingContext = new BindingContext(_rootObject);
         _valueBindings.clear();
         _propertyBindings.clear();
-        _rootBindingContext.setBindingRoot(_rootObject);
+    }
+
+    public void SetViewModelData(JObject viewModel)
+    {
+        if (viewModel == null)
+        {
+            viewModel = new JObject();
+        }
+        _rootObject = viewModel;
+        _rootBindingContext = new BindingContext(_rootObject);
+
+        // Update bindings (setting BindingRoot to a new value will cause rebind)
+        //
+        for (ValueBinding valueBinding : _valueBindings)
+        {
+            valueBinding.getBindingContext().setBindingRoot(_rootBindingContext.getBindingRoot());
+        }
+        for (PropertyBinding propertyBinding : _propertyBindings)
+        {
+            for (BindingContext propBinding : propertyBinding.getBindingContexts())
+            {
+                propBinding.setBindingRoot(_rootBindingContext.getBindingRoot());
+            }
+        }
     }
 
     // This object represents a binding update (the path of the bound item and an indication of whether rebinding is required)
