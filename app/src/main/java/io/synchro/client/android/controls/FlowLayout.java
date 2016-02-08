@@ -386,7 +386,7 @@ public class FlowLayout extends ViewGroup
                 ControlWrapper parent, BindingContext bindingContext, JObject controlSpec
                                       )
         {
-            super(parent, bindingContext);
+            super(parent, bindingContext, controlSpec);
             Log.d(TAG, "Creating wrap panel element");
 
             final FlowLayout layout = new FlowLayout(
@@ -403,7 +403,7 @@ public class FlowLayout extends ViewGroup
             else
             {
                 processElementProperty(
-                        controlSpec.get("orientation"), new ISetViewValue()
+                        controlSpec, "orientation", new ISetViewValue()
                         {
                             @Override
                             public void SetViewValue(JToken value)
@@ -415,7 +415,7 @@ public class FlowLayout extends ViewGroup
             }
 
             processElementProperty(
-                    controlSpec.get("itemHeight"), new ISetViewValue()
+                    controlSpec, "itemHeight", new ISetViewValue()
                     {
                         @Override
                         public void SetViewValue(JToken value)
@@ -426,7 +426,7 @@ public class FlowLayout extends ViewGroup
                                   );
 
             processElementProperty(
-                    controlSpec.get("itemWidth"), new ISetViewValue()
+                    controlSpec, "itemWidth", new ISetViewValue()
                     {
                         @Override
                         public void SetViewValue(JToken value)
@@ -437,7 +437,7 @@ public class FlowLayout extends ViewGroup
                                   );
 
             processThicknessProperty(
-                    controlSpec.get("padding"), new PaddingThicknessSetter(this.getControl())
+                    controlSpec, "padding", new PaddingThicknessSetter(this.getControl())
                                     );
 
             if (controlSpec.get("contents") != null)

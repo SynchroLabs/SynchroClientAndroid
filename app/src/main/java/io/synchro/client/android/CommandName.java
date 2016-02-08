@@ -42,4 +42,7 @@ public class CommandName
     public static CommandName getOnUpdate() {
         return new CommandName("onUpdate");
     }
+    public static CommandName getOnTap() {
+        return new CommandName("onTap");
+    }
 }

@@ -234,7 +234,7 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
             JObject controlSpec
                                  )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
 
         Log.d(TAG, "Creating listview element");
 
@@ -246,7 +246,7 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
 
         int choiceMode = ListView.CHOICE_MODE_NONE;
 
-        ListSelectionMode mode = ToListSelectionMode(controlSpec.get("select"), ListSelectionMode.Single);
+        ListSelectionMode mode = ToListSelectionMode(processElementProperty(controlSpec, "select", null), ListSelectionMode.Single);
         switch (mode)
         {
             case Single:

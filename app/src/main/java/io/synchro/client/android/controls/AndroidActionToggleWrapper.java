@@ -117,7 +117,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
 
     public AndroidActionToggleWrapper(ControlWrapper parent, BindingContext bindingContext, JObject controlSpec)
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, String.format("Creating action bar toggle item with title of: %s",(controlSpec.get("text") != null) ? controlSpec.get("text").asString() : "(null)"));
 
         this._isVisualElement = false;
@@ -145,7 +145,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
                 }))
         {
             processElementProperty(
-                    controlSpec.get("value"), new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
+                    controlSpec, "value", new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
                     {
                         @Override
                         protected void UiThreadSetViewValue(JToken value)
@@ -156,7 +156,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
         }
 
         processElementProperty(
-                controlSpec.get("text"), new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
+                controlSpec, "text", new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
                 {
                     @Override
                     protected void UiThreadSetViewValue(JToken value)
@@ -165,7 +165,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
                     }
                 });
         processElementProperty(
-                controlSpec.get("icon"), new AndroidUiThreadSetViewValue(
+                controlSpec, "icon", new AndroidUiThreadSetViewValue(
                         (Activity) ((AndroidControlWrapper) parent).getControl().getContext()
                 )
                 {
@@ -178,7 +178,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
                               );
 
         processElementProperty(
-                controlSpec.get("uncheckedtext"), new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
+                controlSpec, "uncheckedtext", new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
                 {
                     @Override
                     protected void UiThreadSetViewValue(JToken value)
@@ -187,7 +187,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
                     }
                 });
         processElementProperty(
-                controlSpec.get("checkedtext"), new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
+                controlSpec, "checkedtext", new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
                 {
                     @Override
                     protected void UiThreadSetViewValue(JToken value)
@@ -196,7 +196,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
                     }
                 });
         processElementProperty(
-                controlSpec.get("uncheckedicon"), new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
+                controlSpec, "uncheckedicon", new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
                 {
                     @Override
                     protected void UiThreadSetViewValue(JToken value)
@@ -205,7 +205,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
                     }
                 });
         processElementProperty(
-                controlSpec.get("checkedicon"), new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
+                controlSpec, "checkedicon", new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
                 {
                     @Override
                     protected void UiThreadSetViewValue(JToken value)
@@ -215,7 +215,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
                 });
 
         processElementProperty(
-                controlSpec.get("enabled"), new AndroidUiThreadSetViewValue(
+                controlSpec, "enabled", new AndroidUiThreadSetViewValue(
                         (Activity) ((AndroidControlWrapper) parent).getControl().getContext()
                 )
                 {

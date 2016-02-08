@@ -2,6 +2,7 @@ package io.synchro.client.android.controls;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.View;
 
 import io.synchro.client.android.*;
 import io.synchro.json.JObject;
@@ -13,6 +14,7 @@ import io.synchro.json.JToken;
 public class AndroidRectangleWrapper extends AndroidControlWrapper
 {
     public static final String TAG = AndroidRectangleWrapper.class.getSimpleName();
+    static              String[] Commands = new String[]{CommandName.getOnTap().getAttribute()};
 
     AndroidSynchroRectDrawable _rect = new AndroidSynchroRectDrawable();
 
@@ -22,7 +24,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
             JObject controlSpec
               )
 {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating rectangle");
 
         AndroidDrawableView drawableView = new AndroidDrawableView(((AndroidControlWrapper)parent).getControl().getContext(), _rect);
@@ -30,7 +32,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
 
         applyFrameworkElementDefaults(drawableView);
 
-        processElementProperty(controlSpec.get("border"), new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
+        processElementProperty(controlSpec, "border", new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -39,7 +41,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec.get("borderThickness"), new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
+        processElementProperty(controlSpec, "borderThickness", new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -48,7 +50,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec.get("cornerRadius"), new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
+        processElementProperty(controlSpec, "cornerRadius", new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -57,7 +59,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec.get("fill"), new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
+        processElementProperty(controlSpec, "fill", new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -65,5 +67,32 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
                                        _rect.SetFillColor(ToColor(value));
                                    }
                                });
+
+        JObject bindingSpec = BindingHelper
+                .GetCanonicalBindingSpec(
+                        controlSpec, CommandName.getOnTap().getAttribute(), Commands
+                                        );
+        ProcessCommands(bindingSpec, Commands);
+
+        if (GetCommand(CommandName.getOnTap()) != null)
+        {
+            drawableView.setOnClickListener(new View.OnClickListener()
+                                     {
+                                         @Override
+                                         public void onClick(View v)
+                                         {
+                                             CommandInstance command = GetCommand(CommandName.getOnTap());
+                                             if (command != null)
+                                             {
+                                                 Log.d(TAG, String.format("Rectangle tap with command: %s", command.getCommand()));
+                                                 AndroidRectangleWrapper.this.getStateManager().sendCommandRequestAsync(
+                                                         command.getCommand(),
+                                                         command.GetResolvedParameters(
+                                                                 getBindingContext()
+                                                                                      ));
+                                             }
+                                         }
+                                     });
+        }
     }
 }

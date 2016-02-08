@@ -28,14 +28,14 @@ public class AndroidActionWrapper extends AndroidControlWrapper
             JObject controlSpec
                                )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, String.format("Creating action bar item with title of: %s", controlSpec.get("text").asString()));
 
         this._isVisualElement = false;
 
         final AndroidActionBarItem actionBarItem = _pageView.CreateAndAddActionBarItem();
 
-        processElementProperty(controlSpec.get("text"), new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
+        processElementProperty(controlSpec, "text", new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -43,7 +43,7 @@ public class AndroidActionWrapper extends AndroidControlWrapper
                                        actionBarItem.setTitle(ToString(value, ""));
                                    }
                                });
-        processElementProperty(controlSpec.get("icon"), new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
+        processElementProperty(controlSpec, "icon", new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -51,7 +51,7 @@ public class AndroidActionWrapper extends AndroidControlWrapper
                                        actionBarItem.setIcon(ToString(value, ""));
                                    }
                                });
-        processElementProperty(controlSpec.get("enabled"), new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
+        processElementProperty(controlSpec, "enabled", new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)

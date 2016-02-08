@@ -54,9 +54,9 @@ public class AndroidControlWrapper extends ControlWrapper
         _control = control;
     }
 
-    public AndroidControlWrapper(ControlWrapper parent, BindingContext bindingContext)
+    public AndroidControlWrapper(ControlWrapper parent, BindingContext bindingContext, JObject controlSpec)
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         _pageView = ((AndroidControlWrapper) parent).getPageView();
     }
 
@@ -461,112 +461,43 @@ public class AndroidControlWrapper extends ControlWrapper
             _control.setPadding(_control.getPaddingLeft(), _control.getPaddingTop(), _control.getPaddingRight(), thickness);
         }
     }
+
     public void processThicknessProperty(
-            JToken thicknessAttributeValue, final ThicknessSetter thicknessSetter
+            JObject controlSpec, String attributeName, final ThicknessSetter thicknessSetter
                                         )
     {
-        if (thicknessAttributeValue instanceof JValue)
-        {
-            if (thicknessAttributeValue == null)
-            {
-                thicknessSetter.SetThickness(0);
-            }
-            else
-            {
-                processElementProperty(
-                        thicknessAttributeValue, new ISetViewValue()
-                        {
-                            @Override
-                            public void SetViewValue(JToken value)
-                            {
-                                thicknessSetter.SetThickness((int) ToDeviceUnits(value));
-                            }
-                        }
-                                      );
-            }
-        }
-        else if (thicknessAttributeValue instanceof JObject)
-        {
-            JObject marginObject = (JObject) thicknessAttributeValue;
-
-            if (marginObject.get("left") == null)
-            {
-                thicknessSetter.SetThicknessLeft(0);
-            }
-            else
-            {
-                processElementProperty(
-                        marginObject.get("left"), new ISetViewValue()
-                        {
-                            @Override
-                            public void SetViewValue(JToken value)
-                            {
-                                thicknessSetter.SetThicknessLeft((int) ToDeviceUnits(value));
-                            }
-                        }
-                                      );
-            }
-
-            if (marginObject.get("top") == null)
-            {
-                thicknessSetter.SetThicknessTop(0);
-            }
-            else
-            {
-                processElementProperty(
-                        marginObject.get("top"), new ISetViewValue()
-                        {
-                            @Override
-                            public void SetViewValue(JToken value)
-                            {
-                                thicknessSetter.SetThicknessTop(
-                                        (int) ToDeviceUnits(value)
-                                                               );
-                            }
-                        }
-                                      );
-            }
-
-            if (marginObject.get("right") == null)
-            {
-                thicknessSetter.SetThicknessRight(0);
-            }
-            else
-            {
-                processElementProperty(
-                        marginObject.get("right"), new ISetViewValue()
-                        {
-                            @Override
-                            public void SetViewValue(JToken value)
-                            {
-                                thicknessSetter.SetThicknessRight(
-                                        (int) ToDeviceUnits(value)
-                                                                 );
-                            }
-                        }
-                                      );
-            }
-
-            if (marginObject.get("bottom") == null)
-            {
-                thicknessSetter.SetThicknessBottom(0);
-            }
-            else
-            {
-                processElementProperty(
-                        marginObject.get("bottom"), new ISetViewValue()
-                        {
-                            @Override
-                            public void SetViewValue(JToken value)
-                            {
-                                thicknessSetter.SetThicknessBottom(
-                                        (int) ToDeviceUnits(value)
-                                                                  );
-                            }
-                        }
-                                      );
-            }
-        }
+        processElementProperty(controlSpec, attributeName + ".left", new ISetViewValue()
+                               {
+                                   @Override
+                                   public void SetViewValue(JToken value)
+                                   {
+                                       thicknessSetter.SetThicknessLeft((int) ToDeviceUnits(value));
+                                   }
+                               });
+        processElementProperty(controlSpec, attributeName + ".top", new ISetViewValue()
+                               {
+                                   @Override
+                                   public void SetViewValue(JToken value)
+                                   {
+                                       thicknessSetter.SetThicknessTop((int) ToDeviceUnits(value));
+                                   }
+                               });
+        processElementProperty(controlSpec, attributeName + ".right", new ISetViewValue()
+                               {
+                                   @Override
+                                   public void SetViewValue(JToken value)
+                                   {
+                                       thicknessSetter.SetThicknessRight((int) ToDeviceUnits(value));
+                                   }
+                               });
+        processElementProperty(controlSpec, attributeName + ".bottom", new ISetViewValue()
+                               {
+                                   @Override
+                                   public void SetViewValue(JToken value)
+                                   {
+                                       thicknessSetter.SetThicknessBottom((int) ToDeviceUnits(value));
+                                   }
+                               });
     }
 
     protected void setHeight(JToken value)
@@ -748,7 +679,7 @@ public class AndroidControlWrapper extends ControlWrapper
         //processElementProperty((string)controlSpec["name"], value => this.Control.Name = ToString(value));
 
         processElementProperty(
-                controlSpec.get("horizontalAlignment"), new ISetViewValue()
+                controlSpec, "horizontalAlignment", new ISetViewValue()
                 {
                     @Override
                     public void SetViewValue(JToken value)
@@ -759,7 +690,7 @@ public class AndroidControlWrapper extends ControlWrapper
                               );
 
         processElementProperty(
-                controlSpec.get("verticalAlignment"), new ISetViewValue()
+                controlSpec, "verticalAlignment", new ISetViewValue()
                 {
                     @Override
                     public void SetViewValue(JToken value)
@@ -770,7 +701,7 @@ public class AndroidControlWrapper extends ControlWrapper
                               );
 
         processElementProperty(
-                controlSpec.get("height"), new ISetViewValue()
+                controlSpec, "height", new ISetViewValue()
                 {
                     @Override
                     public void SetViewValue(JToken value)
@@ -781,7 +712,7 @@ public class AndroidControlWrapper extends ControlWrapper
                               );
 
         processElementProperty(
-                controlSpec.get("width"), new ISetViewValue()
+                controlSpec, "width", new ISetViewValue()
                 {
                     @Override
                     public void SetViewValue(JToken value)
@@ -794,7 +725,7 @@ public class AndroidControlWrapper extends ControlWrapper
         updateSize(); // To init the layout params
 
         processElementProperty(
-                controlSpec.get("minheight"), new ISetViewValue()
+                controlSpec, "minheight", new ISetViewValue()
                 {
                     @Override
                     public void SetViewValue(JToken value)
@@ -805,7 +736,7 @@ public class AndroidControlWrapper extends ControlWrapper
                               );
 
         processElementProperty(
-                controlSpec.get("minwidth"), new ISetViewValue()
+                controlSpec, "minwidth", new ISetViewValue()
                 {
                     @Override
                     public void SetViewValue(JToken value)
@@ -819,7 +750,7 @@ public class AndroidControlWrapper extends ControlWrapper
         //processElementProperty(controlSpec["maxwidth"], value => this.Control.MaxWidth = ToDeviceUnits(value));
 
         processElementProperty(
-                controlSpec.get("opacity"), new ISetViewValue()
+                controlSpec, "opacity", new ISetViewValue()
                 {
                     @Override
                     public void SetViewValue(JToken value)
@@ -830,7 +761,7 @@ public class AndroidControlWrapper extends ControlWrapper
                               );
 
         processElementProperty(
-                controlSpec.get("visibility"), new AndroidUiThreadSetViewValue((Activity) getControl().getContext())
+                controlSpec, "visibility", new AndroidUiThreadSetViewValue((Activity) getControl().getContext())
                 {
                     @Override
                     public void UiThreadSetViewValue(JToken value)
@@ -843,7 +774,7 @@ public class AndroidControlWrapper extends ControlWrapper
                               );
 
         processElementProperty(
-                controlSpec.get("enabled"), new AndroidUiThreadSetViewValue((Activity) getControl().getContext())
+                controlSpec, "enabled", new AndroidUiThreadSetViewValue((Activity) getControl().getContext())
                 {
                     @Override
                     public void UiThreadSetViewValue(JToken value)
@@ -854,13 +785,13 @@ public class AndroidControlWrapper extends ControlWrapper
                               );
 
 
-        processThicknessProperty(controlSpec.get("margin"), new MarginThicknessSetter(this));
+        processThicknessProperty(controlSpec, "margin", new MarginThicknessSetter(this));
         // Since some controls have to treat padding differently, the padding attribute is handled by the individual control classes
 
         if (!(this instanceof AndroidBorderWrapper) && !(this instanceof AndroidRectangleWrapper))
         {
             processElementProperty(
-                    controlSpec.get("background"), new ISetViewValue()
+                    controlSpec, "background", new ISetViewValue()
                     {
                         @Override
                         public void SetViewValue(JToken value)
@@ -878,7 +809,7 @@ public class AndroidControlWrapper extends ControlWrapper
         if (textView != null)
         {
             processElementProperty(
-                    controlSpec.get("foreground"), new AndroidUiThreadSetViewValue((Activity) textView.getContext())
+                    controlSpec, "foreground", new AndroidUiThreadSetViewValue((Activity) textView.getContext())
                     {
                         @Override
                         public void UiThreadSetViewValue(JToken value)

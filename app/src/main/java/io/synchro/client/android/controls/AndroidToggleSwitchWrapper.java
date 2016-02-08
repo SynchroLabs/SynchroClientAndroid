@@ -30,7 +30,7 @@ public class AndroidToggleSwitchWrapper extends AndroidControlWrapper
             JObject controlSpec
                                      )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating toggle switch");
 
         final Switch toggleSwitch = new Switch(((AndroidControlWrapper)parent).getControl().getContext());
@@ -57,7 +57,7 @@ public class AndroidToggleSwitchWrapper extends AndroidControlWrapper
                                           }
                                       }))
         {
-            processElementProperty(controlSpec.get("value"), new AndroidUiThreadSetViewValue((Activity) toggleSwitch.getContext())
+            processElementProperty(controlSpec, "value", new AndroidUiThreadSetViewValue((Activity) toggleSwitch.getContext())
                                    {
                                        @Override
                                        protected void UiThreadSetViewValue(JToken value)
@@ -67,7 +67,7 @@ public class AndroidToggleSwitchWrapper extends AndroidControlWrapper
                                    });
         }
 
-        processElementProperty(controlSpec.get("caption"), new AndroidUiThreadSetViewValue((Activity) toggleSwitch.getContext())
+        processElementProperty(controlSpec, "caption", new AndroidUiThreadSetViewValue((Activity) toggleSwitch.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -76,7 +76,7 @@ public class AndroidToggleSwitchWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec.get("onLabel"), new AndroidUiThreadSetViewValue((Activity) toggleSwitch.getContext())
+        processElementProperty(controlSpec, "onLabel", new AndroidUiThreadSetViewValue((Activity) toggleSwitch.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -85,7 +85,7 @@ public class AndroidToggleSwitchWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec.get("offLabel"), new AndroidUiThreadSetViewValue((Activity) toggleSwitch.getContext())
+        processElementProperty(controlSpec, "offLabel", new AndroidUiThreadSetViewValue((Activity) toggleSwitch.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)

@@ -2,6 +2,8 @@ package io.synchro.client.android;
 
 import java.util.List;
 
+import io.synchro.json.JToken;
+
 /**
  * Created by blake on 2/9/15.
  */
@@ -18,9 +20,14 @@ public class PropertyBinding
         _setViewValue = setViewValue;
     }
 
-    public void UpdateViewFromViewModel()
+    public JToken UpdateViewFromViewModel()
     {
-        this._setViewValue.SetViewValue(_propertyValue.Expand());
+        JToken value = _propertyValue.Expand();
+        if (_setViewValue != null)
+        {
+            _setViewValue.SetViewValue(value);
+        }
+        return value;
     }
 
     public List<BindingContext> getBindingContexts()

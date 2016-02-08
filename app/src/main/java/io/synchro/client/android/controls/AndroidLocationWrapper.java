@@ -69,7 +69,7 @@ public class AndroidLocationWrapper extends AndroidControlWrapper
             JObject controlSpec
                                  )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating location element");
         this._isVisualElement = false;
 

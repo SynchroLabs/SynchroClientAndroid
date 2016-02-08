@@ -23,7 +23,7 @@ public class AndroidWrapPanelWrapper extends AndroidControlWrapper
             JObject controlSpec
                                   )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating wrap panel element");
 
         final FlowLayout layout = new FlowLayout(((AndroidControlWrapper)parent).getControl().getContext());
@@ -37,7 +37,7 @@ public class AndroidWrapPanelWrapper extends AndroidControlWrapper
         }
         else
         {
-            processElementProperty(controlSpec.get("orientation"), new AndroidUiThreadSetViewValue((Activity) layout.getContext())
+            processElementProperty(controlSpec, "orientation", new AndroidUiThreadSetViewValue((Activity) layout.getContext())
                                    {
                                        @Override
                                        protected void UiThreadSetViewValue(JToken value)
@@ -47,7 +47,7 @@ public class AndroidWrapPanelWrapper extends AndroidControlWrapper
                                    });
         }
 
-        processElementProperty(controlSpec.get("itemHeight"), new AndroidUiThreadSetViewValue((Activity) layout.getContext())
+        processElementProperty(controlSpec, "itemHeight", new AndroidUiThreadSetViewValue((Activity) layout.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -55,7 +55,7 @@ public class AndroidWrapPanelWrapper extends AndroidControlWrapper
                                        layout.setItemHeight((int)ToDeviceUnits(value));
                                    }
                                });
-        processElementProperty(controlSpec.get("ItemWidth"), new AndroidUiThreadSetViewValue((Activity) layout.getContext())
+        processElementProperty(controlSpec, "ItemWidth", new AndroidUiThreadSetViewValue((Activity) layout.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -64,7 +64,7 @@ public class AndroidWrapPanelWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processThicknessProperty(controlSpec.get("padding"), new PaddingThicknessSetter(this.getControl()));
+        processThicknessProperty(controlSpec, "padding", new PaddingThicknessSetter(this.getControl()));
 
         if (controlSpec.get("contents") != null)
         {

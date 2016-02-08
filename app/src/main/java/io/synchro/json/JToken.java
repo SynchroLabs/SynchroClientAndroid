@@ -90,7 +90,7 @@ public abstract class JToken
                 {
                     currentToken = ((JObject) currentToken).get(element);
                 }
-                else
+                else if (errorWhenNoMatch)
                 {
                     // If you try to go into anything other than an object or array looking for a
                     // child element, you are barking up the wrong tree...

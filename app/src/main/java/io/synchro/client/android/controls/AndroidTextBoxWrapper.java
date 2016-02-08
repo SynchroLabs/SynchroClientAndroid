@@ -32,7 +32,7 @@ public class AndroidTextBoxWrapper extends AndroidControlWrapper
             JObject controlSpec
                                 )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
 
         // !!! value can be null below
 //        Log.d(TAG, String.format("Creating text box element with value of: %s",controlSpec.get("value").asString()));
@@ -65,7 +65,7 @@ public class AndroidTextBoxWrapper extends AndroidControlWrapper
                                           }
                                       }))
         {
-            processElementProperty(controlSpec.get("value"), new ISetViewValue()
+            processElementProperty(controlSpec, "value", new ISetViewValue()
                                    {
                                        @Override
                                        public void SetViewValue(JToken value)
@@ -84,7 +84,7 @@ public class AndroidTextBoxWrapper extends AndroidControlWrapper
             }
         }
 
-        processElementProperty(controlSpec.get("placeholder"), new ISetViewValue()
+        processElementProperty(controlSpec, "placeholder", new ISetViewValue()
                                {
                                    @Override
                                    public void SetViewValue(JToken value)

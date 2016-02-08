@@ -65,7 +65,7 @@ public class AndroidSliderWrapper extends AndroidControlWrapper
             JObject controlSpec
                                )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         ProgressBar bar = null;
 
         if (controlSpec.get("control").asString().equals("progressbar"))
@@ -130,7 +130,7 @@ public class AndroidSliderWrapper extends AndroidControlWrapper
                 }
                                      ))
         {
-            processElementProperty(controlSpec.get("value"), new AndroidUiThreadSetViewValue((Activity) _control.getContext())
+            processElementProperty(controlSpec, "value", new AndroidUiThreadSetViewValue((Activity) _control.getContext())
                                    {
                                        @Override
                                        protected void UiThreadSetViewValue(JToken value)
@@ -140,7 +140,7 @@ public class AndroidSliderWrapper extends AndroidControlWrapper
                                    });
         }
 
-        processElementProperty(controlSpec.get("minimum"), new AndroidUiThreadSetViewValue((Activity) _control.getContext())
+        processElementProperty(controlSpec, "minimum", new AndroidUiThreadSetViewValue((Activity) _control.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
@@ -149,7 +149,7 @@ public class AndroidSliderWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec.get("maximum"), new AndroidUiThreadSetViewValue((Activity) _control.getContext())
+        processElementProperty(controlSpec, "maximum", new AndroidUiThreadSetViewValue((Activity) _control.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)

@@ -19,6 +19,7 @@ import io.synchro.json.JObject;
 public class SynchroPageActivity extends Activity
 {
     public static final String TAG = SynchroPageActivity.class.getSimpleName();
+    public static final String STATE_RESUMING = "Synchro_Resuming";
 
     StateManager _stateManager;
     AndroidPageView _pageView;
@@ -50,6 +51,9 @@ public class SynchroPageActivity extends Activity
     {
         super.onCreate(savedInstanceState);
 
+        boolean restoreStateFromServer = (savedInstanceState != null) ? savedInstanceState.getBoolean(STATE_RESUMING, false) : false;
+
+        Log.d(TAG, "onCreate");
         String endpoint = this.getIntent().getExtras().getString("endpoint");
 
         AndroidSynchroDeviceMetrics deviceMetrics = new AndroidSynchroDeviceMetrics(this);
@@ -178,13 +182,16 @@ public class SynchroPageActivity extends Activity
                                                                                           );
                                                 }
                                             });
-        _stateManager.startApplicationAsync();
-    }
-
-    public int getScreenOrientation()
-    {
-        // !!! Fix this in the really complicated way required.
-        return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        if (restoreStateFromServer)
+        {
+            Log.d(TAG, "Restoring state from server (sendResyncRequestAsync)");
+            _stateManager.sendResyncRequestAsync();
+        }
+        else
+        {
+            Log.d(TAG, "Normal application start (startApplicationAsync)");
+            _stateManager.startApplicationAsync();
+        }
     }
 
     @Override
@@ -215,5 +222,13 @@ public class SynchroPageActivity extends Activity
         {
             this.finish();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        Log.d(TAG, "onSaveInstanceState");
+        outState.putBoolean(STATE_RESUMING, true);
+        super.onSaveInstanceState(outState);
     }
 }

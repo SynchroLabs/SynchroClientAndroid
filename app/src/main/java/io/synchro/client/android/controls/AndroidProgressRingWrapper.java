@@ -20,7 +20,7 @@ public class AndroidProgressRingWrapper extends AndroidControlWrapper
             JObject controlSpec
                                      )
     {
-        super(parent, bindingContext);
+        super(parent, bindingContext, controlSpec);
         Log.d(TAG, "Creating progress ring element");
 
         ProgressBar bar = new ProgressBar(((AndroidControlWrapper)parent).getControl().getContext());
