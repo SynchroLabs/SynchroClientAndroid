@@ -73,6 +73,15 @@ public class BindingContext
             {
                 pathElement = pathElement.substring(1);
                 Log.d(TAG, String.format("Found binding path element: %s", pathElement));
+                int indexStart = pathElement.indexOf('[');
+                String indexPart = "";
+
+                if (indexStart != -1)
+                {
+                    indexPart = pathElement.substring(indexStart);
+                    pathElement = pathElement.substring(0, indexStart);
+                }
+
                 switch (pathElement)
                 {
                     case "root":
@@ -81,7 +90,7 @@ public class BindingContext
                     case "parent":
                         if (parentPath.length() != 0)
                         {
-                            int lastDot = parentPath.lastIndexOf(".");
+                            int lastDot = Math.max(parentPath.lastIndexOf("."), parentPath.lastIndexOf("["));
                             if (lastDot == -1)
                             {
                                 // Remove the only remaining path segment
@@ -93,6 +102,7 @@ public class BindingContext
                                 parentPath = parentPath.substring(0, lastDot);
                             }
                         }
+                        parentPath = parentPath + indexPart;
                         break;
                     case "data":
                         // We're going to treat $data as a noop

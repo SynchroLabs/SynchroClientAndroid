@@ -41,6 +41,11 @@ public class BindingContextTest extends TestCase
                                 "\"value\" : \"0x0000ff\"" +
                             "}," +
                         "]" +
+                        "\"board\" :" +
+                        "[" +
+                            "[ \"s00\", \"s01\" ]," +
+                            "[ \"s10\", \"s11\" ]," +
+                        "]" +
                     "}");
     }
 
@@ -80,7 +85,27 @@ public class BindingContextTest extends TestCase
     {
         BindingContext bindingCtx = new BindingContext(viewModel);
 
-        assertEquals("Colors", bindingCtx.Select("colors[1].name").Select("$parent.$parent.title").GetValue().asString());
+        assertEquals("Green", bindingCtx.Select("colors[1].name").Select("$parent.name").GetValue().asString());
+        assertEquals(
+                "Red",
+                bindingCtx.Select("colors[1].name").Select("$parent.$parent[0].name")
+                                   .GetValue().asString()
+                    );
+        assertEquals(
+                "Colors", bindingCtx.Select("colors[1].name")
+                                             .Select("$parent.$parent.$parent.title").GetValue().asString()
+                    );
+        assertEquals(null, bindingCtx.Select("colors[1].name")
+                                                 .Select("$parent.$parent.$parent.$parent")
+                                                 .GetValue()
+                       );
+    }
+
+    public void testParentElementInArrayOfArray()
+    {
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        assertEquals(1, bindingCtx.Select("board[1][0]").Select("$parent.$index").GetValue().asInt());
     }
 
     public void testRootElement()

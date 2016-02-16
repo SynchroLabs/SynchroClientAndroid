@@ -6,6 +6,7 @@ import java.util.Map;
 import io.synchro.json.JObject;
 import io.synchro.json.JToken;
 import io.synchro.json.JTokenType;
+import io.synchro.json.JValue;
 
 /**
  * Created by blake on 3/1/15.
@@ -44,15 +45,17 @@ public class CommandInstance
             JToken value = parameter.getValue();
             if (value.getType() == JTokenType.String)
             {
-                JToken expanded = PropertyValue.Expand(value.asString(), bindingContext);
-                value = expanded.deepClone();
+                value = PropertyValue.Expand(value.asString(), bindingContext);
             }
 
-            // Not sure why value would ever be null, if it is, the universe has exploded I think
-//            if (value == null)
-//            {
-//                value = new JValue(null);
-//            }
+            if (value != null)
+            {
+                value = value.deepClone();
+            }
+            else
+            {
+                value = new JValue((String) null);
+            }
 
             obj.put(parameter.getKey(), value);
         }
