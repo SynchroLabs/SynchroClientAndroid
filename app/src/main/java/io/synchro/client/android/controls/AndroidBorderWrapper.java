@@ -17,6 +17,7 @@ import io.synchro.json.JToken;
 public class AndroidBorderWrapper extends AndroidControlWrapper
 {
     public static final String TAG = AndroidBorderWrapper.class.getSimpleName();
+    static              String[] Commands = new String[]{CommandName.getOnTap().getAttribute()};
 
     public class BorderPaddingThicknessSetter extends ThicknessSetter
     {
@@ -201,6 +202,42 @@ public class AndroidBorderWrapper extends AndroidControlWrapper
                                            });
                                }
                            });
+        }
+
+        JObject bindingSpec = BindingHelper
+                .GetCanonicalBindingSpec(
+                        controlSpec, CommandName.getOnTap().getAttribute(), Commands
+                                        );
+        ProcessCommands(bindingSpec, Commands);
+
+        if (GetCommand(CommandName.getOnTap()) != null)
+        {
+            _layout.setOnClickListener(
+                    new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            CommandInstance command = GetCommand(CommandName.getOnTap());
+                            if (command != null)
+                            {
+                                Log.d(
+                                        TAG, String.format(
+                                                "Border tap with command: %s",
+                                                command.getCommand()
+                                                          )
+                                     );
+                                AndroidBorderWrapper.this.getStateManager()
+                                                            .sendCommandRequestAsync(
+                                                                    command.getCommand(),
+                                                                    command.GetResolvedParameters(
+                                                                            getBindingContext()
+                                                                                                 )
+                                                                                    );
+                            }
+                        }
+                    }
+                                           );
         }
     }
 }
