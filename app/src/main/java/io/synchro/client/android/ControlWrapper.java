@@ -462,7 +462,14 @@ public class ControlWrapper
         }
         else
         {
-            return new ColorARGB(ColorNames.get(colorValue));
+            if (ColorNames.containsKey(colorValue))
+            {
+                return new ColorARGB(ColorNames.get(colorValue));
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
