@@ -25,7 +25,7 @@ public class TransportAndroidHttpClientTest extends TestCase
         JObject expectedObject = new JObject();
 
         expectedObject.put("name", new JValue("synchro-samples"));
-        expectedObject.put("version", new JValue("1.3.0"));
+        expectedObject.put("version", new JValue("1.3.1"));
         expectedObject.put("description", new JValue("Synchro API Samples"));
         expectedObject.put("main", new JValue("menu"));
         expectedObject.put("author", new JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)"));
@@ -34,6 +34,12 @@ public class TransportAndroidHttpClientTest extends TestCase
             JObject enginesObject = new JObject();
             enginesObject.put("synchro", new JValue(">= 1.3.0"));
             expectedObject.put("engines", enginesObject);
+        }
+        expectedObject.put("synchroArchiveUrl", new JValue("https://github.com/SynchroLabs/SynchroSamples/archive/master.zip"));
+        {
+            JObject synchroObject = new JObject();
+            synchroObject.put("clientVersion", new JValue(">=1.2.3"));
+            expectedObject.put("synchro", synchroObject);
         }
 
         assertEquals(expectedObject, transport.getAppDefinition());
