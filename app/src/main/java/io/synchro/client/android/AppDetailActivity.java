@@ -13,8 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -41,6 +45,7 @@ public class AppDetailActivity extends Activity
     Button       btnSave;
     Button       btnLaunch;
     Button       btnDelete;
+    ImageButton  btnScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,6 +58,7 @@ public class AppDetailActivity extends Activity
         layoutFind = (LinearLayout) findViewById(R.id.linearLayoutFind);
         editEndpoint = (EditText) findViewById(R.id.editEndpoint);
         btnFind = (Button) findViewById(R.id.btnFind);
+        btnScan = (ImageButton) findViewById(R.id.btnScan);
 
         btnFind.setOnClickListener(new View.OnClickListener()
                                    {
@@ -60,6 +66,14 @@ public class AppDetailActivity extends Activity
                                        public void onClick(View v)
                                        {
                                            btnFind_Click();
+                                       }
+                                   });
+        btnScan.setOnClickListener(new View.OnClickListener()
+                                   {
+                                       @Override
+                                       public void onClick(View v)
+                                       {
+                                           btnScan_Click();
                                        }
                                    });
 
@@ -305,5 +319,23 @@ public class AppDetailActivity extends Activity
         builder.setNegativeButton("No", null);
         builder.setCancelable(false);
         builder.show();
+    }
+
+    void btnScan_Click()
+    {
+        // http://stackoverflow.com/questions/18543668/integrate-zxing-in-android-studio
+
+        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+        intentIntegrator.initiateScan();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null)
+        {
+            String contents = scanResult.getContents();
+            Log.d(TAG, String.format("Scanned code is \"%s\"", contents));
+            this.editEndpoint.setText(contents);
+        }
     }
 }
