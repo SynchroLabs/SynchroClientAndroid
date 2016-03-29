@@ -326,6 +326,10 @@ public class AppDetailActivity extends Activity
         // http://stackoverflow.com/questions/18543668/integrate-zxing-in-android-studio
 
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        // No idea what this does, apparently it does not keep the orientation of your previous
+        // activity which is what I want...
+//        intentIntegrator.setOrientationLocked(false);
         intentIntegrator.initiateScan();
     }
 
