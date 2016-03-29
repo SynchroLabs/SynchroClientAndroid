@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.regex.Pattern;
 
 import io.synchro.json.JObject;
+import io.synchro.json.JToken;
 import io.synchro.json.JsonParser;
 
 /**
@@ -81,6 +82,12 @@ public class TransportAndroidHttpClient extends Transport
             //noinspection TryFinallyCanBeTryWithResources
             try
             {
+                JToken returnedToken = JsonParser.parseValue(reader);
+                if ((returnedToken == null) || (!(returnedToken instanceof JObject)))
+                {
+                    // Throw an exception, this was not a good time
+                    throw new IOException("A JSON object was not returned from the endpoint");
+                }
                 JObject returnedObject = (JObject) JsonParser.parseValue(reader);
                 Log.d(TAG, String.format("Returned parsed object is %s", returnedObject.toJson()));
                 return returnedObject;
