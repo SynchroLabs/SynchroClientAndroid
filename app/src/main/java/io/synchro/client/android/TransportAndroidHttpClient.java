@@ -88,7 +88,7 @@ public class TransportAndroidHttpClient extends Transport
                     // Throw an exception, this was not a good time
                     throw new IOException("A JSON object was not returned from the endpoint");
                 }
-                JObject returnedObject = (JObject) JsonParser.parseValue(reader);
+                JObject returnedObject = (JObject) returnedToken;
                 Log.d(TAG, String.format("Returned parsed object is %s", returnedObject.toJson()));
                 return returnedObject;
             }
