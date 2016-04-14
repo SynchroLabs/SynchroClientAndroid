@@ -146,6 +146,7 @@ public abstract class PageView
 
             controlSpec.put("control", new JValue("stackpanel"));
             controlSpec.put("orientation", new JValue("vertical"));
+            controlSpec.put("width", new JValue("*"));
             controlSpec.put("contents", elements);
 
             _rootContainerControlWrapper = CreateRootContainerControl(controlSpec);
