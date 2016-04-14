@@ -8,8 +8,8 @@ android {
         applicationId "io.synchro.client.android"
         minSdkVersion 17
         targetSdkVersion 21
-        versionCode 9
-        versionName "1.2.4"
+        versionCode 10
+        versionName "1.3.0"
     }
     buildTypes {
         release {
