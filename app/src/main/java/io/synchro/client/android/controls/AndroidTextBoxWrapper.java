@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
 //import android.util.Log;
+import android.view.Gravity;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
@@ -44,6 +45,28 @@ public class AndroidTextBoxWrapper extends AndroidControlWrapper
         {
             // You have to tell it it's text (in addition to password) or the password doesn't work...
             editText.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+        }
+
+        // Multiline needs some extra lovin'
+        if (ToBoolean(controlSpec.get("multiline"), false))
+        {
+            processElementProperty(controlSpec, "lines", null, new ISetViewValue()
+            {
+                @Override
+                public void SetViewValue(JToken value)
+                {
+                    editText.setLines((int) ToDouble(value, 1));
+                }
+            });
+
+
+            // If you have multiple lines, in order for the first line to be at the top, you need
+            // to set the gravity to the top, otherwise it will be in the middle
+            editText.setGravity(Gravity.TOP);
+        }
+        else
+        {
+            editText.setSingleLine();
         }
 
         applyFrameworkElementDefaults(editText);
