@@ -388,4 +388,166 @@ public class PropertyValueTest extends TestCase
 
         assertEquals("The numeric value is 13.00", propVal.Expand().asString());
     }
+
+    public void testEvalStringLength()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("strVal", new JValue("13"));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval({strVal}.length)", bindingCtx);
+
+        assertEquals(2, propVal.Expand().asInt());
+    }
+
+    public void testEvalStringResult()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("strVal", new JValue("hello"));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval({strVal} + ' world')", bindingCtx);
+
+        assertEquals("hello world", propVal.Expand().asString());
+    }
+
+    public void testEvalNumericResult()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("strVal", new JValue("hello"));
+        viewModel.put("intVal", new JValue(10));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval({strVal}.length + {intVal})", bindingCtx);
+
+        assertEquals(15.0, propVal.Expand().asDouble());
+    }
+
+    public void testEvalBoolResult()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("intVal", new JValue(10));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval({intVal} == 10)", bindingCtx);
+
+        assertEquals(true, propVal.Expand().asBoolean());
+    }
+
+    public void testEvalBoolParam()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("boolVal", new JValue(true));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval(false || {boolVal})", bindingCtx);
+
+        assertEquals(true, propVal.Expand().asBoolean());
+    }
+
+    public void testEvalNullParam()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("nullVal", new JValue((String) null));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval(null === {nullVal})", bindingCtx);
+
+        assertEquals(true, propVal.Expand().asBoolean());
+    }
+
+    public void testEvalUnsupportedParamType()
+            throws IOException
+    {
+        JObject viewModel = (JObject) JObject.parse(
+                "{" +
+                        "\"colors\" :" +
+                        "[" +
+                        "{" +
+                        "\"name\" : \"Red\"," +
+                        "\"color\" : \"red\"," +
+                        "\"value\" : \"0xff0000\"" +
+                        "}," +
+                        "{" +
+                        "\"name\" : \"Green\"," +
+                        "\"color\" : \"green\"," +
+                        "\"value\" : \"0x00ff00\"" +
+                        "}," +
+                        "{" +
+                        "\"name\" : \"Blue\"," +
+                        "\"color\" : \"blue\"," +
+                        "\"value\" : \"0x0000ff\"" +
+                        "}," +
+                        "]" +
+                        "}");
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval({colors})", bindingCtx);
+
+        // Unsupport JValue type will be converted to string in the Synchro way (array will get converted to string value representing
+        // length of the array).
+        //
+        assertEquals("3", propVal.Expand().asString());
+    }
+
+    public void testEvalNullResult()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("intVal", new JValue(10));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval(null)", bindingCtx);
+
+        assertEquals(JTokenType.Null, propVal.Expand().getType());
+    }
+
+    public void testEvalUnsupportResultType()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("intVal", new JValue(10));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval(['foo', 'bar'])", bindingCtx);
+
+        // Expected result is toString() of actual result when not of support type (Boolean, Number, String, Null)
+        assertEquals("foo,bar", propVal.Expand().asString());
+    }
+
+    public void testEvalBadScript()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("intVal", new JValue(10));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval()foo)", bindingCtx);
+
+        assertEquals("syntax error", propVal.Expand().asString());
+    }
+
+    /*
+        [TestMethod]
+        public void TestEvalBadScript()
+        {
+            var viewModel = new JObject()
+            {
+                {"intVal", new JValue(10) }
+            };
+
+            var bindingCtx = new BindingContext(viewModel);
+
+            var propVal = new PropertyValue("eval()foo)", bindingContext: bindingCtx);
+
+            Assert.AreEqual("Line 1: Unexpected token )", (string)propVal.Expand());
+        }
+            */
 }
