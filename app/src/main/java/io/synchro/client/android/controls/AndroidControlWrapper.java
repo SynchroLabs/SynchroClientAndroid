@@ -44,6 +44,8 @@ public class AndroidControlWrapper extends ControlWrapper
     protected boolean _widthSpecified = false;
     protected boolean _heightSpecified = false;
 
+    protected int _defaultTextColor;
+
     public AndroidControlWrapper(
             AndroidPageView pageView, StateManager stateManager, ViewModel viewModel,
             BindingContext bindingContext, View control
@@ -808,13 +810,15 @@ public class AndroidControlWrapper extends ControlWrapper
                 .getControl() : null;
         if (textView != null)
         {
+            _defaultTextColor = textView.getCurrentTextColor();
             processElementProperty(
                     controlSpec, "foreground", new AndroidUiThreadSetViewValue((Activity) textView.getContext())
                     {
                         @Override
                         public void UiThreadSetViewValue(JToken value)
                         {
-                            textView.setTextColor(ToColor(value));
+                            int color = ToColor(value);
+                            textView.setTextColor((color == Color.TRANSPARENT) ? _defaultTextColor : color);
                         }
                     }
                                   );
