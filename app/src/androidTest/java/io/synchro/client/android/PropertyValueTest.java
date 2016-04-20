@@ -533,21 +533,4 @@ public class PropertyValueTest extends TestCase
 
         assertEquals("syntax error", propVal.Expand().asString());
     }
-
-    /*
-        [TestMethod]
-        public void TestEvalBadScript()
-        {
-            var viewModel = new JObject()
-            {
-                {"intVal", new JValue(10) }
-            };
-
-            var bindingCtx = new BindingContext(viewModel);
-
-            var propVal = new PropertyValue("eval()foo)", bindingContext: bindingCtx);
-
-            Assert.AreEqual("Line 1: Unexpected token )", (string)propVal.Expand());
-        }
-            */
 }
