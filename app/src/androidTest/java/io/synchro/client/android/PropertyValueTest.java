@@ -426,6 +426,33 @@ public class PropertyValueTest extends TestCase
         assertEquals(15.0, propVal.Expand().asDouble());
     }
 
+    public void testEvalNumericResultIntAsInt()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("strVal", new JValue("hello"));
+        viewModel.put("intVal", new JValue(10));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval({strVal}.length + {intVal})", bindingCtx);
+
+        assertEquals(15, propVal.Expand().asInt());
+    }
+
+    public void testEvalNumericResultDoubleAsDouble()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("strVal", new JValue("hello"));
+        viewModel.put("intVal", new JValue(10));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval({strVal}.length / {intVal})", bindingCtx);
+
+        assertEquals(JTokenType.Float, propVal.Expand().getType());
+        assertEquals(0.5, propVal.Expand().asDouble());
+    }
+
     public void testEvalBoolResult()
     {
         JObject viewModel = new JObject();

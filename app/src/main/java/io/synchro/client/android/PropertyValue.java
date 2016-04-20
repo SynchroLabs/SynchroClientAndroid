@@ -131,7 +131,17 @@ public class PropertyValue
         }
         else if (randomJavascriptObject instanceof Double)
         {
-            returnValue = new JValue((Double) randomJavascriptObject);
+            // Rhino said it was a double. BUT IS IT REALLY?!? Such a liar.
+
+            double doubleValue = (double) randomJavascriptObject;
+            if (Math.floor(doubleValue) == doubleValue)
+            {
+                returnValue = new JValue((int) (double) (Double) randomJavascriptObject);
+            }
+            else
+            {
+                returnValue = new JValue((Double) randomJavascriptObject);
+            }
         }
         else if (randomJavascriptObject instanceof Integer)
         {
