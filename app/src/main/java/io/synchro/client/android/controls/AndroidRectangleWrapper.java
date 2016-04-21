@@ -37,7 +37,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
                                    {
-                                       _rect.SetStrokeColor(ToColor(value));
+                                       _rect.SetStrokeColor(ToColor(value, null));
                                    }
                                });
 
@@ -64,7 +64,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
                                    {
-                                       _rect.SetFillColor(ToColor(value));
+                                       _rect.SetFillColor(ToColor(value, null));
                                    }
                                });
 

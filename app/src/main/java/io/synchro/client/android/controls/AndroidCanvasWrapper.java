@@ -1,6 +1,7 @@
 package io.synchro.client.android.controls;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.AbsoluteLayout;
 
@@ -25,6 +26,7 @@ public class AndroidCanvasWrapper extends AndroidControlWrapper
 
         final AbsoluteLayout absLayout = new AbsoluteLayout(((AndroidControlWrapper)parent).getControl().getContext());
         this._control = absLayout;
+        final Drawable defaultBackground = absLayout.getBackground();
 
         // !!! Absolute layout supports padding
         // !!! http://alvinalexander.com/java/jwarehouse/android/core/java/android/widget/AbsoluteLayout.java.shtml
@@ -36,7 +38,15 @@ public class AndroidCanvasWrapper extends AndroidControlWrapper
                     @Override
                     protected void UiThreadSetViewValue(JToken value)
                     {
-                        absLayout.setBackgroundColor(ToColor(value));
+                        Integer color = ToColor(value, null);
+                        if (color != null)
+                        {
+                            absLayout.setBackgroundColor(color);
+                        }
+                        else
+                        {
+                            absLayout.setBackground(defaultBackground);
+                        }
                     }
                 });
 

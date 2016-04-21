@@ -135,7 +135,7 @@ public class AndroidBorderWrapper extends AndroidControlWrapper
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
                                    {
-                                       _rect.SetStrokeColor(ToColor(value));
+                                       _rect.SetStrokeColor(ToColor(value, null));
                                    }
                                });
         processElementProperty(controlSpec, "borderThickness", new AndroidUiThreadSetViewValue((Activity) this.getControl().getContext())
@@ -161,7 +161,7 @@ public class AndroidBorderWrapper extends AndroidControlWrapper
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
                                    {
-                                       _rect.SetFillColor(ToColor(value));
+                                       _rect.SetFillColor(ToColor(value, null));
                                    }
                                });
         processThicknessProperty(controlSpec, "padding", borderThicknessSetter);

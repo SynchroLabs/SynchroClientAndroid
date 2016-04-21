@@ -3,6 +3,7 @@ package io.synchro.client.android.controls;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -45,6 +46,7 @@ public class AndroidControlWrapper extends ControlWrapper
     protected boolean _heightSpecified = false;
 
     protected int _defaultTextColor;
+    protected Drawable _defaultBackground;
 
     public AndroidControlWrapper(
             AndroidPageView pageView, StateManager stateManager, ViewModel viewModel,
@@ -325,7 +327,7 @@ public class AndroidControlWrapper extends ControlWrapper
         return alignment;
     }
 
-    public int ToColor(JToken value)
+    public Integer ToColor(JToken value, Integer defaultColor)
     {
         ColorARGB color = ControlWrapper.getColor(ToString(value, ""));
         if (color != null)
@@ -334,7 +336,7 @@ public class AndroidControlWrapper extends ControlWrapper
         }
         else
         {
-            return Color.TRANSPARENT;
+            return defaultColor;
         }
     }
 
@@ -790,15 +792,25 @@ public class AndroidControlWrapper extends ControlWrapper
         processThicknessProperty(controlSpec, "margin", new MarginThicknessSetter(this));
         // Since some controls have to treat padding differently, the padding attribute is handled by the individual control classes
 
-        if (!(this instanceof AndroidBorderWrapper) && !(this instanceof AndroidRectangleWrapper))
+        if (!(this instanceof AndroidBorderWrapper) && !(this instanceof AndroidRectangleWrapper) &&
+            !(this instanceof AndroidCanvasWrapper))
         {
+            _defaultBackground = getControl().getBackground();
             processElementProperty(
                     controlSpec, "background", new ISetViewValue()
                     {
                         @Override
                         public void SetViewValue(JToken value)
                         {
-                            getControl().setBackgroundColor(ToColor(value));
+                            Integer newColor = ToColor(value, null);
+                            if (newColor != null)
+                            {
+                                getControl().setBackgroundColor(newColor);
+                            }
+                            else
+                            {
+                                getControl().setBackground(_defaultBackground);
+                            }
                         }
                     }
                                   );
@@ -817,8 +829,8 @@ public class AndroidControlWrapper extends ControlWrapper
                         @Override
                         public void UiThreadSetViewValue(JToken value)
                         {
-                            int color = ToColor(value);
-                            textView.setTextColor((color == Color.TRANSPARENT) ? _defaultTextColor : color);
+                            Integer color = ToColor(value, null);
+                            textView.setTextColor((color == null) ? _defaultTextColor : color);
                         }
                     }
                                   );

@@ -22,8 +22,9 @@ public class AndroidSynchroRectDrawable extends GradientDrawable
         this.setBounds(0, 0, 0, 0);
     }
 
-    public void SetFillColor(int color)
+    public void SetFillColor(Integer color)
     {
+        // !!! If color is null then do something "default-like"
         _fillColor = color;
         this.setColor(_fillColor);
     }
@@ -40,8 +41,9 @@ public class AndroidSynchroRectDrawable extends GradientDrawable
         super.setCornerRadius(_radius);
     }
 
-    public void SetStrokeColor(int color)
+    public void SetStrokeColor(Integer color)
     {
+        // !!! If color is null then do something "default-like"
         _strokeColor = color;
     }
 
