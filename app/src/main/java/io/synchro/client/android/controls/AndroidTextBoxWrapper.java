@@ -41,12 +41,6 @@ public class AndroidTextBoxWrapper extends AndroidControlWrapper
         final EditText editText = new EditText(((AndroidControlWrapper)parent).getControl().getContext());
         this._control = editText;
 
-        if (controlSpec.get("control").asString().equals("password"))
-        {
-            // You have to tell it it's text (in addition to password) or the password doesn't work...
-            editText.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
-        }
-
         // Multiline needs some extra lovin'
         if (ToBoolean(controlSpec.get("multiline"), false))
         {
@@ -67,6 +61,14 @@ public class AndroidTextBoxWrapper extends AndroidControlWrapper
         else
         {
             editText.setSingleLine();
+        }
+
+        // Make sure you set the input type after setting single line or the password attribute will
+        // be lost
+        if (controlSpec.get("control").asString().equals("password"))
+        {
+            // You have to tell it it's text (in addition to password) or the password doesn't work...
+            editText.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
         }
 
         applyFrameworkElementDefaults(editText);
