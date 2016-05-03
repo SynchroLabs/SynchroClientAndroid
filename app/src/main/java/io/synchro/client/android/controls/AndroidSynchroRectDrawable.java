@@ -1,6 +1,7 @@
 package io.synchro.client.android.controls;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 
 /**
@@ -24,8 +25,7 @@ public class AndroidSynchroRectDrawable extends GradientDrawable
 
     public void SetFillColor(Integer color)
     {
-        // !!! If color is null then do something "default-like"
-        _fillColor = color;
+        _fillColor = (color != null) ? color : Color.TRANSPARENT;
         this.setColor(_fillColor);
     }
 
@@ -43,8 +43,7 @@ public class AndroidSynchroRectDrawable extends GradientDrawable
 
     public void SetStrokeColor(Integer color)
     {
-        // !!! If color is null then do something "default-like"
-        _strokeColor = color;
+        _strokeColor = (color != null) ? color : Color.TRANSPARENT;
     }
 
     @Override
