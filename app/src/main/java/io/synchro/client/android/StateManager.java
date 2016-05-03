@@ -50,8 +50,8 @@ public class StateManager
     }
 
     String _path;
-    int   _instanceId;
-    int   _instanceVersion;
+    long   _instanceId;
+    long   _instanceVersion;
     boolean   _isBackSupported;
 
     ViewModel _viewModel;
@@ -251,7 +251,7 @@ public class StateManager
                                });
 
                 }
-                else if (this._instanceId == responseAsJSON.get("InstanceId").asInt())
+                else if (this._instanceId == responseAsJSON.get("InstanceId").asLong())
                 {
                     // The instance that we're on now matches the server instance, so we can safely ignore
                     // the sync error (the request that caused it was sent against a previous instance).
@@ -307,8 +307,8 @@ public class StateManager
         }
         else if ((responseAsJSON.get("ViewModel") != null) && (responseAsJSON.get("View") != null)) // ViewModel and View - means we have a new page/screen
         {
-            this._instanceId = responseAsJSON.get("InstanceId").asInt();
-            this._instanceVersion = responseAsJSON.get("InstanceVersion").asInt();
+            this._instanceId = responseAsJSON.get("InstanceId").asLong();
+            this._instanceVersion = responseAsJSON.get("InstanceVersion").asLong();
 
             JObject jsonViewModel = (JObject) responseAsJSON.get("ViewModel");
 
@@ -330,10 +330,10 @@ public class StateManager
         }
         else if (responseAsJSON.get("ViewModel") != null) // ViewModel without View (resync)
         {
-            int responseInstanceId = responseAsJSON.get("InstanceId").asInt();
+            long responseInstanceId = responseAsJSON.get("InstanceId").asLong();
             if (responseInstanceId == this._instanceId)
             {
-                int responseInstanceVersion = responseAsJSON.get("InstanceVersion").asInt();
+                long responseInstanceVersion = responseAsJSON.get("InstanceVersion").asLong();
 
                 JObject jsonViewModel = (JObject) responseAsJSON.get("ViewModel");
 
@@ -362,10 +362,10 @@ public class StateManager
         }
         else // Updating existing page/screen
         {
-            int responseInstanceId = responseAsJSON.get("InstanceId").asInt();
+            long responseInstanceId = responseAsJSON.get("InstanceId").asLong();
             if (responseInstanceId == this._instanceId)
             {
-                int responseInstanceVersion = responseAsJSON.get("InstanceVersion").asInt();
+                long responseInstanceVersion = responseAsJSON.get("InstanceVersion").asLong();
 
                 // You can get a new view on a view model update if the view is dynamic and was updated
                 // based on the previous command/update.

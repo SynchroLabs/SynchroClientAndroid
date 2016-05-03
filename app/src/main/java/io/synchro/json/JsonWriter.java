@@ -45,10 +45,10 @@ public class JsonWriter
         writer.write('\"');
     }
 
-    private static void writeNumber(Writer writer, int i)
+    private static void writeNumber(Writer writer, long i)
             throws IOException
     {
-        writer.write(Integer.toString(i));
+        writer.write(Long.toString(i));
     }
 
     private static void writeNumber(Writer writer, double d)
@@ -127,7 +127,7 @@ public class JsonWriter
         switch (value.type)
         {
             case Integer:
-                writeNumber(writer, value.asInt());
+                writeNumber(writer, value.asLong());
                 break;
 
             case Float:

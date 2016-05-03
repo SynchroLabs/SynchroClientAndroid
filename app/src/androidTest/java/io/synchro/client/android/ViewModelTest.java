@@ -67,7 +67,7 @@ public class ViewModelTest extends TestCase
                 }
              );
 
-        final int[] serialValue = new int[] { -1 };
+        final long[] serialValue = new long[] { -1 };
         ValueBinding valBinding = viewModel.CreateAndRegisterValueBinding(
                 viewModel.getRootBindingContext().Select("serial"),
                 new IGetViewValue()
@@ -83,7 +83,7 @@ public class ViewModelTest extends TestCase
                     @Override
                     public void SetViewValue(JToken value)
                     {
-                        serialValue[0] = value.asInt();
+                        serialValue[0] = value.asLong();
                     }
                 }
              );
@@ -135,7 +135,7 @@ public class ViewModelTest extends TestCase
                 }
              );
 
-        final int[] serialValue = new int[] { -1 };
+        final long[] serialValue = new long[] { -1 };
         ValueBinding valBinding = viewModel.CreateAndRegisterValueBinding(
                 viewModel.getRootBindingContext().Select("serial"),
                 new IGetViewValue()
@@ -151,7 +151,7 @@ public class ViewModelTest extends TestCase
                     @Override
                     public void SetViewValue(JToken value)
                     {
-                        serialValue[0] = value.asInt();
+                        serialValue[0] = value.asLong();
                         if (bindingsInitialized[0])
                         {
                             fail("Value bining setter should not be called after initialization (its change shouldn't update itself)");
@@ -182,7 +182,7 @@ public class ViewModelTest extends TestCase
         //
         Map<String, JToken> changes = viewModel.CollectChangedValues();
         assertEquals(1, changes.size());
-        assertEquals(2, changes.get("serial").asInt());
+        assertEquals(2, changes.get("serial").asLong());
 
         // Collecting the changes (above) should have cleared the dirty indicators, so there shouldn't be any changes now...
         //
@@ -229,7 +229,7 @@ public class ViewModelTest extends TestCase
                 }
              );
 
-        final int serialValue[] = new int[] { -1 };
+        final long serialValue[] = new long[] { -1 };
         ValueBinding valBinding = viewModel.CreateAndRegisterValueBinding(
                 viewModel.getRootBindingContext().Select("serial"),
                 new IGetViewValue()
@@ -245,7 +245,7 @@ public class ViewModelTest extends TestCase
                     @Override
                     public void SetViewValue(JToken value)
                     {
-                        serialValue[0] = value.asInt();
+                        serialValue[0] = value.asLong();
                     }
                 }
                                                                          );

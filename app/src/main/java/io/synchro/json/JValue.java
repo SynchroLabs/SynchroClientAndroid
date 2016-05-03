@@ -24,7 +24,7 @@ public class JValue extends JToken
         this.value = value;
     }
 
-    public JValue(int value)
+    public JValue(long value)
     {
         super(JTokenType.Integer);
 
@@ -57,9 +57,9 @@ public class JValue extends JToken
         return (type == JTokenType.String) ? ((String) value) : null;
     }
 
-    public int asInt()
+    public long asLong()
     {
-        return (type == JTokenType.Integer) ? ((int) value) : null;
+        return (type == JTokenType.Integer) ? ((long) value) : null;
     }
 
     public boolean asBoolean()
@@ -71,7 +71,7 @@ public class JValue extends JToken
     {
         if (type == JTokenType.Integer)
         {
-            return (double) (int) value;
+            return (double) (long) value;
         }
 
         return (type == JTokenType.Float) ? ((double) value) : null;

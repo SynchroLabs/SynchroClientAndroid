@@ -46,7 +46,7 @@ public class CommandInstanceTest extends TestCase
 
         JObject resolvedParams = cmdInst.GetResolvedParameters(bindingCtx);
         assertEquals("literal", resolvedParams.get("Literal").asString());
-        assertEquals(69, resolvedParams.get("Serial").asInt());
+        assertEquals(69, resolvedParams.get("Serial").asLong());
         assertEquals("The Title", resolvedParams.get("Title").asString());
         assertEquals("", resolvedParams.get("Empty").asString());
         assertEquals(resolvedParams.get("Obj"), viewModel.get("board").selectToken("0", false).selectToken("1", false));

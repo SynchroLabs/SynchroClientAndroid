@@ -84,7 +84,7 @@ public class JObject extends JToken
     }
 
     @Override
-    public int asInt()
+    public long asLong()
     {
         return 0;
     }

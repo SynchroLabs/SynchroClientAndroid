@@ -105,7 +105,7 @@ public class BindingContextTest extends TestCase
     {
         BindingContext bindingCtx = new BindingContext(viewModel);
 
-        assertEquals(1, bindingCtx.Select("board[1][0]").Select("$parent.$index").GetValue().asInt());
+        assertEquals(1, bindingCtx.Select("board[1][0]").Select("$parent.$index").GetValue().asLong());
     }
 
     public void testRootElement()
@@ -119,14 +119,14 @@ public class BindingContextTest extends TestCase
     {
         BindingContext bindingCtx = new BindingContext(viewModel);
 
-        assertEquals(1, bindingCtx.Select("colors[1]").Select("$index").GetValue().asInt());
+        assertEquals(1, bindingCtx.Select("colors[1]").Select("$index").GetValue().asLong());
     }
 
     public void testIndexElementInsideArrayItem()
     {
         BindingContext bindingCtx = new BindingContext(viewModel);
 
-        assertEquals(1, bindingCtx.Select("colors[1].name").Select("$index").GetValue().asInt());
+        assertEquals(1, bindingCtx.Select("colors[1].name").Select("$index").GetValue().asLong());
     }
 
     public void testSetValue()

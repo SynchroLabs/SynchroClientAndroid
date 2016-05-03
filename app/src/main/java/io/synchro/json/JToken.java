@@ -27,7 +27,7 @@ public abstract class JToken
     }
 
     public abstract String asString();
-    public abstract int asInt();
+    public abstract long asLong();
     public abstract boolean asBoolean();
     public abstract double asDouble();
     public abstract JToken deepClone();

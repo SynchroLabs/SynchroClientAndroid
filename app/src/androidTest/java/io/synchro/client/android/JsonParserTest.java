@@ -46,8 +46,8 @@ public class JsonParserTest extends TestCase
     public void testParseInteger()
     {
         validateRoundTrip("0", new JValue(0));
-        validateRoundTrip(String.format("%d", Integer.MAX_VALUE), new JValue(Integer.MAX_VALUE));
-        validateRoundTrip(String.format("%d", Integer.MIN_VALUE), new JValue(Integer.MIN_VALUE));
+        validateRoundTrip(String.format("%d", Long.MAX_VALUE), new JValue(Long.MAX_VALUE));
+        validateRoundTrip(String.format("%d", Long.MIN_VALUE), new JValue(Long.MIN_VALUE));
     }
 
     public void testParseArray()

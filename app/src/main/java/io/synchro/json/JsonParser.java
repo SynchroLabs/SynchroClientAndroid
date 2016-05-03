@@ -170,7 +170,7 @@ public class JsonParser
         }
         else
         {
-            return new JValue(Integer.parseInt(numberData));
+            return new JValue(Long.parseLong(numberData));
         }
     }
 

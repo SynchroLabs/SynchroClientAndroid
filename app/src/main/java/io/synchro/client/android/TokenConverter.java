@@ -26,7 +26,7 @@ public class TokenConverter
                     result = token.asString();
                     break;
                 case Integer:
-                    result = Integer.toString(token.asInt());
+                    result = Long.toString(token.asLong());
                     break;
                 case Float:
                     result = Double.toString(token.asDouble());
@@ -65,7 +65,7 @@ public class TokenConverter
                     result = token.asDouble() != 0;
                     break;
                 case Integer:
-                    result = token.asInt() != 0;
+                    result = token.asLong() != 0;
                     break;
                 case Array:
                     JArray array = (JArray) token;

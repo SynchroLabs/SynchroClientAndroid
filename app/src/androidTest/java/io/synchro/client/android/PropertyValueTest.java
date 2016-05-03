@@ -159,7 +159,7 @@ public class PropertyValueTest extends TestCase
         JToken expandedPropValToken = propVal.Expand();
 
         assertEquals(JTokenType.Integer, expandedPropValToken.getType());
-        assertEquals(420, expandedPropValToken.asInt());
+        assertEquals(420, expandedPropValToken.asLong());
     }
 
     public void testPropertyValueFloatToken()
@@ -398,7 +398,7 @@ public class PropertyValueTest extends TestCase
 
         PropertyValue propVal = new PropertyValue("eval({strVal}.length)", bindingCtx);
 
-        assertEquals(2, propVal.Expand().asInt());
+        assertEquals(2, propVal.Expand().asLong());
     }
 
     public void testEvalStringResult()
@@ -436,7 +436,7 @@ public class PropertyValueTest extends TestCase
 
         PropertyValue propVal = new PropertyValue("eval({strVal}.length + {intVal})", bindingCtx);
 
-        assertEquals(15, propVal.Expand().asInt());
+        assertEquals(15, propVal.Expand().asLong());
     }
 
     public void testEvalNumericResultDoubleAsDouble()

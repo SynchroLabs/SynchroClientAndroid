@@ -84,7 +84,7 @@ public class JArray extends JToken implements Iterable<JToken>
     }
 
     @Override
-    public int asInt()
+    public long asLong()
     {
         return 0;
     }

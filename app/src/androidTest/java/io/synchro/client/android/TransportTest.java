@@ -84,8 +84,8 @@ public class TransportTest extends TestCase
         assertEquals("menu", theResponse.get("Path").asString());
 
         String sessionId = theResponse.get("NewSessionId").asString();
-        int instanceId = theResponse.get("InstanceId").asInt();
-        int instanceVersion = theResponse.get("InstanceVersion").asInt();
+        long instanceId = theResponse.get("InstanceId").asLong();
+        long instanceVersion = theResponse.get("InstanceVersion").asLong();
 
         requestObject = new JObject();
         requestObject.put("Mode", new JValue("Command"));
