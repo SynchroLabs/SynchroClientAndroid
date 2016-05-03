@@ -209,7 +209,7 @@ public class AndroidPageView extends PageView
 
                 final String label = PropertyValue.ExpandAsString(option.get("label").asString(), _viewModel.getRootBindingContext());
                 String command = null;
-                if (option.get("command").asString() != null)
+                if ((option.get("command") != null) && (option.get("command").asString() != null))
                 {
                     command = PropertyValue.ExpandAsString(option.get("command").asString(), _viewModel.getRootBindingContext());
                 }
