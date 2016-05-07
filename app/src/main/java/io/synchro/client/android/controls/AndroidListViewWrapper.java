@@ -64,7 +64,7 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
                     )
                                 );
 
-            RelativeLayout.LayoutParams contentLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams contentLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             contentLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
             this.addView(contentView, contentLayoutParams);
 
