@@ -257,7 +257,23 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
                 break;
         }
 
-        ListViewAdapter adapter = new ListViewAdapter(((AndroidControlWrapper)parent).getControl().getContext(), this, (JObject)controlSpec.get("itemTemplate"), choiceMode != ListView.CHOICE_MODE_NONE);
+        JObject bindingSpec = BindingHelper.GetCanonicalBindingSpec(controlSpec, "items", Commands);
+
+        JObject itemTemplate = (JObject)controlSpec.get("itemTemplate");
+        if (itemTemplate == null)
+        {
+            String itemContent = "{$data}";
+            if (bindingSpec.get("itemContent") != null)
+            {
+                itemContent = bindingSpec.get("itemContent").asString();
+            }
+            itemTemplate = new JObject();
+            itemTemplate.put("control", new JValue("text"));
+            itemTemplate.put("value", new JValue(itemContent));
+            itemTemplate.put("margin", new JValue(5));
+        }
+
+        ListViewAdapter adapter = new ListViewAdapter(((AndroidControlWrapper)parent).getControl().getContext(), this, itemTemplate, choiceMode != ListView.CHOICE_MODE_NONE);
         listView.setAdapter(adapter);
 
         listView.setChoiceMode(choiceMode);
@@ -303,7 +319,6 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
                            });
         }
 
-        JObject bindingSpec = BindingHelper.GetCanonicalBindingSpec(controlSpec, "items", Commands);
         ProcessCommands(bindingSpec, Commands);
 
         if (bindingSpec.get("items") != null)
