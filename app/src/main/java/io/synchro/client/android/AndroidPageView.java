@@ -193,8 +193,14 @@ public class AndroidPageView extends PageView
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(_activity);
         AlertDialog dialog = builder.create();
+        String message = "";
 
-        dialog.setMessage(PropertyValue.ExpandAsString((String)messageBox.get("message").asString(), _viewModel.getRootBindingContext()));
+        if (messageBox.get("message") != null)
+        {
+            message = PropertyValue.ExpandAsString((String)messageBox.get("message").asString(), _viewModel.getRootBindingContext());
+        }
+        dialog.setMessage(message);
+
         if (messageBox.get("title") != null)
         {
             dialog.setTitle(PropertyValue.ExpandAsString((String)messageBox.get("title").asString(), _viewModel.getRootBindingContext()));
