@@ -71,7 +71,7 @@ public class AndroidSliderWrapper extends AndroidControlWrapper
         if (controlSpec.get("control").asString().equals("progressbar"))
         {
             Log.d(TAG, "Creating progress bar element");
-            bar = new ProgressBar(((AndroidControlWrapper)parent).getControl().getContext(), null, android.R.style.Widget_ProgressBar_Horizontal);
+            bar = new ProgressBar(((AndroidControlWrapper)parent).getControl().getContext(), null, android.R.attr.progressBarStyleHorizontal);
             bar.setIndeterminate(false);
         }
         else
