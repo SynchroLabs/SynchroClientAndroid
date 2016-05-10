@@ -270,7 +270,7 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
             itemTemplate = new JObject();
             itemTemplate.put("control", new JValue("text"));
             itemTemplate.put("value", new JValue(itemContent));
-            itemTemplate.put("margin", new JValue(5));
+            itemTemplate.put("margin", new JValue(DEFAULT_MARGIN));
         }
 
         ListViewAdapter adapter = new ListViewAdapter(((AndroidControlWrapper)parent).getControl().getContext(), this, itemTemplate, choiceMode != ListView.CHOICE_MODE_NONE);

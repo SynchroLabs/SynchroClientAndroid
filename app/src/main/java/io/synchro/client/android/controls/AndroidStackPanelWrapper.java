@@ -29,7 +29,7 @@ public class AndroidStackPanelWrapper extends AndroidControlWrapper
         final LinearLayout layout = new LinearLayout(((AndroidControlWrapper)parent).getControl().getContext());
         this._control = layout;
 
-        applyFrameworkElementDefaults(layout);
+        applyFrameworkElementDefaults(layout, false);
 
         // When orientation is horizontal, items are baseline aligned by default, and in this case all the vertical gravity does is specify
         // how to position the entire group of baseline aligned items if there is extra vertical space.  This is not what we want.  Turning

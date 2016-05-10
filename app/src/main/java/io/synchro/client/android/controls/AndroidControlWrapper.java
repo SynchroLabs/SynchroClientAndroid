@@ -25,6 +25,8 @@ public class AndroidControlWrapper extends ControlWrapper
 {
     public static final String TAG = AndroidControlWrapper.class.getSimpleName();
 
+    public static final Double DEFAULT_MARGIN = 5.0;
+
     protected View _control;
 
     public View getControl()
@@ -225,7 +227,7 @@ public class AndroidControlWrapper extends ControlWrapper
                                                                       @Override
                                                                       public void run()
                                                                       {
-                                                                          if (AndroidControlWrapper.this.getControl().getLayoutParams() != null)
+                                                                          if (AndroidControlWrapper.this.getControl().getLayoutParams() instanceof LinearLayout.LayoutParams)
                                                                           {
                                                                               LinearLayout.LayoutParams linearLayoutParams = (LinearLayout.LayoutParams) AndroidControlWrapper.this
                                                                                       .getControl().getLayoutParams();
@@ -342,7 +344,19 @@ public class AndroidControlWrapper extends ControlWrapper
 
     protected void applyFrameworkElementDefaults(View element)
     {
-        // !!! This could be a little more thourough ;)
+        this.applyFrameworkElementDefaults(element, true);
+    }
+
+    protected void applyFrameworkElementDefaults(View element, Boolean applyMargins)
+    {
+        if (applyMargins)
+        {
+            MarginThicknessSetter marginSetter = new MarginThicknessSetter(this);
+            marginSetter.SetThicknessLeft((int)ToDeviceUnits(DEFAULT_MARGIN));
+            marginSetter.SetThicknessTop((int)ToDeviceUnits(DEFAULT_MARGIN));
+            marginSetter.SetThicknessRight((int)ToDeviceUnits(DEFAULT_MARGIN));
+            marginSetter.SetThicknessBottom((int)ToDeviceUnits(DEFAULT_MARGIN));
+        }
     }
 
     public double ToAndroidDpFromTypographicPoints(JToken value)
