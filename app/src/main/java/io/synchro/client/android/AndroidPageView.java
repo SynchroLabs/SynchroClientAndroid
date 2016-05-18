@@ -196,8 +196,8 @@ public class AndroidPageView extends PageView
                     //
                     panel.setPadding(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.rightMargin, layoutParams.bottomMargin);
                 }
-                panel.addView(control);
             }
+            panel.addView(control);
         }
         _rootControlWrapper.getChildControls().add(content);
 
