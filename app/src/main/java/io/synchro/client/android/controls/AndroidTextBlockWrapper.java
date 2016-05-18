@@ -37,6 +37,11 @@ public class AndroidTextBlockWrapper extends AndroidControlWrapper
         final TextView textView = new TextView(
                 ((AndroidControlWrapper) parent).getControl().getContext()
         );
+
+        // TextAppearance.Medium value of 18 seems to be a good default (the real default is TextAppearance.Small,
+        // which is 14, and is pretty small).  Of course any explicit font size will override this.
+        textView.setTextSize(18);
+
         this._control = textView;
 
         applyFrameworkElementDefaults(textView);

@@ -178,7 +178,26 @@ public class AndroidPageView extends PageView
         ViewGroup panel = (ViewGroup)_rootControlWrapper.getControl();
         if (content != null)
         {
-            panel.addView(((AndroidControlWrapper)content).getControl());
+            View control = controlWrapper.getControl();
+            if (panel instanceof ScrollView)
+            {
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) control.getLayoutParams();
+                if (layoutParams != null)
+                {
+                    // We are putting a control with a margin into a top-level ScrollView.  The ScrollView does not
+                    // support margin layout, so we convert the margin of the contents into a padding of the ScrollView
+                    // to accomplish the same thing.
+                    //
+                    // Note that generally the top-level control will be a container and not have a margin.  Note also
+                    // that this "margin as padding" will be applied at the time the content is set, so the applied margin
+                    // will not be updated after that point (the margin property cannot be animated in this case).  This is
+                    // really to handle the "Hello World" case of a standalone non-container top-level control that we don't
+                    // want jammed into the upper left corner.
+                    //
+                    panel.setPadding(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.rightMargin, layoutParams.bottomMargin);
+                }
+                panel.addView(control);
+            }
         }
         _rootControlWrapper.getChildControls().add(content);
 

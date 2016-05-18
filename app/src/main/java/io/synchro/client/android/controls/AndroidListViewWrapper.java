@@ -228,6 +228,36 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
         }
     }
 
+    // Need to make our ListView support WrapContent sizing (particularly for height).
+    //
+    // http://stackoverflow.com/questions/11295080/android-wrap-content-is-not-working-with-listview
+    //
+    // The consensus seems to be "don't do that", but I think for our case we will be using this for small
+    // list views only (with a handful of items, and I'm not afraid of the measure overhead for that).  So
+    // we're just going to make this work to be consistent with other platforms.
+    //
+    public class MyListView extends ListView {
+
+        public MyListView(Context context, android.util.AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public MyListView(Context context) {
+            super(context);
+        }
+
+        public MyListView(Context context, android.util.AttributeSet attrs, int defStyle) {
+            super(context, attrs, defStyle);
+        }
+
+        @Override
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
+                    MeasureSpec.AT_MOST);
+            super.onMeasure(widthMeasureSpec, expandSpec);
+        }
+    }
+
     public AndroidListViewWrapper(
             ControlWrapper parent,
             BindingContext bindingContext,
@@ -238,7 +268,7 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
 
         Log.d(TAG, "Creating listview element");
 
-        final ListView listView = new ListView(
+        final ListView listView = new MyListView(
                 ((AndroidControlWrapper) parent).getControl().getContext()
         );
         this._control = listView;
@@ -440,6 +470,8 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
         }
 
         _selectionChangingProgramatically = false;
+
+        listView.requestLayout();
     }
 
     // To determine if an item should be selected, get an item from the list, get the ElementMetaData.BindingContext.  Apply any
