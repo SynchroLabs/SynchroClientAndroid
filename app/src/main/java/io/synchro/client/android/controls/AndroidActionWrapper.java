@@ -48,7 +48,7 @@ public class AndroidActionWrapper extends AndroidControlWrapper
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
                                    {
-                                       actionBarItem.setIcon(ToString(value, ""));
+                                       actionBarItem.setIcon(getResourceNameFromIcon(ToString(value, "")));
                                    }
                                });
         processElementProperty(controlSpec, "enabled", new AndroidUiThreadSetViewValue((Activity) ((AndroidControlWrapper)parent).getControl().getContext())

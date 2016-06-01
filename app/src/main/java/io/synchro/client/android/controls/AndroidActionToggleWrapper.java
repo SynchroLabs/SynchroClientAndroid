@@ -172,7 +172,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
                     @Override
                     protected void UiThreadSetViewValue(JToken value)
                     {
-                        _actionBarItem.setIcon(ToString(value, ""));
+                        _actionBarItem.setIcon(getResourceNameFromIcon(ToString(value, "")));
                     }
                 }
                               );
@@ -201,7 +201,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
                     @Override
                     protected void UiThreadSetViewValue(JToken value)
                     {
-                        setUncheckedIcon(ToString(value, ""));
+                        setUncheckedIcon(getResourceNameFromIcon(ToString(value, "")));
                     }
                 });
         processElementProperty(
@@ -210,7 +210,7 @@ public class AndroidActionToggleWrapper extends AndroidControlWrapper
                     @Override
                     protected void UiThreadSetViewValue(JToken value)
                     {
-                        setCheckedIcon(ToString(value, ""));
+                        setCheckedIcon(getResourceNameFromIcon(ToString(value, "")));
                     }
                 });
 

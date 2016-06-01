@@ -1,16 +1,24 @@
 package io.synchro.client.android.controls;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.text.method.TransformationMethod;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.lang.reflect.Field;
 
 import io.synchro.client.android.*;
 import io.synchro.json.JArray;
@@ -49,6 +57,166 @@ public class AndroidControlWrapper extends ControlWrapper
 
     protected int _defaultTextColor;
     protected Drawable _defaultBackground;
+
+    public class SynchroButton extends Button
+    {
+        int _textColor = Color.WHITE;
+        int _disabledColor = Color.GRAY;
+
+        public SynchroButton(Context context, AttributeSet attrs, int defStyleAttr)
+        {
+            super(context, attrs, defStyleAttr);
+            _textColor = this.getCurrentTextColor();
+            int[] disabledState = { -android.R.attr.state_enabled };
+            _disabledColor = this.getTextColors().getColorForState(disabledState, _disabledColor);
+
+            // We always want our icon and/or text grouped and centered.  We have to left align the text to
+            // the (possible) left drawable in order to then be able to center them in our onDraw() below.
+            //
+            setGravity(Gravity.LEFT|Gravity.CENTER_VERTICAL);
+        }
+
+        public void updateIconAndTextColor()
+        {
+            int color = this.isEnabled() ? _textColor : _disabledColor;
+
+            Drawable drawables[] = this.getCompoundDrawables();
+            for (Drawable drawable : drawables)
+            {
+                if (drawable != null)
+                {
+                    drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+                }
+            }
+
+            super.setTextColor(color);
+        }
+
+        @Override
+        public void setEnabled(boolean enabled)
+        {
+            super.setEnabled(enabled);
+            this.updateIconAndTextColor();
+        }
+
+        @Override
+        public void setTextColor(int color)
+        {
+            // We assume this means "set the normal/enabled text color"
+            super.setTextColor(color);
+            _textColor = color;
+            this.updateIconAndTextColor();
+        }
+
+        public void setIcon(Drawable icon)
+        {
+            icon.mutate(); // We're going to have some fun with this guy later
+            super.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
+            this.updateIconAndTextColor();
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas)
+        {
+            // We want the icon and/or text grouped together and centered as a group.
+
+            float buttonContentWidth = getWidth() - getPaddingLeft() - getPaddingRight();
+
+            // In later versions of Android, an "all caps" transform is applied to buttons.  We need to get
+            // the transformed text in order to measure it.
+            //
+            TransformationMethod method = getTransformationMethod();
+            String buttonText = ((method != null) ? method.getTransformation(getText(), this) : getText()).toString();
+            float textWidth = getPaint().measureText(buttonText);
+
+            Drawable[] drawables = getCompoundDrawables();
+            Drawable drawableLeft = drawables[0];
+            int drawableWidth = (drawableLeft != null) ? drawableLeft.getIntrinsicWidth() : 0;
+            int drawablePadding = ((textWidth > 0) && (drawableLeft != null)) ? getCompoundDrawablePadding() : 0;
+            float bodyWidth = textWidth + drawableWidth + drawablePadding;
+            canvas.translate((buttonContentWidth - bodyWidth) / 2, 0);
+
+            super.onDraw(canvas);
+        }
+    }
+
+    // Icon helpers
+    //
+    static public String getResourceNameFromIcon(String icon, String color, int sizeDp)
+    {
+        return "ic_" + icon + "_" + color + "_" + sizeDp + "dp";
+    }
+
+    static public String getResourceNameFromIcon(String icon, String color)
+    {
+        return getResourceNameFromIcon(icon, color, 36);
+    }
+
+    static public String getResourceNameFromIcon(String icon, int sizeDp)
+    {
+        return getResourceNameFromIcon(icon, "white", sizeDp);
+    }
+
+    static public String getResourceNameFromIcon(String icon)
+    {
+        // Backward compat for Civics - convert the old ic_ icons to the new names...
+        if (icon == "ic_action_important")
+        {
+            icon = "star";
+        }
+        else if (icon == "ic_action_not_important")
+        {
+            icon = "star_border";
+        }
+        else if (icon.startsWith("ic_"))
+        {
+            // The user knows *exactly* what they want, so give it to them...
+            return icon;
+        }
+        return getResourceNameFromIcon(icon, "white", 36);
+    }
+
+    static public Drawable getIconDrawable(Context context, String iconName)
+    {
+        Log.d(TAG, String.format("getIconDrawable(\"%s\")", iconName));
+
+        // http://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
+        //
+        Field idField = null;
+        try
+        {
+            idField = R.drawable.class.getDeclaredField(iconName);
+        }
+        catch (NoSuchFieldException e)
+        {
+            Log.wtf(TAG, e);
+        }
+
+        if (idField != null)
+        {
+            int iconResourceId = 0;
+
+            try
+            {
+                iconResourceId = idField.getInt(idField);
+            }
+            catch (IllegalAccessException e)
+            {
+                Log.wtf(TAG, e);
+            }
+            if (iconResourceId > 0)
+            {
+                return context.getDrawable(iconResourceId);
+            }
+        }
+
+        // If we didn't find the icon, return a placeholder (the "no" sign)
+        //
+        Log.w(TAG, String.format("getIconDrawable - icon not found: %s, using default", iconName));
+        return context.getDrawable(R.drawable.ic_do_not_disturb_white_36dp);
+    }
+    //
+    // End icon helpers
 
     public AndroidControlWrapper(
             AndroidPageView pageView, StateManager stateManager, ViewModel viewModel,
@@ -838,7 +1006,7 @@ public class AndroidControlWrapper extends ControlWrapper
         {
             _defaultTextColor = textView.getCurrentTextColor();
             processElementProperty(
-                    controlSpec, "foreground", new AndroidUiThreadSetViewValue((Activity) textView.getContext())
+                    controlSpec, "color", "foreground", new AndroidUiThreadSetViewValue((Activity) textView.getContext())
                     {
                         @Override
                         public void UiThreadSetViewValue(JToken value)
@@ -951,6 +1119,11 @@ public class AndroidControlWrapper extends ControlWrapper
                 break;
             case "toggle":
                 controlWrapper = new AndroidToggleSwitchWrapper(
+                        parent, bindingContext, controlSpec
+                );
+                break;
+            case "togglebutton":
+                controlWrapper = new AndroidToggleButtonWrapper(
                         parent, bindingContext, controlSpec
                 );
                 break;

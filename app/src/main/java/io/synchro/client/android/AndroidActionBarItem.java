@@ -9,6 +9,8 @@ import android.view.MenuItem;
 
 import java.lang.reflect.Field;
 
+import io.synchro.client.android.controls.AndroidControlWrapper;
+
 /**
  * Created by blake on 3/9/15.
  */
@@ -61,7 +63,7 @@ public class AndroidActionBarItem
 
     protected void updateIconOnMenuItem()
     {
-        if ((_menuItem != null) && (_iconResourceId > 0))
+        if ((_menuItem != null) && (_icon != null))
         {
             if (_enabled)
             {
@@ -75,7 +77,7 @@ public class AndroidActionBarItem
                 if (_iconDisabled == null)
                 {
                     // !!! This is probably not the best way to show the icon as disabled, but it works for now...
-                    _iconDisabled = _context.getResources().getDrawable(_iconResourceId);
+                    _iconDisabled = AndroidControlWrapper.getIconDrawable(_context, _iconName);
                     _iconDisabled.mutate().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
                 }
 
@@ -92,39 +94,11 @@ public class AndroidActionBarItem
         return _iconName;
     }
 
-    // http://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
-
     public void setIcon(String value)
     {
         Log.d(TAG, String.format("setIcon(\"%s\")", value));
         _iconName = value;
-
-        Field idField = null;
-        try
-        {
-            idField = R.drawable.class.getDeclaredField(value);
-        }
-        catch (NoSuchFieldException e)
-        {
-            Log.wtf(TAG, e);
-        }
-
-        if (idField != null)
-        {
-            try
-            {
-                _iconResourceId = idField.getInt(idField);
-            }
-            catch (IllegalAccessException e)
-            {
-                Log.wtf(TAG, e);
-            }
-            if (_iconResourceId > 0)
-            {
-                _icon = _context.getDrawable(_iconResourceId);
-            }
-        }
-
+        _icon = AndroidControlWrapper.getIconDrawable(_context, _iconName);
         updateIconOnMenuItem();
     }
 

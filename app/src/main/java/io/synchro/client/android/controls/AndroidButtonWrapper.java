@@ -1,15 +1,24 @@
 package io.synchro.client.android.controls;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.method.TransformationMethod;
 import android.util.Log;
+import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.lang.reflect.Field;
 
 import io.synchro.client.android.AndroidUiThreadSetViewValue;
 import io.synchro.client.android.BindingContext;
@@ -17,6 +26,7 @@ import io.synchro.client.android.BindingHelper;
 import io.synchro.client.android.CommandInstance;
 import io.synchro.client.android.CommandName;
 import io.synchro.client.android.ControlWrapper;
+import io.synchro.client.android.R;
 import io.synchro.json.JObject;
 import io.synchro.json.JToken;
 
@@ -36,8 +46,16 @@ public class AndroidButtonWrapper extends AndroidControlWrapper
     {
         super(parent, bindingContext, controlSpec);
         Log.d(TAG, String.format("Creating button element with caption of: %s", (controlSpec.get("caption") != null) ? controlSpec.get("caption").asString() : "(no caption)"));
-        final Button button = new Button(((AndroidControlWrapper)parent).getControl().getContext());
+
+        int btnStyle = android.R.attr.buttonStyle;
+        if (ToBoolean(controlSpec.get("borderless"), false))
+        {
+            btnStyle = android.R.attr.borderlessButtonStyle;
+        }
+        final SynchroButton button = new SynchroButton(((AndroidControlWrapper)parent).getControl().getContext(), null, btnStyle);
         this._control = button;
+
+        button.setCompoundDrawablePadding(20);
 
         applyFrameworkElementDefaults(button);
 
@@ -50,9 +68,21 @@ public class AndroidButtonWrapper extends AndroidControlWrapper
                                    }
                                });
 
+        processElementProperty(controlSpec, "icon", new AndroidUiThreadSetViewValue((Activity) button.getContext())
+                                {
+                                    @Override
+                                    public void UiThreadSetViewValue(JToken value)
+                                    {
+                                        button.setIcon(getIconDrawable(button.getContext(), getResourceNameFromIcon(ToString(value, ""))));
+                                    }
+                                });
+
         JObject bindingSpec = BindingHelper
                 .GetCanonicalBindingSpec(controlSpec, CommandName.getOnClick().getAttribute(), Commands);
         ProcessCommands(bindingSpec, Commands);
+
+        // !!! We don't do anything to indicate the disabled state of the image button.  Test and see what, if anything,
+        //     Android is doing for us (and whether we should attempt to gray it out ourselves).
 
         processElementProperty(
                 controlSpec, "resource",

@@ -59,7 +59,7 @@ public class AndroidRectangleWrapper extends AndroidControlWrapper
                                    }
                                });
 
-        processElementProperty(controlSpec, "fill", new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
+        processElementProperty(controlSpec, "color", "fill", new AndroidUiThreadSetViewValue((Activity) drawableView.getContext())
                                {
                                    @Override
                                    protected void UiThreadSetViewValue(JToken value)
