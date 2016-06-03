@@ -1,5 +1,6 @@
 package io.synchro.client.android;
 
+import android.app.Activity;
 import android.test.AndroidTestCase;
 
 import junit.framework.TestCase;
@@ -37,10 +38,17 @@ public class StateManagerTest extends AndroidTestCase
 
         TransportAndroidHttpClient transport = new TransportAndroidHttpClient(new URL("http://" + app.getEndpoint()));
 
-        StateManager stateManager = new StateManager(appManager, app, transport, new AndroidSynchroDeviceMetrics(getContext()));
+        StateManager stateManager = new StateManager(appManager, app, transport, new AndroidSynchroDeviceMetrics(getContext()), null);
 
         final int responseNumber[] = new int[] { 0 };
         final JObject thePageView[] = new JObject[] { null };
+
+        StateManager.IProcessAppExit processAppExit = new StateManager.IProcessAppExit() {
+            @Override
+            public void ProcessAppExit()
+            {
+            }
+        };
 
         stateManager.SetProcessingHandlers(new StateManager.IProcessPageView()
                                            {
@@ -54,7 +62,9 @@ public class StateManagerTest extends AndroidTestCase
                                                        waitObject.notify();
                                                    }
                                                }
-                                           }, new StateManager.IProcessMessageBox()
+                                           },
+                                           processAppExit,
+                                           new StateManager.IProcessMessageBox()
                                            {
                                                @Override
                                                public void ProcessMessageBox(

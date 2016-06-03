@@ -541,8 +541,15 @@ public class StateManager
             {
                 try
                 {
-                    ProcessResponseAsyncOnUiThread(requestObject, StateManager.this._transport.sendMessage(sessionId, requestObject));
-                    //ProcessResponseAsync(StateManager.this._transport.sendMessage(sessionId, requestObject));
+                    if (_activity != null)
+                    {
+                        ProcessResponseAsyncOnUiThread(requestObject, StateManager.this._transport.sendMessage(sessionId, requestObject));
+                    }
+                    else
+                    {
+                        // This is for test cases where we don't have an activity and can't run on UX thread
+                        ProcessResponseAsync(StateManager.this._transport.sendMessage(sessionId, requestObject));
+                    }
                 }
                 catch (IOException e)
                 {
