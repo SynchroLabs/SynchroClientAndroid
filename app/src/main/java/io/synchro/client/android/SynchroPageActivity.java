@@ -92,27 +92,30 @@ public class SynchroPageActivity extends Activity
             Log.wtf(TAG, e);
         }
 
-        PageView.IDoBackToMenu backToMenu = null;
-        if (appManager.getAppSeed() == null)
-        {
-            // If we are't nailed to a predefined app, then we'll allow the app to navigate back to
-            // this page from its top level page.
-            //
-            backToMenu = new PageView.IDoBackToMenu()
+        final boolean launchedFromMenu = (appManager.getAppSeed() == null);
+
+        StateManager.IProcessAppExit processAppExit = new StateManager.IProcessAppExit() {
+            @Override
+            public void ProcessAppExit()
             {
-                @Override
-                public void doBackToMenu()
+                if (launchedFromMenu)
                 {
+                    // If we are't nailed to a predefined app, then we'll allow the app to navigate back to
+                    // this page from its top level page.
+                    //
 //                    Intent intent = new Intent(this, typeof(AppDetailActivity));
 //                    intent.putExtra("endpoint", app.getEndpoint());
 //                    NavUtils.navigateUpTo(SynchroPageActivity.this, intent);
                     finish();
-                }
-            };
-        }
 
-        _stateManager = new StateManager(appManager, app, transport, deviceMetrics);
-        _pageView = new AndroidPageView(_stateManager, _stateManager.getViewModel(), this, layout, backToMenu);
+                    // Detach StateManager
+                    _stateManager = null;
+                }
+            }
+        };
+
+        _stateManager = new StateManager(appManager, app, transport, deviceMetrics, SynchroPageActivity.this);
+        _pageView = new AndroidPageView(_stateManager, _stateManager.getViewModel(), this, layout, launchedFromMenu);
 
         _pageView.setSetPageTitle(new PageView.ISetPageTitle()
                                   {
@@ -146,7 +149,9 @@ public class SynchroPageActivity extends Activity
                                                                                                }
                                                                                            });
                                                 }
-                                            }, new StateManager.IProcessMessageBox()
+                                            },
+                                            processAppExit,
+                                            new StateManager.IProcessMessageBox()
                                             {
                                                 @Override
                                                 public void ProcessMessageBox(
@@ -199,15 +204,18 @@ public class SynchroPageActivity extends Activity
     {
         super.onConfigurationChanged(newConfig);
 
-        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+        if (_stateManager != null)
         {
-            Log.d(TAG, "Screen oriented to Portrait");
-            _stateManager.sendViewUpdateAsync(SynchroOrientation.PORTRAIT);
-        }
-        else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-        {
-            Log.d(TAG, "Screen oriented to Landscape");
-            _stateManager.sendViewUpdateAsync(SynchroOrientation.LANDSCAPE);
+            if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+            {
+                Log.d(TAG, "Screen oriented to Portrait");
+                _stateManager.sendViewUpdateAsync(SynchroOrientation.PORTRAIT);
+            }
+            else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            {
+                Log.d(TAG, "Screen oriented to Landscape");
+                _stateManager.sendViewUpdateAsync(SynchroOrientation.LANDSCAPE);
+            }
         }
     }
 

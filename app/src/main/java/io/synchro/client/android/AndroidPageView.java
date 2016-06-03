@@ -37,10 +37,10 @@ public class AndroidPageView extends PageView
 
     public AndroidPageView(
             StateManager stateManager, ViewModel viewModel, Activity activity, ViewGroup panel,
-            IDoBackToMenu doBackToMenu
+            Boolean launchedFromMenu
                           )
     {
-        super(stateManager, viewModel, doBackToMenu);
+        super(stateManager, viewModel, launchedFromMenu);
         _activity = activity;
         _rootControlWrapper = new AndroidControlWrapper(this, _stateManager, _viewModel, _viewModel.getRootBindingContext(), panel);
     }

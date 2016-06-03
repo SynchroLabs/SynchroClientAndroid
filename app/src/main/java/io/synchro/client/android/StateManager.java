@@ -1,5 +1,6 @@
 package io.synchro.client.android;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -28,6 +29,11 @@ public class StateManager
         public void ProcessPageView(JObject pageView);
     }
 
+    public interface IProcessAppExit
+    {
+        public void ProcessAppExit();
+    }
+
     public interface IProcessMessageBox
     {
         public void ProcessMessageBox(JObject messageBox, ICommandHandler commandHandler);
@@ -53,17 +59,22 @@ public class StateManager
     long   _instanceId;
     long   _instanceVersion;
     boolean   _isBackSupported;
+    boolean   _isExited = false;
 
     ViewModel _viewModel;
+    Activity _activity;
+
     IProcessPageView _onProcessPageView;
+    IProcessAppExit _onProcessAppExit;
     IProcessMessageBox _onProcessMessageBox;
     IProcessUrl _onProcessUrl;
 
     SynchroDeviceMetrics _deviceMetrics;
 
-    public StateManager(SynchroAppManager appManager, SynchroApp app, Transport transport, SynchroDeviceMetrics deviceMetrics)
+    public StateManager(SynchroAppManager appManager, SynchroApp app, Transport transport, SynchroDeviceMetrics deviceMetrics, Activity activity)
     {
         _viewModel = new ViewModel();
+        _activity = activity;
 
         _appManager = appManager;
         _app = app;
@@ -94,9 +105,15 @@ public class StateManager
         return _deviceMetrics;
     }
 
-    public void SetProcessingHandlers(IProcessPageView OnProcessPageView, IProcessMessageBox OnProcessMessageBox, IProcessUrl OnProcessUrl)
+    public void SetProcessingHandlers(
+            IProcessPageView OnProcessPageView,
+            IProcessAppExit OnProcessAppExit,
+            IProcessMessageBox OnProcessMessageBox,
+            IProcessUrl OnProcessUrl
+            )
     {
         _onProcessPageView = OnProcessPageView;
+        _onProcessAppExit = OnProcessAppExit;
         _onProcessMessageBox = OnProcessMessageBox;
         _onProcessUrl = OnProcessUrl;
     }
@@ -198,10 +215,36 @@ public class StateManager
                    });
     }
 
+    void ProcessResponseAsyncOnUiThread(final JObject requestObject, final JObject responseAsJSON)
+    {
+        _activity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    ProcessResponseAsync(responseAsJSON);
+                }
+                catch (IOException e)
+                {
+                    Log.wtf(TAG, e);
+                    ProcessRequestFailure(requestObject, e);
+                }
+            }
+        });
+    }
+
     void ProcessResponseAsync(JObject responseAsJSON)
             throws IOException
     {
         // logger.Info("Got response: {0}", (string)responseAsJSON);
+
+        if (_isExited)
+        {
+            Log.e(TAG, "StateManager called after exit, ignoring");
+            return;
+        }
 
         if (responseAsJSON.get("NewSessionId") != null)
         {
@@ -291,7 +334,19 @@ public class StateManager
 
         boolean updateRequired = false;
 
-        if (responseAsJSON.get("App") != null) // This means we have a new app
+        if (responseAsJSON.get("Exit") != null) // Navigate back out of the app
+        {
+            // Return to launcher (if there is one).  Disable StateManager (so it won't keep processing responses).
+            //
+            Log.i(TAG, "Navigated back out of the app");
+            if (this._onProcessAppExit != null)
+            {
+                _isExited = true;
+                this._onProcessAppExit.ProcessAppExit();
+            }
+            return;
+        }
+        else if (responseAsJSON.get("App") != null) // This means we have a new app
         {
             // Note that we already have an app definition from the MaaasApp that was passed in.  The App in this
             // response was triggered by a request at app startup for the current version of the app metadata
@@ -486,7 +541,8 @@ public class StateManager
             {
                 try
                 {
-                    ProcessResponseAsync(StateManager.this._transport.sendMessage(sessionId, requestObject));
+                    ProcessResponseAsyncOnUiThread(requestObject, StateManager.this._transport.sendMessage(sessionId, requestObject));
+                    //ProcessResponseAsync(StateManager.this._transport.sendMessage(sessionId, requestObject));
                 }
                 catch (IOException e)
                 {

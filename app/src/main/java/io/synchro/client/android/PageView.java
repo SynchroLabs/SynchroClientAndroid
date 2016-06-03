@@ -35,14 +35,9 @@ public abstract class PageView
         _setBackEnabled = setBackEnabled;
     }
 
-    public interface IDoBackToMenu
-    {
-        void doBackToMenu();
-    }
-
     protected StateManager _stateManager;
     protected ViewModel _viewModel;
-    protected IDoBackToMenu _doBackToMenu;
+    protected Boolean _launchedFromMenu;
 
     // This is the top level container of controls for a page.  If the page specifies a single top level
     // element, then this represents that element.  If not, then this is a container control that we
@@ -57,11 +52,11 @@ public abstract class PageView
 
     protected String onBackCommand = null;
 
-    public PageView(StateManager stateManager, ViewModel viewModel, IDoBackToMenu doBackToMenu)
+    public PageView(StateManager stateManager, ViewModel viewModel, Boolean launchedFromMenu)
     {
         _stateManager = stateManager;
         _viewModel = viewModel;
-        _doBackToMenu = doBackToMenu;
+        _launchedFromMenu = launchedFromMenu;
     }
 
     public abstract ControlWrapper CreateRootContainerControl(JObject controlSpec);
@@ -79,7 +74,7 @@ public abstract class PageView
             //
             return true;
         }
-        else if ((_doBackToMenu != null) && _stateManager.IsOnMainPath())
+        else if (_launchedFromMenu && _stateManager.IsOnMainPath())
         {
             // No page-specified back command, launched from menu, and is main (top-level) page...
             //
@@ -91,22 +86,15 @@ public abstract class PageView
 
     public boolean GoBack()
     {
-        if (_stateManager.IsBackSupported())
+        if (_launchedFromMenu || _stateManager.IsBackSupported())
         {
             Log.d(TAG, "Back navigation");
             _stateManager.sendBackRequestAsync();
             return true;
         }
-        else if ((_doBackToMenu != null) && _stateManager.IsOnMainPath())
-        {
-            Log.d(TAG, "Back navigation - returning to menu");
-            _rootContainerControlWrapper.Unregister();
-            _doBackToMenu.doBackToMenu();
-            return true;
-        }
         else
         {
-            Log.w(TAG, "OnBackCommand called with no back command, ignoring");
+            Log.w(TAG, "OnBackCommand called when no back navigation available");
             return false; // Not handled
         }
     }
