@@ -160,11 +160,11 @@ public class AndroidControlWrapper extends ControlWrapper
     static public String getResourceNameFromIcon(String icon)
     {
         // Backward compat for Civics - convert the old ic_ icons to the new names...
-        if (icon == "ic_action_important")
+        if (icon.equals("ic_action_important"))
         {
             icon = "star";
         }
-        else if (icon == "ic_action_not_important")
+        else if (icon.equals("ic_action_not_important"))
         {
             icon = "star_border";
         }
