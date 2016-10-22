@@ -166,28 +166,31 @@ public class PropertyValue
             for (int tokenIndex = 0;tokenIndex < _boundTokens.size();++tokenIndex)
             {
                 String name = String.format("var%d", tokenIndex);
-                Object value;
+                Object value = null;
 
                 JToken token = _boundTokens.get(tokenIndex).getResolvedValue();
 
-                switch (token.getType())
+                if (token != null)
                 {
-                    case Boolean:
-                        value = token.asBoolean();
-                        break;
+                    switch (token.getType())
+                    {
+                        case Boolean:
+                            value = token.asBoolean();
+                            break;
 
-                    case Integer:
-                    case Float:
-                        value = token.asDouble();
-                        break;
+                        case Integer:
+                        case Float:
+                            value = token.asDouble();
+                            break;
 
-                    case Null:
-                        value = null;
-                        break;
+                        case Null:
+                            value = null;
+                            break;
 
-                    default:
-                        value = _boundTokens.get(tokenIndex).getResolvedValueAsString();
-                        break;
+                        default:
+                            value = _boundTokens.get(tokenIndex).getResolvedValueAsString();
+                            break;
+                    }
                 }
 
                 ScriptableObject.putProperty(scope, name, value);

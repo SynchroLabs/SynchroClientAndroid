@@ -489,6 +489,18 @@ public class PropertyValueTest extends TestCase
         assertEquals(true, propVal.Expand().asBoolean());
     }
 
+    public void testEvalUndefinedParam()
+    {
+        JObject viewModel = new JObject();
+        viewModel.put("boolVal", new JValue(true));
+
+        BindingContext bindingCtx = new BindingContext(viewModel);
+
+        PropertyValue propVal = new PropertyValue("eval(null === {undefinedVal})", bindingCtx);
+
+        assertEquals(true, propVal.Expand().asBoolean());
+    }
+
     public void testEvalUnsupportedParamType()
             throws IOException
     {
