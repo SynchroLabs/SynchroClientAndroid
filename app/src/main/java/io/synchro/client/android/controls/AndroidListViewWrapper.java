@@ -28,6 +28,7 @@ import io.synchro.client.android.IGetViewValue;
 import io.synchro.json.JArray;
 import io.synchro.json.JObject;
 import io.synchro.json.JToken;
+import io.synchro.json.JTokenType;
 import io.synchro.json.JValue;
 import io.synchro.client.android.ValueBinding;
 
@@ -259,6 +260,45 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
         }
     }
 
+    private static JArray returnSameArrayIfArrayOtherwiseMakeNewArrayWithOneElement(JToken maybeArray)
+    {
+        JArray returnArray;
+
+        if (maybeArray.getType() == JTokenType.Array)
+        {
+            returnArray = (JArray) maybeArray;
+        }
+        else
+        {
+            returnArray = new JArray();
+
+            returnArray.add(maybeArray);
+        }
+
+        return returnArray;
+    }
+
+    private static JToken returnSameElementIfNotArrayOtherwiseFirstElementOfArray(JToken maybeArray)
+    {
+        JToken returnToken = null;
+
+        if ((maybeArray == null) || (maybeArray.getType() != JTokenType.Array))
+        {
+            returnToken = maybeArray;
+        }
+        else
+        {
+            JArray definitelyArray = (JArray) maybeArray;
+
+            if (definitelyArray.size() > 0)
+            {
+                returnToken = definitelyArray.get(0);
+            }
+        }
+
+        return returnToken;
+    }
+
     public AndroidListViewWrapper(
             ControlWrapper parent,
             BindingContext bindingContext,
@@ -290,7 +330,7 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
 
         JObject bindingSpec = BindingHelper.GetCanonicalBindingSpec(controlSpec, "items", Commands);
 
-        JObject itemTemplate = (JObject)controlSpec.get("itemTemplate");
+        JObject itemTemplate = (JObject)returnSameElementIfNotArrayOtherwiseFirstElementOfArray(controlSpec.get("itemTemplate"));
         if (itemTemplate == null)
         {
             String itemContent = "{$data}";
@@ -313,9 +353,7 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
 
         if (controlSpec.get("header") != null)
         {
-            JArray headerControlSpec = new JArray();
-
-            headerControlSpec.add(controlSpec.get("header"));
+            JArray headerControlSpec = returnSameArrayIfArrayOtherwiseMakeNewArrayWithOneElement(controlSpec.get("header"));
 
             createControls(headerControlSpec, new IAndroidCreateControl()
                            {
@@ -333,9 +371,7 @@ public class AndroidListViewWrapper extends AndroidControlWrapper
 
         if (controlSpec.get("footer") != null)
         {
-            JArray headerControlSpec = new JArray();
-
-            headerControlSpec.add(controlSpec.get("footer"));
+            JArray headerControlSpec = returnSameArrayIfArrayOtherwiseMakeNewArrayWithOneElement(controlSpec.get("footer"));
 
             createControls(headerControlSpec, new IAndroidCreateControl()
                            {
