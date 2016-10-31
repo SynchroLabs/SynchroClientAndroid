@@ -20,7 +20,7 @@ public class TransportTest extends TestCase
     // http://stackoverflow.com/questions/5806220/how-to-connect-to-my-http-localhost-web-server-from-android-emulator-in-eclips
 
     // private static final String testEndpoint = "http://10.0.2.2:1337/api/samples";
-    private static final String testEndpoint = "http://api.synchro.io/api/samples";
+    private static final String testEndpoint = "https://api.synchro.io/api/samples";
 
     public void testGetAppDefinition()
             throws IOException
@@ -28,20 +28,20 @@ public class TransportTest extends TestCase
         JObject expectedObject = new JObject();
 
         expectedObject.put("name", new JValue("synchro-samples"));
-        expectedObject.put("version", new JValue("1.3.5"));
+        expectedObject.put("version", new JValue("1.5.0"));
         expectedObject.put("description", new JValue("Synchro API Samples"));
         expectedObject.put("main", new JValue("menu"));
         expectedObject.put("author", new JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)"));
         expectedObject.put("private", new JValue(true));
         {
             JObject enginesObject = new JObject();
-            enginesObject.put("synchro", new JValue(">= 1.3.3"));
+            enginesObject.put("synchro", new JValue(">= 1.5.0"));
             expectedObject.put("engines", enginesObject);
         }
         expectedObject.put("synchroArchiveUrl", new JValue("https://github.com/SynchroLabs/SynchroSamples/archive/master.zip"));
         {
             JObject synchroObject = new JObject();
-            synchroObject.put("clientVersion", new JValue(">=1.3.0"));
+            synchroObject.put("clientVersion", new JValue(">= 1.4.0"));
             expectedObject.put("synchro", synchroObject);
         }
 
@@ -76,7 +76,7 @@ public class TransportTest extends TestCase
         requestObject.put("TransactionId", new JValue(1));
 
         JObject metricsObject = new JObject();
-        metricsObject.put("clientVersion", new JValue("1.3.0"));
+        metricsObject.put("clientVersion", new JValue("1.4.0"));
 
         requestObject.put("DeviceMetrics", metricsObject);
 
