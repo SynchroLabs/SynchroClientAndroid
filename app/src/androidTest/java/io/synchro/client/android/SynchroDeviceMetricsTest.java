@@ -12,6 +12,6 @@ public class SynchroDeviceMetricsTest extends AndroidTestCase
         AndroidSynchroDeviceMetrics androidSynchroDeviceMetrics = new AndroidSynchroDeviceMetrics(getContext());
 
         assertEquals("Synchro Explorer", androidSynchroDeviceMetrics.getClientName());
-        assertEquals("1.4.0", androidSynchroDeviceMetrics.getClientVersion());
+        assertEquals("1.4.1", androidSynchroDeviceMetrics.getClientVersion());
     }
 }
