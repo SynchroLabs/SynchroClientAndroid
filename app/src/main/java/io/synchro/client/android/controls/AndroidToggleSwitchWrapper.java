@@ -41,7 +41,7 @@ public class AndroidToggleSwitchWrapper extends AndroidControlWrapper
         JObject bindingSpec = BindingHelper.GetCanonicalBindingSpec(controlSpec, "value", Commands);
         ProcessCommands(bindingSpec, Commands);
 
-        if (!processElementBoundValue("value", bindingSpec.get("value").asString(), new IGetViewValue()
+        if (!processElementBoundValue("value", (bindingSpec.get("value") != null) ? bindingSpec.get("value").asString() : null, new IGetViewValue()
                                       {
                                           @Override
                                           public JToken GetViewValue()
